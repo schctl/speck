@@ -3,16 +3,26 @@ from datetime import datetime as dt
 
 from .raw import *
 
+__all__ = [
+    'Location',
+    'HourlyPoint',
+    'DayPoint',
+    'AstroPoint',
+    'DailyPoint',
+    'IpPoint',
+    'SportsPoint'
+]
+
 class BasePoint:
     """Abstract class representing a single data point."""
     @classmethod
     def from_raw(cls, location, data):
-        """Return subclass object from json converted `weatherapi` response."""
+        """Return new instance of child from json converted `weatherapi` response."""
         return cls(location, **data) # Unpacking uses the dict's keys are keyword arguments
 
     @classmethod
     def from_json(cls, location, data):
-        """Return subclass object from raw `weatherapi` response."""
+        """Return new instance of child from raw `weatherapi` response."""
         return cls(location, **json.loads(data))
 
 
@@ -159,6 +169,7 @@ class DailyPoint(BasePoint):
                 self.hour.append(HourlyPoint.from_raw(location, i))
 
 class IpPoint(BasePoint):
+    """IP Address information."""
     def __init__(self,
         ip, type,
         continent_code, continent_name,
@@ -173,15 +184,16 @@ class IpPoint(BasePoint):
 
     @classmethod
     def from_raw(cls, data):
-        """Return `Location` object from json converted `weatherapi` response."""
+        """Return `IpPoint` object from json converted `weatherapi` response."""
         return cls(**data)
 
     @classmethod
     def from_json(cls, data):
-        """Return `Location` object from raw `weatherapi` response."""
+        """Return `IpPoint` object from raw `weatherapi` response."""
         return cls(**json.loads(data))
 
-class SportEventPoint(BasePoint):
+class SportsPoint(BasePoint):
+    """Information about a sports event, such as stadium, region, start time, etc."""
     def __init__(self, stadium, country, region, tournament, start, match):
         self.stadium = stadium
         self.country = country # / Might wrap in a `Location` object
@@ -191,10 +203,10 @@ class SportEventPoint(BasePoint):
 
     @classmethod
     def from_raw(cls, data):
-        """Return `Location` object from json converted `weatherapi` response."""
+        """Return `SportEventPoint` object from json converted `weatherapi` response."""
         return cls(**data)
 
     @classmethod
     def from_json(cls, data):
-        """Return `Location` object from raw `weatherapi` response."""
+        """Return `SportEventPoint` object from raw `weatherapi` response."""
         return cls(**json.loads(data))
