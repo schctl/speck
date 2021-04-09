@@ -8,7 +8,7 @@ deps_required = list(readf('requirements.txt').splitlines())
 
 setup(
     name             = "speck",
-    version          = "0.1.0",
+    version          = readf('VERSION')[0],
     license          = "MIT",
     author           = "Nevin Jose, Sachin Cherian",
     url              = "https://github.com/schctl/speck",

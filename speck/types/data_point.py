@@ -69,8 +69,8 @@ class HourlyPoint(BasePoint):
 
         self.condition = condition
 
-        self.wind_kph = Kph(wind_kph)
-        self.gust_kph = Kph(gust_kph)
+        self.wind_kph = Km(wind_kph)
+        self.gust_kph = Km(gust_kph)
 
         self.wind_degree = wind_degree
         self.wind_dir = wind_dir
@@ -109,7 +109,7 @@ class DayPoint(BasePoint):
 
         self.condition = condition
         
-        self.maxwind_kph = Kph(maxwind_kph)
+        self.maxwind_kph = Km(maxwind_kph)
         
         self.totalprecip_mm = Mm(totalprecip_mm)
         self.avgvis_km = Km(avgvis_km)

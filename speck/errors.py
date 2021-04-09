@@ -3,9 +3,8 @@ All errors that can be raised during a weatherapi request.
 https://www.weatherapi.com/docs/
 """
 
-## Functions that make a request to weatherapi.com have the possibility
-## of raising one of these errors depending on the response.
-## Call help(errors) or help(ErrorName) to get help for the entire module or just one error.
+# Functions that make a request to weatherapi.com have the possibility
+# of raising one of these errors depending on the response.
 
 class WeatherApiError(Exception): # We use these custom error classes to convert the error code into something more understandable
     """Raised when an unknown weatherapi error is encountered."""
