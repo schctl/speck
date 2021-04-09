@@ -470,7 +470,8 @@ class SpeckFrontend:
 
     def calculator_search(self):
         """Run the calculator."""
-        speck_ui.calculator.main()
+        _calculator = speck_ui.calculator.Calculator()
+        _calculator.run()
 
     # - - - - - - - - - - - - - - - - - - - - - -
 
