@@ -97,14 +97,14 @@ class SpeckFrontend:
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
             fg    = self.style.colors["primary"].fg,
-            bd    = 0
+            bd    = 1
         )
         welcome_password_entry = tk.Entry(
             self.root,
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
             fg    = self.style.colors["primary"].fg,
-            bd    = 0
+            bd    = 1
         )
         self.active_widgets.append(welcome_username_entry)
         self.active_widgets.append(welcome_password_entry)
@@ -149,7 +149,7 @@ class SpeckFrontend:
             width   = 8,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
-            bd      = 0,
+            bd      = 1,
             command = check_login
         )
         self.active_widgets.append(welcome_login_button)
@@ -169,7 +169,7 @@ class SpeckFrontend:
             self.root,
             width              = self.style.window.width,
             height             = self.style.window.height,
-            bd                 = 0,
+            bd                 = 1,
             highlightthickness = 0
         )
         self.main_canvas.pack(fill="both", expand=True)
@@ -180,7 +180,7 @@ class SpeckFrontend:
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
             fg    = self.style.colors["primary"].fg,
-            bd    = 0
+            bd    = 1
         )
         self.active_widgets.append(location_input_entry)
 
@@ -201,7 +201,7 @@ class SpeckFrontend:
             width   = 8,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
-            bd      = 0,
+            bd      = 1,
             command = lambda: self.type_entry(location_input_entry.get())
         )
         self.active_widgets.append(location_input_button)
