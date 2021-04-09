@@ -1,0 +1,26 @@
+{
+    "window": {
+        "width": 323,
+        "height": 576
+    },
+    "fonts": {
+        "primary": {
+            "family": "Helvetica",
+            "sizes": {
+                "big": 24,
+                "medium": 20,
+                "small": 16
+            }
+        }
+    },
+    "colors": {
+        "primary": {
+            "fg": "#00008b",
+            "bg": "#ffffff"
+        },
+        "secondary": {
+            "fg": "#e0e0e0",
+            "bg": "#1d3284"
+        }
+    }
+}
