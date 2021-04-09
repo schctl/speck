@@ -13,7 +13,7 @@ from speck.errors import *
 
 import speck_ui
 
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 
 from PIL import ImageTk
@@ -82,7 +82,7 @@ class SpeckFrontend:
 
         self.bg = ImageTk.PhotoImage(file='./res/exports/base_login.png')
 
-        self.main_canvas = Canvas(
+        self.main_canvas = tk.Canvas(
             self.root,
             width              = self.style.window.width,
             height             = self.style.window.height,
@@ -92,14 +92,14 @@ class SpeckFrontend:
         self.main_canvas.pack(fill="both", expand=True)
         self.main_canvas.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
 
-        welcome_username_entry = Entry(
+        welcome_username_entry = tk.Entry(
             self.root,
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
             fg    = self.style.colors["primary"].fg,
             bd    = 0
         )
-        welcome_password_entry = Entry(
+        welcome_password_entry = tk.Entry(
             self.root,
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
@@ -127,8 +127,8 @@ class SpeckFrontend:
         def entry_clear(e):
             if not self.entry_cleared:
 
-                welcome_username_entry.delete(0, END)
-                welcome_password_entry.delete(0, END)
+                welcome_username_entry.delete(0, tk.END)
+                welcome_password_entry.delete(0, tk.END)
                 # change pw to ***
                 welcome_password_entry.config(show='*')
 
@@ -139,10 +139,10 @@ class SpeckFrontend:
         welcome_password_entry.bind("<Button-1>", entry_clear)
 
         # add entry boxes to canvas
-        un_window = self.main_canvas.create_window(38, 325, anchor='nw', window=welcome_username_entry)
-        pw_window = self.main_canvas.create_window(38, 380, anchor='nw', window=welcome_password_entry)
+        self.main_canvas.create_window(38, 325, anchor='nw', window=welcome_username_entry)
+        self.main_canvas.create_window(38, 380, anchor='nw', window=welcome_password_entry)
 
-        welcome_login_button = Button(
+        welcome_login_button = tk.Button(
             self.root,
             text    = "LOGIN",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -154,7 +154,7 @@ class SpeckFrontend:
         )
         self.active_widgets.append(welcome_login_button)
 
-        welcome_login_button_win = self.main_canvas.create_window(38, 435, anchor='nw', window=welcome_login_button)
+        self.main_canvas.create_window(38, 435, anchor='nw', window=welcome_login_button)
 
     def location_entry(self):
         """Implementation for Location Entry Screen."""
@@ -165,7 +165,7 @@ class SpeckFrontend:
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
 
-        self.main_canvas = Canvas(
+        self.main_canvas = tk.Canvas(
             self.root,
             width              = self.style.window.width,
             height             = self.style.window.height,
@@ -175,7 +175,7 @@ class SpeckFrontend:
         self.main_canvas.pack(fill="both", expand=True)
         self.main_canvas.create_image(0, 0, image=self.bg, anchor="nw")
 
-        location_input_entry = Entry(
+        location_input_entry = tk.Entry(
             self.root,
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width = 15,
@@ -188,13 +188,13 @@ class SpeckFrontend:
 
         def clear_location_entry(e):
             if location_input_entry.get().lower() == "search location":
-                location_input_entry.delete(0, END)
+                location_input_entry.delete(0, tk.END)
 
         location_input_entry.bind("<Button-1>", clear_location_entry)
 
-        location_entry_window = self.main_canvas.create_window(38, 355, anchor='nw', window=location_input_entry)
+        self.main_canvas.create_window(38, 355, anchor='nw', window=location_input_entry)
 
-        location_input_button = Button(
+        location_input_button = tk.Button(
             self.root,
             text    = "Continue",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -206,7 +206,7 @@ class SpeckFrontend:
         )
         self.active_widgets.append(location_input_button)
 
-        location_input_button_win = self.main_canvas.create_window(38, 405, anchor='nw', window=location_input_button)
+        self.main_canvas.create_window(38, 405, anchor='nw', window=location_input_button)
 
     def type_entry(self, actual_loc):
         """Implementation for Data Type Entry Screen."""
@@ -216,7 +216,7 @@ class SpeckFrontend:
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
 
-        self.main_canvas = Canvas(
+        self.main_canvas = tk.Canvas(
             self.root,
             width              = self.style.window.width,
             height             = self.style.window.height,
@@ -226,7 +226,7 @@ class SpeckFrontend:
         self.main_canvas.pack(fill="both", expand=True)
         self.main_canvas.create_image(0, 0, image=self.bg, anchor="nw")
 
-        current_search_button = Button(
+        current_search_button = tk.Button(
             self.root,
             text    = "Current",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
@@ -234,7 +234,7 @@ class SpeckFrontend:
             fg      = self.style.colors["primary"].fg,
             command = lambda: self.current_search(actual_loc)
         )
-        forecast_search_button = Button(
+        forecast_search_button = tk.Button(
             self.root,
             text    = "Forecast",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
@@ -242,7 +242,7 @@ class SpeckFrontend:
             fg      = self.style.colors["primary"].fg,
             command = lambda: self.forecast_search(actual_loc)
         )
-        astronomy_search_button = Button(
+        astronomy_search_button = tk.Button(
             self.root,
             text    = "Astronomy",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
@@ -250,7 +250,7 @@ class SpeckFrontend:
             fg      = self.style.colors["primary"].fg,
             command = lambda: self.astro_search(actual_loc)
         )
-        caclulator_init_button = Button(
+        caclulator_init_button = tk.Button(
             self.root,
             text    = "Calculator",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
@@ -264,12 +264,12 @@ class SpeckFrontend:
         self.active_widgets.append(astronomy_search_button)
         self.active_widgets.append(caclulator_init_button)
 
-        curr_btn_win  = self.main_canvas.create_window(38, 220, anchor='nw', window=current_search_button)
-        fore_btn_win  = self.main_canvas.create_window(38, 280, anchor='nw', window=forecast_search_button)
-        astro_btn_win = self.main_canvas.create_window(38, 340, anchor='nw', window=astronomy_search_button)
-        calc_btn_win  = self.main_canvas.create_window(38, 400, anchor='nw', window=caclulator_init_button)
+        self.main_canvas.create_window(38, 220, anchor='nw', window=current_search_button)
+        self.main_canvas.create_window(38, 280, anchor='nw', window=forecast_search_button)
+        self.main_canvas.create_window(38, 340, anchor='nw', window=astronomy_search_button)
+        self.main_canvas.create_window(38, 400, anchor='nw', window=caclulator_init_button)
 
-        back_btn = Button(
+        back_btn = tk.Button(
             self.root,
             text    = 'Back',
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -295,19 +295,20 @@ class SpeckFrontend:
 
         font = int(min((30 - len(cur_data.location.name)), 24))
         
-        top = Toplevel()
+        top = tk.Toplevel()
+        
         top.title(f"Current weather in {cur_data.location.name}")
         top.geometry(f'{self.style.window.width}x{self.style.window.height}')
         top.resizable(width=False, height="false")
 
-        loc_label = Label(
+        loc_label = tk.Label(
             top,
             text = f"{cur_data.location.name},\n{cur_data.location.country}",
             font = (self.style.fonts["primary"].family, font)
         )
-        temp_label = Label(
+        temp_label = tk.Label(
             top,
-            text = f"{cur_data.temp_c()}°C",
+            text = f"{cur_data.temp_c}°C",
             font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
             fg   =  self.style.colors["primary"].fg
         )
@@ -315,11 +316,11 @@ class SpeckFrontend:
         loc_label.pack()
         temp_label.pack()
 
-        temp_unit = StringVar()
+        temp_unit = tk.StringVar()
         temp_unit.set("°C")
 
         for i in ['°C', '°F']:
-            Radiobutton(
+            tk.Radiobutton(
                 top,
                 text     = i,
                 font     = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -333,7 +334,7 @@ class SpeckFrontend:
             else:
                 temp_label.config(text=f"{cur_data.temp_c.fahrenheit()}°F")
 
-        update_button = Button(
+        update_button = tk.Button(
             top,
             text    = "Update",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -343,7 +344,7 @@ class SpeckFrontend:
         )
         update_button.pack()
 
-        close_button = Button(
+        close_button = tk.Button(
             top,
             text    = "Close",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -363,12 +364,12 @@ class SpeckFrontend:
 
         font = int(min((30 - len(fore_data[0].location.name)), 24))
 
-        top = Toplevel()
+        top = tk.Toplevel()
         top.title(f"Forecast weather in {fore_data[0].location.name}")
         top.geometry(f'{self.style.window.width}x{self.style.window.height}')
         top.resizable(width=False, height="false")
 
-        lbl = Label(
+        lbl = tk.Label(
             top,
             text = f"\n{fore_data[0].location.name},\n{fore_data[0].location.country}",
             font = (self.style.fonts["primary"].family, font)
@@ -377,23 +378,23 @@ class SpeckFrontend:
 
         options = []
 
-        for n, i in enumerate(fore_data):
+        for n, _ in enumerate(fore_data):
             ndt = dt.now() + td(days=n+1)
 
             options.append(f"{ndt.day}-{ndt.month}-{ndt.year}")
 
-        main_info_lbl = Label(
+        main_info_lbl = tk.Label(
             top,
-            text = f"\n\nAverage temperature on {options[0]}:\n{fore_data[0].day.avgtemp_c()}°C\n\n",
+            text = f"\n\nAverage temperature on {options[0]}:\n{fore_data[0].day.avgtemp_c}°C\n\n",
             font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
             fg   = self.style.colors["primary"].fg
         )
         main_info_lbl.pack()
 
-        day_select_menu = StringVar()
+        day_select_menu = tk.StringVar()
         day_select_menu.set(options[0])
 
-        day_select_drop = OptionMenu(top, day_select_menu, *options)
+        day_select_drop = tk.OptionMenu(top, day_select_menu, options[0], *options[1:])
         day_select_drop.pack()
         day_select_drop.config(
             font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -403,12 +404,12 @@ class SpeckFrontend:
 
         def callback():
             n = options.index(day_select_menu.get())
-            main_info_lbl.config(text=f"\n\nAverage temperature on {options[n]}:\n{fore_data[n].day.avgtemp_c()}°C\n\n", fg="dark blue")
+            main_info_lbl.config(text=f"\n\nAverage temperature on {options[n]}:\n{fore_data[n].day.avgtemp_c}°C\n\n", fg="dark blue")
 
-        _lbl = Label(top, text="\n\n\n\n")
+        _lbl = tk.Label(top, text="\n\n\n\n")
         _lbl.pack()
 
-        update_button = Button(
+        update_button = tk.Button(
             top,
             text    = "Update",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -416,7 +417,7 @@ class SpeckFrontend:
         )
         update_button.pack()
 
-        close_button = Button(
+        close_button = tk.Button(
             top,
             text    = "Close",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -436,18 +437,18 @@ class SpeckFrontend:
 
         font = int(min((30 - len(cur_data.location.name)), 24))
         
-        top = Toplevel()
+        top = tk.Toplevel()
         top.title(f"Astronomy Information in {cur_data.location.name}")
         top.geometry(f'{self.style.window.width}x{self.style.window.height}')
         top.resizable(width=False, height="false")
 
         
-        lbl = Label(
+        lbl = tk.Label(
             top,
             text = f"\n\n{cur_data.location.name},\n{cur_data.location.country}",
             font = (self.style.fonts["primary"].family, font)
         )
-        lbl2 = Label(
+        lbl2 = tk.Label(
             top,
             text = f"\n\nMoon Phase Today:\n{cur_data.moon_phase}\n\n",
             font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -457,7 +458,7 @@ class SpeckFrontend:
         lbl.pack()
         lbl2.pack()
 
-        close_button = Button(
+        close_button = tk.Button(
             top,
             text    = "Close",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
@@ -475,7 +476,7 @@ class SpeckFrontend:
 
     def run(self):
         """Run the entire application. This is blocking."""
-        self.root = Tk()
+        self.root = tk.Tk()
         self.root.title('Speck Frontend')
         self.root.geometry(f'{self.style.window.width}x{self.style.window.height}')
         # make sure app cant be resized

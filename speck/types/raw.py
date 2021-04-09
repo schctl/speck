@@ -2,52 +2,49 @@
 Utility classes for easy convertions.
 """
 
-class Base:
-    """Abstract class for basic unit conversions."""
-    def __init__(self, val):
-        self.val = val
+from dataclasses import dataclass
 
-    def __call__(self):
-        return self.val
+# The use of dataclasses here
+# ---------------------------
+# The dataclasses module provides a decorator and functions for automatically generating special methods
+# such as __repr__() for user-defined classes - [docs](https://docs.python.org/3/library/dataclasses.html).
 
-    def __eq__(self, other):
-        return self.val == other.val
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-
-class Km(Base):
-    def __init__(self, val):
-        super().__init__(val)
+@dataclass(frozen=True, order=True)
+class Km:
+    val: float
 
     def mi(self):
-        return self.val * 0.6213712
+        return self.val * 0.6213
 
-class Kph(Base):
-    def __init__(self, val):
-        super().__init__(val)
+    def __repr__(self):
+        return f"{self.val}"
 
-    def mph(self):
-        return self.val * 0.6213712
-
-class Cel(Base):
-    def __init__(self, val):
-        super().__init__(val)
+@dataclass(frozen=True, order=True)
+class Cel:
+    val: float
 
     def fahrenheit(self):
         return (self.val * 1.8) + 32
 
-class Mm(Base):
-    def __init__(self, val):
-        super().__init__(val)
+    def __repr__(self):
+        return f"{self.val}"
+
+@dataclass(frozen=True, order=True)
+class Mm:
+    val: float
 
     def inches(self):
-        return self.val * 0.03937008
+        return self.val * 0.0393
 
-class Mb(Base):
-    def __init__(self, val):
-        super().__init__(val)
+    def __repr__(self):
+        return f"{self.val}"
+
+@dataclass(frozen=True, order=True)
+class Mb:
+    val: float
 
     def inches(self):
-        return self.val * 0.029529983071445
+        return self.val * 0.02952
+
+    def __repr__(self):
+        return f"{self.val}"

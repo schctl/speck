@@ -8,6 +8,8 @@ from pathlib import Path
 ## API response's are stored in "cache files", which can be read later on.
 
 class Cache:
+    """Cache Manager utility. Keeps track of and gets/updates data from cache files."""
+    
     def __init__(self, path):
         self.path = path
 

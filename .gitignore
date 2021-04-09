@@ -128,10 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-# OpenWeatherMap API key
-token.txt
-
-sample_cur.json
-sample_pre.json
+# Utils
 cache/*
+.vscode
+token.txt
