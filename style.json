@@ -7,20 +7,20 @@
         "primary": {
             "family": "Helvetica",
             "sizes": {
-                "big": 24,
-                "medium": 20,
-                "small": 16
+                "big": 20,
+                "medium": 16,
+                "small": 12
             }
         }
     },
     "colors": {
         "primary": {
-            "fg": "#00008b",
+            "fg": "#1c1b47",
             "bg": "#ffffff"
         },
         "secondary": {
-            "fg": "#e0e0e0",
-            "bg": "#1d3284"
+            "fg": "#ffffff",
+            "bg": "#1c1b47"
         }
     }
 }
