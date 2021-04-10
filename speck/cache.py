@@ -23,7 +23,9 @@ class Cache:
         try:
             with open(f"{self.path}/{name}.dat", "rb") as f: # Cache is stored as a dictionary/list
                 return pickle.load(f)                        # in a binary file, which can be read later on.
-        except:
+        except pickle.PickleError:
+            return None
+        except FileNotFoundError:
             return None
 
     def dump(self, name, data):

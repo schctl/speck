@@ -8,8 +8,8 @@ Authors:
 
 import os
 
+import speck
 from speck.speck import Speck
-from speck.errors import *
 
 import speck_ui
 
@@ -25,22 +25,6 @@ from hashlib import md5
 
 class SpeckFrontend:
     def __init__(self):
-        ##     Application Flow
-        ##     ----------------
-        ##
-        ##      Welcome Screen
-        ##  Username and Password Entry
-        ##      Login Button
-        ##             ↓
-        ##    Location Entry Screen
-        ##       Location Entry
-        ##        "GET" Button
-        ##             ↓
-        ##      Type Entry Screen                       ---> (Doesn't change state)
-        ##  Current, Forecast, Astro Buttons
-        ##             ↓
-        ##     Unique TopLevels
-
         self.main_canvas = None
 
         self.active_widgets = []
@@ -49,7 +33,7 @@ class SpeckFrontend:
 
         self.root = None
 
-        self.style = speck_ui.SpeckStyle.from_file("style.json")
+        self.style = speck_ui.style.SpeckStyle.from_file("style.json")
 
         self.entry_cleared = False
 
@@ -75,7 +59,8 @@ class SpeckFrontend:
 
     def welcome(self):
         """Implementation for Welcome screen."""
-        # Step 1 in application flow
+        
+        # Step 1
 
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
@@ -158,7 +143,8 @@ class SpeckFrontend:
 
     def location_entry(self):
         """Implementation for Location Entry Screen."""
-        # Step 2 in application flow
+
+        # Step 2
 
         self.bg = ImageTk.PhotoImage(file='./res/exports/base_login.png')
 
@@ -210,6 +196,9 @@ class SpeckFrontend:
 
     def info_screen(self, loc):
         """Display information for a location."""
+
+        # Step 3
+
         self.bg = ImageTk.PhotoImage(file='./res/exports/secondary.png')
 
         SpeckFrontend.__cleanup_widget(self.main_canvas)
@@ -229,19 +218,19 @@ class SpeckFrontend:
 
         try:
             curr_i = self.speck.current(loc)
-        except InvalidRequestUrl:
+        except speck.errors.InvalidRequestUrl:
             rloc = self.speck.find_city(loc)[0]
             curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             fore_i = self.speck.forecast(loc)
-        except InvalidRequestUrl:
+        except speck.errors.InvalidRequestUrl:
             rloc = self.speck.find_city(loc)[0]
             fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             astro_i = self.speck.astro(loc)
-        except InvalidRequestUrl:
+        except speck.errors.InvalidRequestUrl:
             rloc = self.speck.astro(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
