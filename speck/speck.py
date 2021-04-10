@@ -16,7 +16,7 @@ class Speck:
 
     def __init__(self, token):
         self.token = token
-        self.cache = cache.Cache('cache')
+        self.cache = cache.Cache('cache/weather_cache')
         self.session = requests.Session()
         
         # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file
@@ -69,8 +69,6 @@ class Speck:
             i for i in self.cities if loc.lower() in i['name'].lower() # Generates a list of city names containing the string `loc`
         ]
 
-    # All these implementations are blocking
-
     def current(self, loc):
         """
         Get current weather conditions in a location.
@@ -104,12 +102,10 @@ class Speck:
         if e:
             raise e # We're not going to handle the error here, so anyone using the function can do it themselves
 
-        res = types.HourlyPoint.from_raw(response["location"], response["current"]) # Creates the `HourlyPoint` object
-
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
         self.cache.dump(mode, response) # Writes cache
 
-        return res
+        return types.HourlyPoint.from_raw(response["location"], response["current"]) # Creates the `HourlyPoint` object
 
         ## The same pattern is followed for all other API methods implemented.
 
@@ -127,12 +123,12 @@ class Speck:
 
         n = self.cache.read(mode)
         if n:
-            res = []
-
-            for i in n["forecast"]["forecastday"]:
-                res.append(types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"]))
-
-            return res
+            return list(
+                map(
+                    lambda i: types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"]),
+                    n["forecast"]["forecastday"]
+                )
+            )
 
         response = self.__make_request('forecast.json', f'?key={self.token}&q={loc}&days={min(days, 10)}')
 
@@ -143,7 +139,12 @@ class Speck:
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, response)
 
-        return map(lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]), response["forecast"]["forecastday"])
+        return list(
+            map(
+                lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]),
+                response["forecast"]["forecastday"]
+            )
+        )
 
     def astronomy(self, loc):
         """
@@ -157,9 +158,7 @@ class Speck:
 
         n = self.cache.read(mode)
         if n:
-            res = types.AstroPoint.from_raw(n["location"], n["astronomy"]["astro"])
-
-            return res
+            return types.AstroPoint.from_raw(n["location"], n["astronomy"]["astro"])
 
         response = self.__make_request('astronomy.json', f'?key={self.token}&q={loc}')
 
@@ -167,12 +166,10 @@ class Speck:
         if e:
             raise e
 
-        res = types.AstroPoint.from_raw(response["location"], response["astronomy"]["astro"])
-
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, response)
 
-        return res
+        return types.AstroPoint.from_raw(response["location"], response["astronomy"]["astro"])
 
     def ip_lookup(self, ip):
         """
@@ -186,9 +183,7 @@ class Speck:
 
         n = self.cache.read(mode)
         if n:
-            res = types.IpPoint.from_raw(n)
-
-            return res
+            return types.IpPoint.from_raw(n)
 
         response = self.__make_request('ip.json', f'?key={self.token}&q={ip}')
 
@@ -196,12 +191,10 @@ class Speck:
         if e:
             raise e
 
-        res = types.IpPoint.from_raw(response)
-
         # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, response)
 
-        return res
+        return types.IpPoint.from_raw(response)
 
     def search(self, loc):
         """
@@ -214,13 +207,9 @@ class Speck:
         mode = f"search-{loc}"
 
         n = self.cache.read(mode)
+
         if n:
-            res = []
-
-            for i in n:
-                res.append(types.Location.from_raw(i))
-
-            return res
+            return list(map(lambda i: types.Location.from_raw(i), n))
 
         response = self.__make_request('search.json', f'?key={self.token}&q={loc}')
 
@@ -231,7 +220,7 @@ class Speck:
         # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, response)
 
-        return map(lambda i: types.Location.from_raw(i), response)
+        return list(map(lambda i: types.Location.from_raw(i), response))
 
     def timezone_info(self, loc):
         """
@@ -264,10 +253,7 @@ class Speck:
         
         n = self.cache.read(mode)
         if n:
-            # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
-            res = types.SportsPoint.from_raw(n)
-
-            return res
+            return types.SportsPoint.from_raw(n)
 
         response = self.__make_request('sports.json', f'?key={self.token}&q={loc}')
 
@@ -276,14 +262,12 @@ class Speck:
 
         e = Speck.__error_code_to_error(response)
         if e:
-            raise e # We're not going to handle the error here, so anyone using the function can do it themselves
+            raise e 
 
-        res = types.SportsPoint.from_raw(response) # Creates the `HourlyPoint` object
+        self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
+        self.cache.dump(mode, response)
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
-        self.cache.dump(mode, response) # Writes cache
-
-        return res
+        return types.SportsPoint.from_raw(response)
 
     def history(self, loc, dt):
         """
@@ -301,12 +285,13 @@ class Speck:
 
         n = self.cache.read(mode)
         if n:
-            res = []
+            return list(
+                map(
+                    lambda i: types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"]),
+                    n["forecast"]["forecastday"]
+                )
+            )
 
-            for i in n["forecast"]["forecastday"]:
-                res.append(types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"]))
-
-            return res
 
         response = self.__make_request('history.json', f'?key={self.token}&q={loc}&dt={min(dt, 10)}')
 
@@ -317,19 +302,27 @@ class Speck:
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, response)
 
-        return map(lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]), response["forecast"]["forecastday"])
-                                              # `forecast->forecastday` is a list of all daily forecasts
+        return list(
+            map(
+                lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]),
+                response["forecast"]["forecastday"]
+            )
+        ) # `forecast->forecastday` is a list of all daily forecasts
 
     # Aliases ---------------------------------------
 
     def astro(self, *args, **kwargs):
+        """Alias for `astronomy`."""
         return self.astronomy(*args, **kwargs)
 
     def ip(self, *args, **kwargs):
+        """Alias for `ip_lookup`."""
         return self.ip_lookup(*args, **kwargs)
 
     def tz(self, *args, **kwargs):
+        """Alias for `timezone_info`."""
         return self.timezone_info(*args, **kwargs)
 
     def sports(self, *args, **kwargs):
+        """Alias for `sports_lookup`."""
         return self.sports_lookup(*args, **kwargs)
