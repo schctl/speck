@@ -65,7 +65,7 @@ class SpeckFrontend:
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
 
-        self.bg = ImageTk.PhotoImage(file='./res/exports/base_login.png')
+        self.bg = ImageTk.PhotoImage(file='./res/exports/base_logo.png')
 
         self.main_canvas = tk.Canvas(
             self.root,
@@ -146,7 +146,7 @@ class SpeckFrontend:
 
         # Step 2
 
-        self.bg = ImageTk.PhotoImage(file='./res/exports/base_login.png')
+        self.bg = ImageTk.PhotoImage(file='./res/exports/base_logo.png')
 
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
@@ -218,20 +218,20 @@ class SpeckFrontend:
 
         try:
             curr_i = self.speck.current(loc)
-        except speck.errors.InvalidRequestUrl:
+        except speck.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             fore_i = self.speck.forecast(loc)
-        except speck.errors.InvalidRequestUrl:
+        except speck.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             astro_i = self.speck.astro(loc)
-        except speck.errors.InvalidRequestUrl:
-            rloc = self.speck.astro(loc)[0]
+        except speck.errors.InvalidLocation:
+            rloc = self.speck.find_city(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
         # Display ----------------
@@ -274,13 +274,25 @@ class SpeckFrontend:
             bg   =  self.style.colors["secondary"].bg
         )
 
-        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl])
+        back_btn = tk.Button(
+            self.root,
+            text    = "Back",
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            width   = 8,
+            fg      = self.style.colors["primary"].fg,
+            bg      = self.style.colors["primary"].bg,
+            bd      = 0,
+            command = self.location_entry
+        )
+
+        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl, back_btn])
 
         self.main_canvas.create_window(42, 40,  anchor='nw', window=loc_lbl  )
         self.main_canvas.create_window(42, 90,  anchor='nw', window=lt_lbl   )
         self.main_canvas.create_window(42, 120, anchor='nw', window=curr_lbl )
         self.main_canvas.create_window(42, 150, anchor='nw', window=fore_lbl )
         self.main_canvas.create_window(42, 180, anchor='nw', window=astro_lbl)
+        self.main_canvas.create_window(30, 522, anchor='nw', window=back_btn )
 
     def run(self):
         """Run the application."""
