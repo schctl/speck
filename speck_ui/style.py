@@ -36,16 +36,9 @@ class SpeckStyle:
         with open(file, 'r') as f:
             data = json.load(f)
 
-        window = WindowStyle(**data["window"])
+            window = WindowStyle(**data["window"])
 
-        fonts = {}
-        
-        for i in data["fonts"]:
-            fonts[i] = FontStyle(**data["fonts"][i])
+            fonts = { i: FontStyle(**data["fonts"][i]) for i in data["fonts"] }
+            colors = { i: ColorStyle(**data["colors"][i]) for i in data["colors"] }
 
-        colors = {}
-        
-        for i in data["colors"]:
-            colors[i] = ColorStyle(**data["colors"][i])
-
-        return cls(window, fonts, colors)
+            return cls(window, fonts, colors)
