@@ -16,7 +16,7 @@ __all__ = [
 # The dataclasses module provides a decorator and functions for automatically generating special methods
 # such as __repr__() for user-defined classes - [docs](https://docs.python.org/3/library/dataclasses.html).
 
-@__dc(frozen=True, order=True)
+@__dc(frozen=True)
 class Km:
     val: float
 
@@ -26,7 +26,7 @@ class Km:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True, order=True)
+@__dc(frozen=True)
 class Cel:
     val: float
 
@@ -36,7 +36,7 @@ class Cel:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True, order=True)
+@__dc(frozen=True)
 class Mm:
     val: float
 
@@ -46,7 +46,7 @@ class Mm:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True, order=True)
+@__dc(frozen=True)
 class Mb:
     val: float
 

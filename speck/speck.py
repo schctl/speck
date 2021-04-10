@@ -140,15 +140,10 @@ class Speck:
         if e:
             raise e
 
-        res = []
-
-        for i in response["forecast"]["forecastday"]: # `forecast->forecastday` is a list of all daily forecasts
-            res.append(types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]))
-
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, response)
 
-        return res
+        return map(lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]), response["forecast"]["forecastday"])
 
     def astronomy(self, loc):
         """
@@ -233,15 +228,10 @@ class Speck:
         if e:
             raise e
 
-        res = []
-
-        for i in response:
-            res.append(types.Location.from_raw(i))
-
         # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, response)
 
-        return res
+        return map(lambda i: types.Location.from_raw(i), response)
 
     def timezone_info(self, loc):
         """
@@ -275,7 +265,7 @@ class Speck:
         n = self.cache.read(mode)
         if n:
             # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
-            res = types.SportEventPoint.from_raw(n)
+            res = types.SportsPoint.from_raw(n)
 
             return res
 
@@ -288,7 +278,7 @@ class Speck:
         if e:
             raise e # We're not going to handle the error here, so anyone using the function can do it themselves
 
-        res = types.SportEventPoint.from_raw(response) # Creates the `HourlyPoint` object
+        res = types.SportsPoint.from_raw(response) # Creates the `HourlyPoint` object
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
         self.cache.dump(mode, response) # Writes cache
@@ -324,15 +314,11 @@ class Speck:
         if e:
             raise e
 
-        res = []
-
-        for i in response["forecast"]["forecastday"]: # `forecast->forecastday` is a list of all daily forecasts
-            res.append(types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]))
-
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, response)
 
-        return res
+        return map(lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]), response["forecast"]["forecastday"])
+                                              # `forecast->forecastday` is a list of all daily forecasts
 
     # Aliases ---------------------------------------
 
