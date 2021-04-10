@@ -60,8 +60,8 @@ class Speck:
         """Private method to make a request to `weatherapi.com`."""
         try:
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json() # Does the acutal request
-        except:
-            raise errors.InternalError("Unable to fetch data at this time.", 9999)
+        except Exception as e:
+            raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
 
     def find_city(self, loc):
         """Returns an array of city names and coordinates containing a search pattern."""
