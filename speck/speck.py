@@ -92,9 +92,8 @@ class Speck:
         n = self.cache.read(mode)
         if n:
             # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
-            res = types.HourlyPoint.from_raw(n["location"], n["current"])
 
-            return res
+            return types.HourlyPoint.from_raw(n["location"], n["current"])
 
         response = self.__make_request('current.json', f'?key={self.token}&q={loc}')
 

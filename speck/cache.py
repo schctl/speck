@@ -1,7 +1,11 @@
 import os
+import json
 import pickle
 
 from pathlib import Path
+
+from datetime import datetime as dt
+import zlib
 
 ## Cache is used in this library for the purpose of reducing API calls,
 ## which can only be used a limited amount of times per month/
@@ -22,16 +26,28 @@ class Cache:
         """Tries to read cache with `name`. Returns `None` if no such file is found."""
         try:
             with open(f"{self.path}/{name}.dat", "rb") as f: # Cache is stored as a dictionary/list
-                return pickle.load(f)                        # in a binary file, which can be read later on.
+                try:                                         # in a binary file, which can be read later on.
+                    start = dt.now()
+                    raw = pickle.load(f)
+                    data = json.loads(zlib.decompress(raw).decode('utf-8'))
+                    print(dt.now() - start)
+                    return data
+                except:
+                    pass
         except pickle.PickleError:
-            return None
+            pass
         except FileNotFoundError:
-            return None
+            pass
+
+        return None
 
     def dump(self, name, data):
         """Writes data to a cache file with `name`. `name` must be kept track of manually."""
         with open(f"{self.path}/{name}.dat", "wb") as f:
-            pickle.dump(data, f)
+            start = dt.now()
+            compressed = zlib.compress(json.dumps(data).encode('utf-8'))
+            pickle.dump(compressed, f)
+            print(dt.now() - start)
 
     def cleanup(self, name):
         """Cleans up all cache files with a given `name`. Supports wildcard (*) deletion."""
