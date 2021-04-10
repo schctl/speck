@@ -94,14 +94,14 @@ class SpeckFrontend:
 
         welcome_username_entry = tk.Entry(
             self.root,
-            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
+            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
             width = 15,
             fg    = self.style.colors["primary"].fg,
             bd    = 1
         )
         welcome_password_entry = tk.Entry(
             self.root,
-            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
+            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
             width = 15,
             fg    = self.style.colors["primary"].fg,
             bd    = 1
@@ -145,7 +145,7 @@ class SpeckFrontend:
         welcome_login_button = tk.Button(
             self.root,
             text    = "LOGIN",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width   = 8,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
@@ -177,7 +177,7 @@ class SpeckFrontend:
 
         location_input_entry = tk.Entry(
             self.root,
-            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
+            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
             width = 15,
             fg    = self.style.colors["primary"].fg,
             bd    = 1
@@ -197,21 +197,20 @@ class SpeckFrontend:
         location_input_button = tk.Button(
             self.root,
             text    = "Continue",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
             width   = 8,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 1,
-            command = lambda: self.type_entry(location_input_entry.get())
+            command = lambda: self.info_screen(location_input_entry.get())
         )
         self.active_widgets.append(location_input_button)
 
         self.main_canvas.create_window(38, 405, anchor='nw', window=location_input_button)
 
-    def type_entry(self, actual_loc):
-        """Implementation for Data Type Entry Screen."""
-        # Step 3 in application flow
-        self.bg = ImageTk.PhotoImage(file='./res/exports/secondary_logo.png')
+    def info_screen(self, loc):
+        """Display information for a location."""
+        self.bg = ImageTk.PhotoImage(file='./res/exports/secondary.png')
 
         SpeckFrontend.__cleanup_widget(self.main_canvas)
         self.__cleanup_active_widgets()
@@ -226,262 +225,80 @@ class SpeckFrontend:
         self.main_canvas.pack(fill="both", expand=True)
         self.main_canvas.create_image(0, 0, image=self.bg, anchor="nw")
 
-        current_search_button = tk.Button(
-            self.root,
-            text    = "Current",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
-            width   = 14,
-            fg      = self.style.colors["primary"].fg,
-            command = lambda: self.current_search(actual_loc)
-        )
-        forecast_search_button = tk.Button(
-            self.root,
-            text    = "Forecast",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
-            width   = 14,
-            fg      = self.style.colors["primary"].fg,
-            command = lambda: self.forecast_search(actual_loc)
-        )
-        astronomy_search_button = tk.Button(
-            self.root,
-            text    = "Astronomy",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
-            width   = 14,
-            fg      = self.style.colors["primary"].fg,
-            command = lambda: self.astro_search(actual_loc)
-        )
-        caclulator_init_button = tk.Button(
-            self.root,
-            text    = "Calculator",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_medium),
-            width   = 14,
-            fg      = self.style.colors["primary"].fg,
-            command = lambda: self.calculator_search()
-        )
+        # Get info ----------------
 
-        self.active_widgets.append(current_search_button)
-        self.active_widgets.append(forecast_search_button)
-        self.active_widgets.append(astronomy_search_button)
-        self.active_widgets.append(caclulator_init_button)
-
-        self.main_canvas.create_window(38, 220, anchor='nw', window=current_search_button)
-        self.main_canvas.create_window(38, 280, anchor='nw', window=forecast_search_button)
-        self.main_canvas.create_window(38, 340, anchor='nw', window=astronomy_search_button)
-        self.main_canvas.create_window(38, 400, anchor='nw', window=caclulator_init_button)
-
-        back_btn = tk.Button(
-            self.root,
-            text    = 'Back',
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 4,
-            fg      = self.style.colors["secondary"].fg,
-            bg      = self.style.colors["secondary"].bg,
-            bd      = 0,
-            command = self.location_entry, highlightthickness=0
-        )
-        self.active_widgets.append(back_btn)
-
-        back_btn = self.main_canvas.create_window(124, 46, anchor='nw', window=back_btn)
-
-    # Step 3 - - - - - - - - - - - - - - - - - -
-
-    def current_search(self, loc):
-        """Implementation for Current Weather screen."""
         try:
-            cur_data = self.speck.current(loc)
+            curr_i = self.speck.current(loc)
         except InvalidRequestUrl:
             rloc = self.speck.find_city(loc)[0]
-            cur_data = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
+            curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
 
-        font = int(min((30 - len(cur_data.location.name)), 24))
-        
-        top = tk.Toplevel()
-        
-        top.title(f"Current weather in {cur_data.location.name}")
-        top.geometry(f'{self.style.window.width}x{self.style.window.height}')
-        top.resizable(width=False, height="false")
-
-        loc_label = tk.Label(
-            top,
-            text = f"{cur_data.location.name},\n{cur_data.location.country}",
-            font = (self.style.fonts["primary"].family, font)
-        )
-        temp_label = tk.Label(
-            top,
-            text = f"{cur_data.temp_c}°C",
-            font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
-            fg   =  self.style.colors["primary"].fg
-        )
-
-        loc_label.pack()
-        temp_label.pack()
-
-        temp_unit = tk.StringVar()
-        temp_unit.set("°C")
-
-        for i in ['°C', '°F']:
-            tk.Radiobutton(
-                top,
-                text     = i,
-                font     = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-                variable = temp_unit,
-                value    = i
-            ).pack(anchor='nw')
-
-        def clicked(val):
-            if val == '°C':
-                temp_label.config(text=f"{cur_data.temp_c()}°C")
-            else:
-                temp_label.config(text=f"{cur_data.temp_c.fahrenheit()}°F")
-
-        update_button = tk.Button(
-            top,
-            text    = "Update",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 15,
-            fg      = self.style.colors["primary"].fg,
-            command = lambda: clicked(temp_unit.get())
-        )
-        update_button.pack()
-
-        close_button = tk.Button(
-            top,
-            text    = "Close",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 15,
-            fg      = self.style.colors["primary"].fg,
-            command = top.destroy
-        )
-        close_button.pack()
-
-    def forecast_search(self, loc):
-        """Implementation for Weather Forecast screen."""
         try:
-            fore_data = self.speck.forecast(loc)
+            fore_i = self.speck.forecast(loc)
         except InvalidRequestUrl:
             rloc = self.speck.find_city(loc)[0]
-            fore_data = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
+            fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
 
-        font = int(min((30 - len(fore_data[0].location.name)), 24))
-
-        top = tk.Toplevel()
-        top.title(f"Forecast weather in {fore_data[0].location.name}")
-        top.geometry(f'{self.style.window.width}x{self.style.window.height}')
-        top.resizable(width=False, height="false")
-
-        lbl = tk.Label(
-            top,
-            text = f"\n{fore_data[0].location.name},\n{fore_data[0].location.country}",
-            font = (self.style.fonts["primary"].family, font)
-        )
-        lbl.pack()
-
-        options = []
-
-        for n, _ in enumerate(fore_data):
-            ndt = dt.now() + td(days=n+1)
-
-            options.append(f"{ndt.day}-{ndt.month}-{ndt.year}")
-
-        main_info_lbl = tk.Label(
-            top,
-            text = f"\n\nAverage temperature on {options[0]}:\n{fore_data[0].day.avgtemp_c}°C\n\n",
-            font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            fg   = self.style.colors["primary"].fg
-        )
-        main_info_lbl.pack()
-
-        day_select_menu = tk.StringVar()
-        day_select_menu.set(options[0])
-
-        day_select_drop = tk.OptionMenu(top, day_select_menu, options[0], *options[1:])
-        day_select_drop.pack()
-        day_select_drop.config(
-            font  = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width = 16,
-            fg    = self.style.colors["primary"].fg
-        )
-
-        def callback():
-            n = options.index(day_select_menu.get())
-            main_info_lbl.config(text=f"\n\nAverage temperature on {options[n]}:\n{fore_data[n].day.avgtemp_c}°C\n\n", fg="dark blue")
-
-        _lbl = tk.Label(top, text="\n\n\n\n")
-        _lbl.pack()
-
-        update_button = tk.Button(
-            top,
-            text    = "Update",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            command = callback
-        )
-        update_button.pack()
-
-        close_button = tk.Button(
-            top,
-            text    = "Close",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 15,
-            fg      = self.style.colors["primary"].fg,
-            command = top.destroy
-        )
-        close_button.pack()
-
-    def astro_search(self, loc):
-        """Implementation for Astronomy Information screen."""
         try:
-            cur_data = self.speck.astro(loc)
+            astro_i = self.speck.astro(loc)
         except InvalidRequestUrl:
             rloc = self.speck.astro(loc)[0]
-            cur_data = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
+            astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
-        font = int(min((30 - len(cur_data.location.name)), 24))
-        
-        top = tk.Toplevel()
-        top.title(f"Astronomy Information in {cur_data.location.name}")
-        top.geometry(f'{self.style.window.width}x{self.style.window.height}')
-        top.resizable(width=False, height="false")
+        # Display ----------------
 
-        
-        lbl = tk.Label(
-            top,
-            text = f"\n\n{cur_data.location.name},\n{cur_data.location.country}",
-            font = (self.style.fonts["primary"].family, font)
-        )
-        lbl2 = tk.Label(
-            top,
-            text = f"\n\nMoon Phase Today:\n{cur_data.moon_phase}\n\n",
-            font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            fg   = self.style.colors["primary"].fg
+        loc_lbl = tk.Label(
+            self.root,
+            text = f"{curr_i.location.name}",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_medium),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
         )
 
-        lbl.pack()
-        lbl2.pack()
-
-        close_button = tk.Button(
-            top,
-            text    = "Close",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 15,
-            fg      = self.style.colors["primary"].fg,
-            command = top.destroy
+        lt_lbl = tk.Label(
+            self.root,
+            text = f"{str(curr_i.location.localtime)[:-3]} {curr_i.location.tz_id}",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
         )
-        close_button.pack()
 
-    def calculator_search(self):
-        """Run the calculator."""
-        _calculator = speck_ui.calculator.Calculator()
-        _calculator.run()
+        curr_lbl = tk.Label(
+            self.root,
+            text = f"Current Temp: {curr_i.temp_c}°C",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
+        )
+        fore_lbl = tk.Label(
+            self.root,
+            text = f"Temp Avg: {fore_i[0].day.avgtemp_c}°C",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
+        )
+        astro_lbl = tk.Label(
+            self.root,
+            text = f"Moon: {astro_i.moon_phase}",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
+        )
 
-    # - - - - - - - - - - - - - - - - - - - - - -
+        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl])
+
+        self.main_canvas.create_window(42, 40,  anchor='nw', window=loc_lbl  )
+        self.main_canvas.create_window(42, 90,  anchor='nw', window=lt_lbl   )
+        self.main_canvas.create_window(42, 120, anchor='nw', window=curr_lbl )
+        self.main_canvas.create_window(42, 150, anchor='nw', window=fore_lbl )
+        self.main_canvas.create_window(42, 180, anchor='nw', window=astro_lbl)
 
     def run(self):
-        """Run the entire application. This is blocking."""
+        """Run the application."""
         self.root = tk.Tk()
         self.root.title('Speck Frontend')
         self.root.geometry(f'{self.style.window.width}x{self.style.window.height}')
-        # make sure app cant be resized
-        self.root.resizable(width=False, height="false")
+        self.root.resizable(width=False, height=False)
 
         self.welcome()
 
