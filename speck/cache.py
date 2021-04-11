@@ -34,7 +34,7 @@ class Cache:
                     return data
                 except:
                     pass
-        except pickle.PickleError:
+        except pickle.PickleError as e:
             pass
         except FileNotFoundError:
             pass

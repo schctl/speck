@@ -12,6 +12,7 @@ import speck
 from speck.speck import Speck
 
 import speck_ui
+import speck_graph
 
 import tkinter as tk
 from tkinter import messagebox
@@ -36,6 +37,8 @@ class SpeckFrontend:
         self.style = speck_ui.style.SpeckStyle.from_file("style.json")
 
         self.entry_cleared = False
+
+        self.tracker = speck_graph.Tracker()
 
         with open("token.txt", "r") as f:
             self.speck = Speck(f.read().rstrip())
@@ -234,7 +237,7 @@ class SpeckFrontend:
             rloc = self.speck.find_city(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
-        cache = speck.cache.Cache('cache/track')
+        self.tracker.dump(curr_i.location.name, curr_i)
 
         # Display ----------------
 
@@ -270,7 +273,7 @@ class SpeckFrontend:
         )
         astro_lbl = tk.Label(
             self.root,
-            text = f"Moon: {astro_i.moon_phase}",
+            text = f"{astro_i.moon_phase}",
             font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
             fg   =  self.style.colors["secondary"].fg,
             bg   =  self.style.colors["secondary"].bg
@@ -280,21 +283,32 @@ class SpeckFrontend:
             self.root,
             text    = "Back",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 28,
+            width   = 8,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
             command = self.location_entry
         )
+        plot_btn = tk.Button(
+            self.root,
+            text    = "Plot",
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            width   = 8,
+            fg      = self.style.colors["primary"].fg,
+            bg      = self.style.colors["primary"].bg,
+            bd      = 0,
+            command = lambda: speck_graph.plot(self.tracker, curr_i.location.name)
+        )
 
-        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl, back_btn])
+        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl, back_btn, plot_btn])
 
-        self.main_canvas.create_window(42, 40,  anchor='nw', window=loc_lbl  )
-        self.main_canvas.create_window(42, 90,  anchor='nw', window=lt_lbl   )
-        self.main_canvas.create_window(42, 120, anchor='nw', window=curr_lbl )
-        self.main_canvas.create_window(42, 150, anchor='nw', window=fore_lbl )
-        self.main_canvas.create_window(42, 180, anchor='nw', window=astro_lbl)
-        self.main_canvas.create_window(28, 523, anchor='nw', window=back_btn )
+        self.main_canvas.create_window(42,  40,  anchor='nw', window=loc_lbl  )
+        self.main_canvas.create_window(42,  90,  anchor='nw', window=lt_lbl   )
+        self.main_canvas.create_window(42,  120, anchor='nw', window=curr_lbl )
+        self.main_canvas.create_window(42,  150, anchor='nw', window=fore_lbl )
+        self.main_canvas.create_window(42,  180, anchor='nw', window=astro_lbl)
+        self.main_canvas.create_window(28,  523, anchor='nw', window=back_btn )
+        self.main_canvas.create_window(210, 523, anchor='nw', window=plot_btn )
 
     def run(self):
         """Run the application."""
