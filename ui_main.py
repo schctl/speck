@@ -8,11 +8,11 @@ Authors:
 
 import os
 
-import speck_wa
-import speck_ui
-import speck_graph
+import waw
+import ui
+import tracker
 
-from speck_wa.speck import Speck
+from waw.speck import Speck
 
 import tkinter as tk
 from tkinter import messagebox
@@ -34,11 +34,11 @@ class SpeckFrontend:
 
         self.root = None
 
-        self.style = speck_ui.style.SpeckStyle.from_file("style.json")
+        self.style = ui.style.SpeckStyle.from_file("style.json")
 
         self.entry_cleared = False
 
-        self.tracker = speck_graph.Tracker()
+        self.tracker = tracker.Tracker()
 
         with open("token.txt", "r") as f:
             self.speck = Speck(f.read().rstrip())
@@ -220,19 +220,19 @@ class SpeckFrontend:
 
         try:
             curr_i = self.speck.current(loc)
-        except speck_wa.errors.InvalidLocation:
+        except waw.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             fore_i = self.speck.forecast(loc)
-        except speck_wa.errors.InvalidLocation:
+        except waw.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             astro_i = self.speck.astro(loc)
-        except speck_wa.errors.InvalidLocation:
+        except waw.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
@@ -303,7 +303,7 @@ class SpeckFrontend:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: speck_graph.plot(self.tracker, curr_i.location.name)
+            command = lambda: tracker.plot(self.tracker, curr_i.location.name)
         )
 
         self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl_1, fore_lbl_2, astro_lbl, back_btn, plot_btn])

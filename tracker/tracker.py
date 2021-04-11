@@ -1,4 +1,4 @@
-from speck_cache import Cache
+from cache import Cache
 
 import os
 from datetime import datetime as dt
