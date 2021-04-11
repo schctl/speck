@@ -29,7 +29,7 @@ class Cache:
                 try:                                         # in a binary file, which can be read later on.
                     start = dt.now()
                     raw = pickle.load(f)
-                    data = json.loads(zlib.decompress(raw).decode('utf-8'))
+                    data = pickle.loads(zlib.decompress(raw))
                     print(dt.now() - start)
                     return data
                 except:
@@ -45,7 +45,7 @@ class Cache:
         """Writes data to a cache file with `name`. `name` must be kept track of manually."""
         with open(f"{self.path}/{name}.dat", "wb") as f:
             start = dt.now()
-            compressed = zlib.compress(json.dumps(data).encode('utf-8'))
+            compressed = zlib.compress(pickle.dumps(data))
             pickle.dump(compressed, f)
             print(dt.now() - start)
 

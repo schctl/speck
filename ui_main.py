@@ -234,6 +234,8 @@ class SpeckFrontend:
             rloc = self.speck.find_city(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
+        cache = speck.cache.Cache('cache/track')
+
         # Display ----------------
 
         loc_lbl = tk.Label(
@@ -278,7 +280,7 @@ class SpeckFrontend:
             self.root,
             text    = "Back",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 8,
+            width   = 28,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
@@ -292,7 +294,7 @@ class SpeckFrontend:
         self.main_canvas.create_window(42, 120, anchor='nw', window=curr_lbl )
         self.main_canvas.create_window(42, 150, anchor='nw', window=fore_lbl )
         self.main_canvas.create_window(42, 180, anchor='nw', window=astro_lbl)
-        self.main_canvas.create_window(30, 522, anchor='nw', window=back_btn )
+        self.main_canvas.create_window(28, 523, anchor='nw', window=back_btn )
 
     def run(self):
         """Run the application."""

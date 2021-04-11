@@ -1,4 +1,5 @@
 import json
+import pickle
 from datetime import datetime as dt
 
 from .raw import *
@@ -15,10 +16,14 @@ class BasePoint:
         """Return new instance of child from raw `weatherapi` response."""
         return cls(location, **json.loads(data))
 
+    def to_bytes(self):
+        """Return a json type object."""
+        return pickle.dumps(self)
+
 
 class Location(BasePoint): # Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses
     """Represents location data such as coordinates, time zone, region, at a particular time."""
-    def __init__(self, lat, lon, name, region=None, country=None, tz_id=None, localtime=None, *args, **kwargs):
+    def __init__(self, lat, lon, name, region=None, country=None, tz_id=None, localtime=None, **kwargs):
         self.lat = lat
         self.lon = lon
         self.name = name
