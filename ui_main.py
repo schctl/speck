@@ -314,8 +314,8 @@ class SpeckFrontend:
         self.main_canvas.create_window(42,  180, anchor='nw', window=fore_lbl_1)
         self.main_canvas.create_window(42,  210, anchor='nw', window=fore_lbl_2)
         self.main_canvas.create_window(42,  240, anchor='nw', window=astro_lbl)
-        self.main_canvas.create_window(28,  523, anchor='nw', window=back_btn )
-        self.main_canvas.create_window(210, 523, anchor='nw', window=plot_btn )
+        self.main_canvas.create_window(26,  523, anchor='nw', window=back_btn )
+        self.main_canvas.create_window(196, 523, anchor='nw', window=plot_btn )
 
     def run(self):
         """Run the application."""

@@ -5,8 +5,9 @@ import os
 
 from datetime import datetime as dt
 
+from speck_cache import Cache
+
 from . import errors
-from . import cache
 from . import types
 
 class Speck:
@@ -16,7 +17,7 @@ class Speck:
 
     def __init__(self, token):
         self.token = token
-        self.cache = cache.Cache('.cache')
+        self.cache = Cache('.cache')
         self.session = requests.Session()
         
         # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file

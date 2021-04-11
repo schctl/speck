@@ -4,11 +4,9 @@ Minimal wrapper and frontend for weatherAPI.com.
 
     https://www.weatherapi.com/
 
-This project isn't intended to be state-of-the-art or educational, rather, a "just works" implementation,
-mostly constrained by what's part of the syllabus (except the use of classes). Speck intends to show
-usage of git, versioning, and common practices used in open source projects. It intends to
-have a well documented API and have thoroughly commented implementations and
-also has a repository hosted on GitHub.
+Speck intends to show use of version control, and other common practices used in
+open source projects. It intends to have a well documented API and have
+thoroughly commented implementations. It also has a repository hosted on GitHub.
 
     https://github.com/schctl/speck
 
