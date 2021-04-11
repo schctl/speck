@@ -12,7 +12,7 @@ from . import types
 class Speck:
     """weatherAPI client."""
     
-    BASE = "http://api.weatherapi.com/v1"
+    BASE = "https://api.weatherapi.com/v1"
 
     def __init__(self, token):
         self.token = token
