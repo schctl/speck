@@ -2,7 +2,7 @@
 Styling utilities for speck.
 
 Authors:
-    2021 Sachin Cherian
+    Sachin Cherian
 """
 
 import json

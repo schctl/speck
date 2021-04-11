@@ -1,4 +1,4 @@
-from speck import speck
+from speck_wa.cache import Cache
 
 import os
 from datetime import datetime as dt
@@ -8,7 +8,7 @@ class Tracker:
 
     def __init__(self, path='cache/tracker'):
         self.path = path
-        self.cache = speck.cache.Cache(self.path)
+        self.cache = Cache(self.path)
 
     def dump(self, name, data):
         """Dump the speck object."""

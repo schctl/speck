@@ -2,7 +2,7 @@
 Sample Calculator.
 
 Authors:
-    2021 Nevin Jose
+    Nevin Jose
 """
 
 import tkinter as tk

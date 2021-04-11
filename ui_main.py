@@ -2,17 +2,17 @@
 Frontend for speck.
 
 Authors:
-    2021 Nevin Jose
-         Sachin Cherian
+    Nevin Jose
+    Sachin Cherian
 """
 
 import os
 
-import speck
-from speck.speck import Speck
-
+import speck_wa
 import speck_ui
 import speck_graph
+
+from speck_wa.speck import Speck
 
 import tkinter as tk
 from tkinter import messagebox

@@ -2,7 +2,7 @@
 # WeatherAPI API wrapper
 """
 
-__authors__ = ['Sachin Cherian <sachinctl@protonmail.com']
+__authors__ = ['Sachin Cherian']
 
 from . import errors
 from . import cache
