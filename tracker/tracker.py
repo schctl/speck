@@ -1,3 +1,5 @@
+"""Tracker class."""
+
 import os
 from datetime import datetime as dt
 

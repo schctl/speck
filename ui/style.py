@@ -8,11 +8,13 @@ Authors:
 import json
 
 class WindowStyle:
+    """Details about the main window."""
     def __init__(self, width, height, *args, **kwargs):
         self.width = width
         self.height = height
 
 class FontStyle:
+    """Details about fonts to be used."""
     def __init__(self, family, sizes):
         self.family = family
 
@@ -21,11 +23,13 @@ class FontStyle:
         self.size_small = sizes["small"]
 
 class ColorStyle:
+    """Details for colors to be used."""
     def __init__(self, fg, bg):
         self.fg = fg
         self.bg = bg
 
 class SpeckStyle:
+    """Container around all other styles."""
     def __init__(self, window, fonts, colors, *args, **kwargs):
         self.window = window
         self.fonts = fonts

@@ -1,3 +1,8 @@
+"""
+WeatherAPI Client.
+Use this to make requests to weatherapi.com.
+"""
+
 import os
 import json
 import requests
@@ -10,6 +15,11 @@ from . import errors
 from . import types
 
 class __DummyCache:
+    """
+    Dummy cache type so checks don't have to be performed
+    if `Client` has opt out of cache.
+    """
+
     def __init__(*args, **kwargs):
         pass
 

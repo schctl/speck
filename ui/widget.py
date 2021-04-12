@@ -26,27 +26,33 @@ class WidgetManager:
         self._widgets = []
 
     def extend(self, widgets):
+        """Extend the widget list."""
         self._widgets.extend(widgets)
         return [len(self._widgets) - (i + 1) for i in range(0, len(widgets), -1)]
 
     def push(self, widget):
+        """Add a new widget to the stack. Returns the index of the widget."""
         self._widgets.append(widget)
         return len(self._widgets) - 1
 
     def pop(self, _id):
+        """Remove a widget from the lift by index."""
         return self._widgets.pop(_id)
 
     def clear(self):
+        """Clear all widgets."""
         for i in self._widgets:
             i.destroy()
         self._widgets.clear()
 
     def empty(self):
+        """Empty the widget list."""
         for i in self._widgets:
             i.destroy()
         self._widgets = []
 
     def __get_position_from_prev(self, index, position_index): # position_index -> x/y -> 0/1
+        """Get position of previous widget in the stack."""
         pos = self._widgets[index].position[position_index]
 
         # TODO: more descriptive errors.
@@ -75,6 +81,7 @@ class WidgetManager:
             raise TypeError("Invalid type for widget position.")
 
     def render_all(self, canvas):
+        """Render all widgets currently in the stack onto a canvas."""
         for n, i in enumerate(self._widgets):
             x_pos = self.__get_position_from_prev(n, 0)
             y_pos = self.__get_position_from_prev(n, 1)

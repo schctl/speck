@@ -25,6 +25,8 @@ from datetime import timedelta as td
 from hashlib import md5
 import cProfile, pstats, io
 
+# Extras
+
 def __profile(fn):
     """Decortator to profile functions."""
     def inner(*args, **kwargs):
@@ -47,19 +49,24 @@ def _ROOTD(fname):
 
 @__profile
 def _READF(fname):
+    """Utility function to read a file."""
     with open(fname, 'r') as f:
         return f.read()
 
 @__profile
 def _UTF8_TO_MD5_HEX(string):
+    """Convert a UTF-8 encoded string to its md5 in hex format."""
     return md5(bytes(string, 'utf-8')).hexdigest()
 
+# -----
+
 class SpeckFrontend:
+    """Prewritten GUI frontend for speck."""
     def __init__(self):
-        self.bg = None
+        self.bg = None # Background image
         self.root = None
-        self.main_canvas = Widget(None, (0, 0))
-        self.entry_cleared = False
+        self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
+        self.entry_cleared = False # Check if uname and pwd entries have been cleared of defaults.
 
         self.widget_manager = ui.widget.WidgetManager()
 
@@ -69,6 +76,7 @@ class SpeckFrontend:
 
     @staticmethod
     def __generic_label(root, style, text):
+        """Make a generic label so we don't have to do it ourselves."""
         return tk.Label(
             root,
             text = text,
@@ -79,6 +87,7 @@ class SpeckFrontend:
 
     @staticmethod
     def __verify_credentials(uname, pwd):
+        """This serves no real purpose other than being a dummy."""
         auth = _READF(_ROOTD('auth.txt')).split()
         return _UTF8_TO_MD5_HEX(uname) == auth[0] and \
                _UTF8_TO_MD5_HEX(pwd)   == auth[1]
@@ -126,7 +135,7 @@ class SpeckFrontend:
             (38, 380)
         )
 
-        welcome_username_entry.internal.insert(0, "Username")
+        welcome_username_entry.internal.insert(0, "Username") # Default values
         welcome_password_entry.internal.insert(0, "Password")
 
         def check_login():
@@ -142,8 +151,8 @@ class SpeckFrontend:
             self.location_entry() # Move onto step 2
 
         def entry_clear(e):
-            if not self.entry_cleared:
-                welcome_username_entry.internal.delete(0, tk.END)
+            if not self.entry_cleared: # Make sure we're not deleting any input
+                welcome_username_entry.internal.delete(0, tk.END) # Clear defaults
                 welcome_password_entry.internal.delete(0, tk.END)
                 # change pw to ***
                 welcome_password_entry.internal.config(show='*')
@@ -182,7 +191,7 @@ class SpeckFrontend:
 
         self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
 
-        self.main_canvas.destroy()
+        self.main_canvas.destroy() # Clear the main canvas
         self.widget_manager.clear()
 
         self.main_canvas = Widget(tk.Canvas(

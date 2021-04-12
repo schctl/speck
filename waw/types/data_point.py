@@ -1,3 +1,5 @@
+"""WeatherAPI types."""
+
 import json
 import pickle
 from datetime import datetime as dt
