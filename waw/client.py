@@ -10,15 +10,32 @@ from cache import Cache
 from . import errors
 from . import types
 
+class __DummyCache:
+    def __init__(*args, **kwargs):
+        pass
+
+    def read(*args, **kwargs):
+        pass
+
+    def dump(*args, **kwargs):
+        pass
+
+    def cleanup(*args, **kwargs):
+        pass
+
 class Client:
     """weatherAPI client."""
     
     BASE = "https://api.weatherapi.com/v1"
 
-    def __init__(self, token):
+    def __init__(self, token, use_cache = False, cache_path = '.cache'):
         self.token = token
-        self.cache = Cache('.cache')
         self.session = requests.Session()
+
+        if use_cache:
+            self.cache = Cache(cache_path)
+        else:
+            self.cache = __DummyCache()
         
         # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file
         with open(f'{os.path.abspath(os.path.dirname(__file__))}/cities_p.json', 'r', encoding='utf-8') as f: # This looks for the cities list file

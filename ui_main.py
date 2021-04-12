@@ -37,7 +37,7 @@ class SpeckFrontend:
         self.tracker = tracker.Tracker()
 
         with open("token.txt", "r") as f:
-            self.speck = Client(f.read().rstrip())
+            self.speck = Client(f.read().rstrip(), use_cache=True)
 
     @staticmethod
     def __generic_label(root, style, text):
@@ -65,7 +65,7 @@ class SpeckFrontend:
         self.main_canvas.destroy()        
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file='./res/exports/base_logo.png')
+        self.bg = ImageTk.PhotoImage(file='./etc/exports/base_logo.png')
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -138,10 +138,12 @@ class SpeckFrontend:
             ),
             (38, 435)
         )
-        
-        self.widget_manager.push(welcome_username_entry)
-        self.widget_manager.push(welcome_password_entry)
-        self.widget_manager.push(welcome_login_button)
+
+        self.widget_manager.extend([
+            welcome_username_entry,
+            welcome_password_entry,
+            welcome_login_button
+        ])
 
         self.widget_manager.render_all(self.main_canvas.internal)
 
@@ -150,7 +152,7 @@ class SpeckFrontend:
 
         # Step 2
 
-        self.bg = ImageTk.PhotoImage(file='./res/exports/base_logo.png')
+        self.bg = ImageTk.PhotoImage(file='./etc/exports/base_logo.png')
 
         self.main_canvas.destroy()
         self.widget_manager.clear()
@@ -202,7 +204,7 @@ class SpeckFrontend:
 
         # Step 3
 
-        self.bg = ImageTk.PhotoImage(file='./res/exports/secondary.png')
+        self.bg = ImageTk.PhotoImage(file='./etc/exports/secondary.png')
 
         self.main_canvas.destroy()        
         self.widget_manager.clear()
