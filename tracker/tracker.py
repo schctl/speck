@@ -17,10 +17,8 @@ class Tracker:
     def find_all(self, name):
         """Find all dumped speck objects."""
 
-        results = []
-        
-        for i in os.listdir(self.path):
-            if i.startswith(name):
-                results.append((dt.strptime(i.replace(name, ''), "-%Y-%m-%d.dat"), self.cache.read(i.rstrip('.dat'))))
-
-        return results
+        return (
+            (dt.strptime(i.replace(name, ''), "-%Y-%m-%d.dat"), self.cache.read(i.rstrip('.dat')))
+            for i in os.listdir(self.path)
+            if i.startswith(name)
+        )

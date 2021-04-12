@@ -6,8 +6,6 @@ Authors:
     Sachin Cherian
 """
 
-import os
-
 import waw
 import ui
 import tracker
@@ -15,8 +13,9 @@ import tracker
 from ui.widget import Widget
 from waw.client import Client
 
+import os
+
 import tkinter as tk
-from tkinter import messagebox
 
 from PIL import ImageTk
 
@@ -24,6 +23,36 @@ from datetime import datetime as dt
 from datetime import timedelta as td
 
 from hashlib import md5
+import cProfile, pstats, io
+
+def __profile(fn):
+    """Decortator to profile functions."""
+    def inner(*args, **kwargs):
+        pr = cProfile.Profile()
+        pr.enable()
+        retval = fn(*args, **kwargs)
+        pr.disable()
+        s = io.StringIO()
+        ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
+        ps.print_stats()
+        print(s.getvalue())
+        return retval
+
+    return inner
+
+@__profile
+def __ROOTD(fname):
+    """Return the path to a file relative to the root directory of the project."""
+    return os.path.join(os.path.dirname(__file__), fname)
+
+@__profile
+def __READF(fname):
+    with open(fname, 'r') as f:
+        return f.read()
+
+@__profile
+def ____UTF8_TO_MD5_HEX(string):
+    return md5(bytes(string, 'utf-8')).hexdigest()
 
 class SpeckFrontend:
     def __init__(self):
@@ -33,11 +62,10 @@ class SpeckFrontend:
         self.entry_cleared = False
         
         self.widget_manager = ui.widget.WidgetManager()
-        self.style = ui.style.SpeckStyle.from_file("style.json")
-        self.tracker = tracker.Tracker()
 
-        with open("token.txt", "r") as f:
-            self.speck = Client(f.read().rstrip(), use_cache=True)
+        self.style = ui.style.SpeckStyle.from_file(__ROOTD('style.json'))
+        self.tracker = tracker.Tracker(__ROOTD('.tracker'))
+        self.speck = Client(__READF(__ROOTD('token.txt')).rstrip(), use_cache=True, cache_path=f"{__ROOTD('.cache')}")
 
     @staticmethod
     def __generic_label(root, style, text):
@@ -51,9 +79,9 @@ class SpeckFrontend:
 
     @staticmethod
     def __verify_credentials(uname, pwd):
-        # Kind of scuffed
-        return md5(bytes(uname, 'utf-8')) .hexdigest() == '0816da75e13696127a3ca692ccc9d06b' and \
-               md5(bytes(pwd, 'utf-8'))   .hexdigest() == 'e7604248bb637b6d0d7ba9b5bc07cc6f'
+        auth = __READF(__ROOTD('auth.txt')).split()
+        return __UTF8_TO_MD5_HEX(uname) == auth[0] and \
+               __UTF8_TO_MD5_HEX(pwd)   == auth[1]
 
     # Flow --------------------------------------
 
@@ -65,7 +93,7 @@ class SpeckFrontend:
         self.main_canvas.destroy()        
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file='./etc/exports/base_logo.png')
+        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/base_logo.png'))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -106,10 +134,10 @@ class SpeckFrontend:
                 pass
 
             elif not self.entry_cleared:
-                return messagebox.showwarning("ERROR","ENTER USERNAME AND PASSWORD")
+                return tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
 
             elif not SpeckFrontend.__verify_credentials(welcome_username_entry.internal.get(), welcome_password_entry.internal.get()):
-                return messagebox.showwarning("ERROR","ENTER CORRECT USERNAME AND PASSWORD")
+                return tk.messagebox.showwarning("ERROR", "ENTER CORRECT USERNAME AND PASSWORD")
 
             self.location_entry() # Move onto step 2
 
@@ -152,7 +180,7 @@ class SpeckFrontend:
 
         # Step 2
 
-        self.bg = ImageTk.PhotoImage(file='./etc/exports/base_logo.png')
+        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/base_logo.png'))
 
         self.main_canvas.destroy()
         self.widget_manager.clear()
@@ -204,7 +232,7 @@ class SpeckFrontend:
 
         # Step 3
 
-        self.bg = ImageTk.PhotoImage(file='./etc/exports/secondary.png')
+        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/secondary.png'))
 
         self.main_canvas.destroy()        
         self.widget_manager.clear()
@@ -253,12 +281,17 @@ class SpeckFrontend:
             ), (42, 40)
         )
 
-        #                                                 # Root     # Style     # Text                                                                 # Pos
-        lt_lbl     = Widget(SpeckFrontend.__generic_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0",  "+50"))
-        curr_lbl   = Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0",  "+30"))
-        fore_lbl_1 = Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0",  "+30"))
-        fore_lbl_2 = Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0",  "+30"))
-        astro_lbl  = Widget(SpeckFrontend.__generic_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0",  "+30"))
+        #                                        # Root     # Style     # Text                                                                 # Pos
+        lt_lbl     = \
+            Widget(SpeckFrontend.__generic_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0", "+50"))
+        curr_lbl   = \
+            Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0", "+30"))
+        fore_lbl_1 = \
+            Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0", "+30"))
+        fore_lbl_2 = \
+            Widget(SpeckFrontend.__generic_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0", "+30"))
+        astro_lbl  = \
+            Widget(SpeckFrontend.__generic_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0", "+30"))
 
         back_btn = Widget(tk.Button(
             self.root,
@@ -297,6 +330,8 @@ class SpeckFrontend:
         ])
 
         self.widget_manager.render_all(self.main_canvas.internal)
+
+    # -------------------------------------------
 
     def run(self):
         """Run the application."""

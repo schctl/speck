@@ -4,9 +4,9 @@ Minimal wrapper and frontend for weatherAPI.com.
 
     https://www.weatherapi.com/
 
-Speck's focus isn't practicality, rather, to show use of version control, and other common
-practices used in open source projects. It intends to have a well documented API and have
-thoroughly commented implementations. It also has a repository hosted on GitHub.
+Speck's focus isn't usability, rather, to show use of application structure, version control,
+and other common practices used in open source projects. It intends to have a well documented
+API and have thoroughly commented implementations. It also has a repository hosted on GitHub.
 
     https://github.com/schctl/speck
 
