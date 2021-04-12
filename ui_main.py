@@ -7,15 +7,16 @@ Authors:
 """
 
 import os
-
-import tkinter as tk
-import cProfile, pstats, io
-
-from PIL import ImageTk
+import io
+import pstats
+import cProfile
 from hashlib import md5
 
-import waw
+import tkinter as tk
+from PIL import ImageTk
+
 import ui
+import waw
 import tracker
 
 from ui.widget import Widget
@@ -129,17 +130,19 @@ class SpeckFrontend:
                 pass
 
             elif not self.entry_cleared:
-                return tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
+                tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
+                return
 
             elif not SpeckFrontend.__verify_credentials(
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):
-                return tk.messagebox.showwarning("ERROR", "ENTER CORRECT USERNAME AND PASSWORD")
+                tk.messagebox.showwarning("ERROR", "ENTER CORRECT USERNAME AND PASSWORD")
+                return
 
             self.location_entry() # Move onto step 2
 
-        def entry_clear(e):
+        def entry_clear(_):
             if not self.entry_cleared: # Make sure we're not deleting any input
                 welcome_username_entry.internal.delete(0, tk.END) # Clear defaults
                 welcome_password_entry.internal.delete(0, tk.END)
@@ -205,7 +208,10 @@ class SpeckFrontend:
         )
 
         location_input_entry.internal.insert(0, "Search Location")
-        location_input_entry.internal.bind("<Button-1>", lambda _: location_input_entry.internal.delete(0, tk.END))
+        location_input_entry.internal.bind(
+            "<Button-1>",
+            lambda _: location_input_entry.internal.delete(0, tk.END)
+        )
 
         location_input_button = Widget(tk.Button(
             self.root,
@@ -224,7 +230,14 @@ class SpeckFrontend:
         self.widget_manager.push(location_input_button)
 
         if self.last_loc_fail:
-            fail_loc = Widget(SpeckFrontend.__generic_label(self.root, self.style, "Unknown Location"), ("-16", "+120"))
+            fail_loc = Widget(
+                SpeckFrontend.__generic_label(
+                    self.root,
+                    self.style,
+                    "Unknown Location"
+                ),
+                ("-16", "+120")
+            )
             self.widget_manager.push(fail_loc)
 
         self.widget_manager.render_all(self.main_canvas.internal)
@@ -360,5 +373,7 @@ if __name__ == '__main__':
 
     buffer = io.StringIO()
     profile_stats = pstats.Stats(profile, stream=buffer).sort_stats('cumulative')
-    profile_stats.print_stats()
-    print(buffer.getvalue())
+
+    if 'SPECK_DEBUG' in os.environ:
+        profile_stats.print_stats()
+        print(buffer.getvalue())

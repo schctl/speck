@@ -32,11 +32,10 @@ class Cache:
     def read(self, name):
         """Tries to read cache with `name`. Returns `None` if no such file is found."""
         try:
-            with open(f"{self.path}/{name}.dat", "rb") as f: # Cache is stored as a dictionary/list
-                try:                                         # in a binary file, which can be read later on.
-                    return pickle.loads(zlib.decompress(pickle.load(f)))
-                except:
-                    pass
+            # Cache is stored as an object in a binary file,
+            # which can be loaded as-is later on.
+            with open(f"{self.path}/{name}.dat", "rb") as f:
+                return pickle.loads(zlib.decompress(pickle.load(f)))
 
         except pickle.PickleError:
             pass
@@ -52,15 +51,28 @@ class Cache:
 
     def cleanup(self, name):
         """Cleans up all cache files with a given `name`. Supports wildcard (*) deletion."""
-        els = name.split('*')
+        els = name.split('*') # splits across *, - removes the * as well
 
         # Removes all cache files matching the `name` pattern. `*` represents any set of characters.
 
         try:
             for i in os.listdir(self.path):
                 for n, j in enumerate(els):
-                    if not (j in i and (i.index(j) <= i.index(els[min(n, len(name) - 1)]) or j == '')):
-                        break  # NEED to cleanup - written at 4 am
+                    if not (
+                        j == '' or ( j in i and \
+                            (i.index(j) >= i.index(els[0 if n < 1 else n - 1]))
+                            )
+                        ):
+                        break
+
+                        # Explanation for above if statement
+                        # ----------------------------------
+                        # `els` is a list of all components split across *.
+                        # We check if each component of `else` is in
+                        # the file name being checked (`j in i`).
+                        # If the component is empty, we can skip directly.
+                        # If it is, we make sure its after the previous
+                        # component (second check).
                 else:
                     os.remove(f"{self.path}/{i}") # Delete the actual file
 

@@ -1,4 +1,9 @@
-import tkinter as tk
+"""
+Widget helpers for tkinter.
+
+Authors:
+    Sachin Cherian
+"""
 
 class Widget:
     """Wrapper around Tkiner Widgets."""

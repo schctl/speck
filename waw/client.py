@@ -5,9 +5,10 @@ Use this to make requests to weatherapi.com.
 
 import os
 import json
-import requests
 
 from datetime import datetime as dt
+
+import requests
 
 from cache import Cache
 
@@ -117,7 +118,7 @@ class Client:
                     - auto:ip IP lookup e.g: 'auto:ip'
                     - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
         """
-        mode = f"current-{loc}-now-{str(dt.now())[:15]}"
+        mode = f"current-{loc}-now-{str(dt.now())[:15].replace(' ', '-')}"
 
         n = self.cache.read(mode)
         if n:
@@ -145,7 +146,8 @@ class Client:
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
 
         * **days:** Number of days to forecast for. Maximum is 10.
         """
@@ -177,7 +179,8 @@ class Client:
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
         """
         mode = f"astro-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -231,7 +234,8 @@ class Client:
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
         """
         mode = f"search-{loc}"
 
@@ -278,11 +282,13 @@ class Client:
     def sports_lookup(self, loc):
         """
         Get listing of all upcoming sports events for football, cricket and golf.
-        Judging from the behaviour of the WeatherAPI Sports API, parameter `loc` doesn't actually matter but is required anyway.
+        Judging from the behaviour of the WeatherAPI Sports API, parameter `loc`
+        doesn't actually matter but is required anyway.
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -309,9 +315,11 @@ class Client:
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
 
-        * **dt:** Restrict number of days of history to fetch. Should be on or after 2015-01-01.
+        * **dt:** Restrict number of days of history to fetch.
+                  Should be on or after 2015-01-01.
 
         # WARNING: This method has not been tested.
         """

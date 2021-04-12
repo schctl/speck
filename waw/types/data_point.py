@@ -69,7 +69,8 @@ class HourlyPoint(BasePoint):
         else:
             self.location = Location.from_raw(location)
 
-        self.time = dt.strptime(last_updated if not time else time, "%Y-%m-%d %H:%M") if (last_updated or time) else None
+        self.time = dt.strptime(last_updated if not time else time, "%Y-%m-%d %H:%M") \
+                    if (last_updated or time) else None
 
         self.temp_c = Cel(temp_c)
         self.feelslike_c = Cel(feelslike_c)
@@ -106,7 +107,8 @@ class DayPoint(BasePoint):
     """The total conditions per day."""
     def __init__(
         self, location,
-        maxtemp_c, mintemp_c, avgtemp_c, maxwind_kph, totalprecip_mm, avgvis_km, avghumidity, condition, uv,
+        maxtemp_c, mintemp_c, avgtemp_c, maxwind_kph,
+        totalprecip_mm, avgvis_km, avghumidity, condition, uv,
         **kwargs
     ):
         if isinstance(location, Location):
