@@ -62,7 +62,7 @@ class Client:
         try:
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json() # Does the acutal request
         except Exception as e:
-            raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
+            raise errors.InternalError(f"Unable to fetch data at this time: {e.__traceback__}", 9999)
 
     def find_city(self, loc):
         """Returns an array of city names and coordinates containing a search pattern."""
