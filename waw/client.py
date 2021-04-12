@@ -38,7 +38,7 @@ class Client:
             self.cache = __DummyCache()
         
         # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file
-        with open(f'{os.path.abspath(os.path.dirname(__file__))}/cities_p.json', 'r', encoding='utf-8') as f: # This looks for the cities list file
+        with open(f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json', 'r', encoding='utf-8') as f: # This looks for the cities list file
             self.cities = json.loads(f.read())
 
     @staticmethod

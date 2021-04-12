@@ -224,22 +224,21 @@ class SpeckFrontend:
         # Get info ----------------
 
         try:
+            curr_i = self.speck.current(loc) # if this fails, there's no valid location
+
+        except waw.errors.InvalidLocation:
+            loc = self.speck.find_city(loc)
+
+            if len(loc) == 0:
+                self.location_entry() # if this fails as well, we go back to the location screen
+                                      # TODO: add an `is_prev_fail` check
+
+            loc = f"{rloc['lat']},{rloc['lon']}"
+
             curr_i = self.speck.current(loc)
-        except waw.errors.InvalidLocation:
-            rloc = self.speck.find_city(loc)[0]
-            curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
-
-        try:
-            fore_i = self.speck.forecast(loc)
-        except waw.errors.InvalidLocation:
-            rloc = self.speck.find_city(loc)[0]
-            fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
-
-        try:
-            astro_i = self.speck.astro(loc)
-        except waw.errors.InvalidLocation:
-            rloc = self.speck.find_city(loc)[0]
-            astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
+        
+        astro_i = self.speck.astro(loc)
+        fore_i  = self.speck.forecast(loc)
 
         self.tracker.dump(curr_i.location.name, curr_i)
 
@@ -294,8 +293,8 @@ class SpeckFrontend:
             fore_lbl_2,
             astro_lbl,
             back_btn,
-            plot_btn]
-        )
+            plot_btn
+        ])
 
         self.widget_manager.render_all(self.main_canvas.internal)
 
