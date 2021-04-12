@@ -6,6 +6,14 @@ Authors:
     Sachin Cherian
 """
 
+import os
+
+import tkinter as tk
+import cProfile, pstats, io
+
+from PIL import ImageTk
+from hashlib import md5
+
 import waw
 import ui
 import tracker
@@ -13,49 +21,18 @@ import tracker
 from ui.widget import Widget
 from waw.client import Client
 
-import os
-
-import tkinter as tk
-
-from PIL import ImageTk
-
-from datetime import datetime as dt
-from datetime import timedelta as td
-
-from hashlib import md5
-import cProfile, pstats, io
-
 # Extras
 
-def __profile(fn):
-    """Decortator to profile functions."""
-    def inner(*args, **kwargs):
-        # pr = cProfile.Profile()
-        # pr.enable()
-        # retval = fn(*args, **kwargs)
-        # pr.disable()
-        # s = io.StringIO()
-        # ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
-        # ps.print_stats()
-        # print(s.getvalue())
-        # return retval
-        return fn(*args, **kwargs)
-
-    return inner
-
-@__profile
-def _ROOTD(fname):
+def _rootd(fname):
     """Return the path to a file relative to the root directory of the project."""
     return os.path.join(os.path.dirname(__file__), fname)
 
-@__profile
-def _READF(fname):
+def _readf(fname):
     """Utility function to read a file."""
     with open(fname, 'r') as f:
         return f.read()
 
-@__profile
-def _UTF8_TO_MD5_HEX(string):
+def _utf8_to_md5_hex(string):
     """Convert a UTF-8 encoded string to its md5 in hex format."""
     return md5(bytes(string, 'utf-8')).hexdigest()
 
@@ -73,9 +50,14 @@ class SpeckFrontend:
 
         self.widget_manager = ui.widget.WidgetManager()
 
-        self.style = ui.style.SpeckStyle.from_file(_ROOTD('style.json'))
-        self.tracker = tracker.Tracker(_ROOTD('.tracker'))
-        self.speck = Client(_READF(_ROOTD('token.txt')).rstrip(), use_cache=True, cache_path=f"{_ROOTD('.cache')}")
+        self.style = ui.style.SpeckStyle.from_file(_rootd('style.json'))
+        self.tracker = tracker.Tracker(_rootd('.tracker'))
+
+        self.speck = Client(
+            _readf(_rootd('token.txt')).rstrip(),
+            use_cache=True,
+            cache_path=f"{_rootd('.cache')}"
+        )
 
     @staticmethod
     def __generic_label(root, style, text):
@@ -91,9 +73,10 @@ class SpeckFrontend:
     @staticmethod
     def __verify_credentials(uname, pwd):
         """This serves no real purpose other than being a dummy."""
-        auth = _READF(_ROOTD('auth.txt')).split()
-        return _UTF8_TO_MD5_HEX(uname) == auth[0] and \
-               _UTF8_TO_MD5_HEX(pwd)   == auth[1]
+        # We'll store our credentials in a file - not the best idea
+        auth = _readf(_rootd('auth.txt')).split()
+        return _utf8_to_md5_hex(uname) == auth[0] and \
+               _utf8_to_md5_hex(pwd)   == auth[1]
 
     # Flow --------------------------------------
 
@@ -105,7 +88,7 @@ class SpeckFrontend:
         self.main_canvas.destroy()
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/base_logo.png'))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -148,7 +131,10 @@ class SpeckFrontend:
             elif not self.entry_cleared:
                 return tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
 
-            elif not SpeckFrontend.__verify_credentials(welcome_username_entry.internal.get(), welcome_password_entry.internal.get()):
+            elif not SpeckFrontend.__verify_credentials(
+                welcome_username_entry.internal.get(),
+                welcome_password_entry.internal.get()
+                ):
                 return tk.messagebox.showwarning("ERROR", "ENTER CORRECT USERNAME AND PASSWORD")
 
             self.location_entry() # Move onto step 2
@@ -192,9 +178,7 @@ class SpeckFrontend:
 
         # Step 2
 
-        print('Location Entry')
-
-        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/base_logo.png'))
 
         self.main_canvas.destroy() # Clear the main canvas
         self.widget_manager.clear()
@@ -250,7 +234,7 @@ class SpeckFrontend:
 
         # Step 3
 
-        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/secondary.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/secondary.png'))
 
         self.main_canvas.destroy()
         self.widget_manager.clear()
@@ -366,5 +350,15 @@ class SpeckFrontend:
         self.root.mainloop()
 
 if __name__ == '__main__':
+    profile = cProfile.Profile()
+    profile.enable()
+
     app = SpeckFrontend() # Create an instance
     app.run()
+
+    profile.disable()
+
+    buffer = io.StringIO()
+    profile_stats = pstats.Stats(profile, stream=buffer).sort_stats('cumulative')
+    profile_stats.print_stats()
+    print(buffer.getvalue())

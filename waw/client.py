@@ -161,12 +161,10 @@ class Client:
         if e:
             raise e
 
-        data = list(
-            map(
-                lambda i: types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"]),
-                response["forecast"]["forecastday"]
-            )
-        )
+        data = [
+            types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"])
+            for i in response["forecast"]["forecastday"]
+        ]
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, data)
@@ -248,7 +246,10 @@ class Client:
         if e:
             raise e
 
-        data = list(map(lambda i: types.Location.from_raw(i), response))
+        data = [
+            types.Location.from_raw(i)
+            for i in response
+        ]
 
         # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, data)
@@ -327,12 +328,10 @@ class Client:
         if e:
             raise e
 
-        data = list(
-            map(
-                lambda i: types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"]),
-                n["forecast"]["forecastday"]
-            )
-        )
+        data = [
+            types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"])
+            for i in n["forecast"]["forecastday"]
+        ]
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, data)
