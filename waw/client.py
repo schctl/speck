@@ -46,13 +46,9 @@ class Client:
         else:
             self.cache = __DummyCache()
 
-        print(
-            f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json'
-        )
-
         # This looks for the cities list file
         with open(
-            f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json',
+            os.path.join(os.path.dirname(__file__), '../etc/cities_p.json'),
             'r', encoding='utf-8'
         ) as f:
             self.cities = json.loads(f.read())

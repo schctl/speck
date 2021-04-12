@@ -30,15 +30,16 @@ import cProfile, pstats, io
 def __profile(fn):
     """Decortator to profile functions."""
     def inner(*args, **kwargs):
-        pr = cProfile.Profile()
-        pr.enable()
-        retval = fn(*args, **kwargs)
-        pr.disable()
-        s = io.StringIO()
-        ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
-        ps.print_stats()
-        print(s.getvalue())
-        return retval
+        # pr = cProfile.Profile()
+        # pr.enable()
+        # retval = fn(*args, **kwargs)
+        # pr.disable()
+        # s = io.StringIO()
+        # ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
+        # ps.print_stats()
+        # print(s.getvalue())
+        # return retval
+        return fn(*args, **kwargs)
 
     return inner
 
@@ -66,7 +67,9 @@ class SpeckFrontend:
         self.bg = None # Background image
         self.root = None
         self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
+
         self.entry_cleared = False # Check if uname and pwd entries have been cleared of defaults.
+        self.last_loc_fail = False
 
         self.widget_manager = ui.widget.WidgetManager()
 
@@ -189,6 +192,8 @@ class SpeckFrontend:
 
         # Step 2
 
+        print('Location Entry')
+
         self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
 
         self.main_canvas.destroy() # Clear the main canvas
@@ -234,6 +239,10 @@ class SpeckFrontend:
         self.widget_manager.push(location_input_entry)
         self.widget_manager.push(location_input_button)
 
+        if self.last_loc_fail:
+            fail_loc = Widget(SpeckFrontend.__generic_label(self.root, self.style, "Unknown Location"), ("-16", "+120"))
+            self.widget_manager.push(fail_loc)
+
         self.widget_manager.render_all(self.main_canvas.internal)
 
     def info_screen(self, loc):
@@ -267,10 +276,11 @@ class SpeckFrontend:
             loc = self.speck.find_city(loc)
 
             if len(loc) == 0:
+                self.last_loc_fail = True
                 self.location_entry() # if this fails as well, we go back to the location screen
-                                      # TODO: add an `is_prev_fail` check
+                return
 
-            loc = f"{rloc['lat']},{rloc['lon']}"
+            loc = f"{loc[0]['lat']},{loc[0]['lon']}"
 
             curr_i = self.speck.current(loc)
 
@@ -278,6 +288,8 @@ class SpeckFrontend:
         fore_i  = self.speck.forecast(loc)
 
         self.tracker.dump(curr_i.location.name, curr_i)
+
+        self.last_loc_fail = False
 
         # Display ----------------
 
