@@ -2,9 +2,7 @@
 
 from matplotlib import pyplot
 
-from . import Tracker
-
-def plot(tracker: Tracker, name):
+def plot(tracker, name):
     """Plot all values of temp_c stored by `tracker`."""
     raw = sorted(tracker.find_all(name), key=lambda x: x[0])
 
