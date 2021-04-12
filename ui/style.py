@@ -15,7 +15,7 @@ class WindowStyle:
 class FontStyle:
     def __init__(self, family, sizes):
         self.family = family
-        
+
         self.size_big = sizes["big"]
         self.size_medium = sizes["medium"]
         self.size_small = sizes["small"]

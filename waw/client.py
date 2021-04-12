@@ -1,7 +1,6 @@
+import os
 import json
 import requests
-
-import os
 
 from datetime import datetime as dt
 
@@ -25,7 +24,7 @@ class __DummyCache:
 
 class Client:
     """weatherAPI client."""
-    
+
     BASE = "https://api.weatherapi.com/v1"
 
     def __init__(self, token, use_cache = False, cache_path = '.cache'):
@@ -36,16 +35,23 @@ class Client:
             self.cache = Cache(cache_path)
         else:
             self.cache = __DummyCache()
-        
-        # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file
-        with open(f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json', 'r', encoding='utf-8') as f: # This looks for the cities list file
+
+        print(
+            f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json'
+        )
+
+        # This looks for the cities list file
+        with open(
+            f'{os.path.abspath(os.path.dirname(__file__))}/../etc/cities_p.json',
+            'r', encoding='utf-8'
+        ) as f:
             self.cities = json.loads(f.read())
 
     @staticmethod
     def __error_code_to_error(response):
         """
         Convert weatherapi.com provided error code to Error Type.
-        
+
         * Parameter `response` should be the raw weatherapi.com response.
         """
         if "error" in response:
@@ -72,7 +78,7 @@ class Client:
             else:
                 return errors.WeatherApiError(message, code)
 
-        return None
+        return
 
     def __make_request(self, endpoint, parameters):
         """Private method to make a request to `weatherapi.com`."""
@@ -83,8 +89,8 @@ class Client:
 
     def find_city(self, loc):
         """Returns an array of city names and coordinates containing a search pattern."""
-        return [
-            i for i in self.cities if loc.lower() in i['name'].lower() # Generates a list of city names containing the string `loc`
+        return [ # Generates a list of city names containing the string `loc`
+            i for i in self.cities if loc.lower() in i['name'].lower()
         ]
 
     def current(self, loc):
@@ -106,7 +112,7 @@ class Client:
                     - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
         """
         mode = f"current-{loc}-now-{str(dt.now())[:15]}"
-        
+
         n = self.cache.read(mode)
         if n:
             # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
@@ -249,7 +255,8 @@ class Client:
 
         Paramters
         ---------
-        * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
+        * **loc:** Query parameter based on which data is sent back.
+                   See docs on method `current` for more info.
         """
         # No cache
 
@@ -271,7 +278,7 @@ class Client:
         * **loc:** Query parameter based on which data is sent back. See docs on method `current` for more info.
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
-        
+
         n = self.cache.read(mode)
         if n:
             return n
@@ -280,7 +287,7 @@ class Client:
 
         e = Client.__error_code_to_error(response)
         if e:
-            raise e 
+            raise e
 
         data = types.SportsPoint.from_raw(response)
 

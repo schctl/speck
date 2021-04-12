@@ -1,6 +1,6 @@
-from . import Tracker
-
 from matplotlib import pyplot
+
+from . import Tracker
 
 def plot(tracker: Tracker, name):
     """Plot all values of temp_c stored by `tracker`."""

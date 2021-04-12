@@ -41,17 +41,17 @@ def __profile(fn):
     return inner
 
 @__profile
-def __ROOTD(fname):
+def _ROOTD(fname):
     """Return the path to a file relative to the root directory of the project."""
     return os.path.join(os.path.dirname(__file__), fname)
 
 @__profile
-def __READF(fname):
+def _READF(fname):
     with open(fname, 'r') as f:
         return f.read()
 
 @__profile
-def ____UTF8_TO_MD5_HEX(string):
+def _UTF8_TO_MD5_HEX(string):
     return md5(bytes(string, 'utf-8')).hexdigest()
 
 class SpeckFrontend:
@@ -60,12 +60,12 @@ class SpeckFrontend:
         self.root = None
         self.main_canvas = Widget(None, (0, 0))
         self.entry_cleared = False
-        
+
         self.widget_manager = ui.widget.WidgetManager()
 
-        self.style = ui.style.SpeckStyle.from_file(__ROOTD('style.json'))
-        self.tracker = tracker.Tracker(__ROOTD('.tracker'))
-        self.speck = Client(__READF(__ROOTD('token.txt')).rstrip(), use_cache=True, cache_path=f"{__ROOTD('.cache')}")
+        self.style = ui.style.SpeckStyle.from_file(_ROOTD('style.json'))
+        self.tracker = tracker.Tracker(_ROOTD('.tracker'))
+        self.speck = Client(_READF(_ROOTD('token.txt')).rstrip(), use_cache=True, cache_path=f"{_ROOTD('.cache')}")
 
     @staticmethod
     def __generic_label(root, style, text):
@@ -79,21 +79,21 @@ class SpeckFrontend:
 
     @staticmethod
     def __verify_credentials(uname, pwd):
-        auth = __READF(__ROOTD('auth.txt')).split()
-        return __UTF8_TO_MD5_HEX(uname) == auth[0] and \
-               __UTF8_TO_MD5_HEX(pwd)   == auth[1]
+        auth = _READF(_ROOTD('auth.txt')).split()
+        return _UTF8_TO_MD5_HEX(uname) == auth[0] and \
+               _UTF8_TO_MD5_HEX(pwd)   == auth[1]
 
     # Flow --------------------------------------
 
     def welcome(self):
         """Implementation for Welcome screen."""
-        
+
         # Step 1
 
-        self.main_canvas.destroy()        
+        self.main_canvas.destroy()
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -151,7 +151,7 @@ class SpeckFrontend:
                 self.entry_cleared = True
 
         # bind the entry boxes, ie when you click it, the text on input box shd vanish
-        welcome_username_entry.internal.bind("<Button-1>", entry_clear) 
+        welcome_username_entry.internal.bind("<Button-1>", entry_clear)
         welcome_password_entry.internal.bind("<Button-1>", entry_clear)
 
         welcome_login_button = Widget(tk.Button(
@@ -180,7 +180,7 @@ class SpeckFrontend:
 
         # Step 2
 
-        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/base_logo.png'))
 
         self.main_canvas.destroy()
         self.widget_manager.clear()
@@ -206,7 +206,7 @@ class SpeckFrontend:
             ), (38, 355)
         )
 
-        location_input_entry.internal.insert(0, "Search Location")            
+        location_input_entry.internal.insert(0, "Search Location")
         location_input_entry.internal.bind("<Button-1>", lambda _: location_input_entry.internal.delete(0, tk.END))
 
         location_input_button = Widget(tk.Button(
@@ -232,9 +232,9 @@ class SpeckFrontend:
 
         # Step 3
 
-        self.bg = ImageTk.PhotoImage(file=__ROOTD('etc/exports/secondary.png'))
+        self.bg = ImageTk.PhotoImage(file=_ROOTD('etc/exports/secondary.png'))
 
-        self.main_canvas.destroy()        
+        self.main_canvas.destroy()
         self.widget_manager.clear()
 
         self.main_canvas = Widget(tk.Canvas(
@@ -264,7 +264,7 @@ class SpeckFrontend:
             loc = f"{rloc['lat']},{rloc['lon']}"
 
             curr_i = self.speck.current(loc)
-        
+
         astro_i = self.speck.astro(loc)
         fore_i  = self.speck.forecast(loc)
 

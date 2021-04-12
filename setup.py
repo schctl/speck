@@ -12,6 +12,6 @@ setup(
     url              = "https://github.com/schctl/speck",
     packages         = ["waw", "ui", "tracker", "cache"],
     description      = "A simple wrapper and frontend for weatherAPI.com",
-    long_description = readf('README'),
+    long_description = readf('README.txt'),
     install_requires = list(readf('requirements.txt').splitlines())
 )

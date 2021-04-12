@@ -33,14 +33,14 @@ class Calculator:
             button_clear()
 
             e.insert(0, str(e.get()) + str(number))
-            
+
         def button_add():
             self.math = 'add'
             self.first_num = entry_get_int()
 
-            button_clear() 
+            button_clear()
 
-        def button_sub():        
+        def button_sub():
             self.math = 'sub'
             self.first_num = entry_get_int()
 
@@ -112,7 +112,7 @@ class Calculator:
                 e.insert(0, self.first_num % int(second_num))
 
             elif self.math == 'floord':
-                e.insert(0, self.first_num // int(second_num)) 
+                e.insert(0, self.first_num // int(second_num))
 
         # -------------------------------------------------
 

@@ -6,8 +6,10 @@ from dataclasses import dataclass as __dc
 
 # The use of dataclasses here
 # ---------------------------
-# The dataclasses module provides a decorator and functions for automatically generating special methods
-# such as __repr__() for user-defined classes - [docs](https://docs.python.org/3/library/dataclasses.html).
+# The dataclasses module provides a decorator and
+# functions for automatically generating special methods
+# such as __repr__() for user-defined classes
+# [docs](https://docs.python.org/3/library/dataclasses.html).
 
 @__dc(frozen=True)
 class Km:

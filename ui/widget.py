@@ -1,6 +1,8 @@
 import tkinter as tk
 
 class Widget:
+    """Wrapper around Tkiner Widgets."""
+
     def __init__(self, internal, position):
         self._internal = internal
         self._position = position # position is ambiguous on purpose
@@ -18,6 +20,8 @@ class Widget:
             self._internal.destroy()
 
 class WidgetManager:
+    """Keep track of Tkinter Widgets."""
+
     def __init__(self):
         self._widgets = []
 
@@ -47,7 +51,7 @@ class WidgetManager:
 
         # TODO: more descriptive errors.
 
-        if isinstance(pos, str):            
+        if isinstance(pos, str):
             try:
                 if index == 0:
                     return int(pos.lstrip('+').lstrip('-'))
@@ -71,7 +75,7 @@ class WidgetManager:
             raise TypeError("Invalid type for widget position.")
 
     def render_all(self, canvas):
-        for n, i in enumerate(self._widgets):            
+        for n, i in enumerate(self._widgets):
             x_pos = self.__get_position_from_prev(n, 0)
             y_pos = self.__get_position_from_prev(n, 1)
 

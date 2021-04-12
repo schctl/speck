@@ -20,10 +20,14 @@ class BasePoint:
         """Return a json type object."""
         return pickle.dumps(self)
 
+# Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses
 
-class Location(BasePoint): # Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses
+class Location(BasePoint):
     """Represents location data such as coordinates, time zone, region, at a particular time."""
-    def __init__(self, lat, lon, name, region=None, country=None, tz_id=None, localtime=None, **kwargs):
+    def __init__(self,
+        lat, lon, name, region=None, country=None, tz_id=None, localtime=None,
+        **kwargs
+    ):
         self.lat = lat
         self.lon = lon
         self.name = name
@@ -56,8 +60,8 @@ class HourlyPoint(BasePoint):
         will_it_rain=None, will_it_snow=None,
         chance_of_rain=None, chance_of_snow=None,
         vis_km=None,
-        *args, **kwargs
-        ):
+        **kwargs
+    ):
         if isinstance(location, Location):
             self.location = location
         else:
@@ -91,7 +95,7 @@ class HourlyPoint(BasePoint):
         self.humidity = humidity
         self.cloud = cloud
 
-        self.is_day = True if is_day else False
+        self.is_day = bool(is_day)
 
         self.uv = uv
         self.vis_km = Km(vis_km)
@@ -101,8 +105,8 @@ class DayPoint(BasePoint):
     def __init__(
         self, location,
         maxtemp_c, mintemp_c, avgtemp_c, maxwind_kph, totalprecip_mm, avgvis_km, avghumidity, condition, uv,
-        *args, **kwargs
-        ):
+        **kwargs
+    ):
         if isinstance(location, Location):
             self.location = location
         else:
@@ -113,9 +117,9 @@ class DayPoint(BasePoint):
         self.avgtemp_c = Cel(avgtemp_c)
 
         self.condition = condition
-        
+
         self.maxwind_kph = Km(maxwind_kph)
-        
+
         self.totalprecip_mm = Mm(totalprecip_mm)
         self.avgvis_km = Km(avgvis_km)
         self.avghumidity = avghumidity
@@ -124,7 +128,7 @@ class DayPoint(BasePoint):
 
 class AstroPoint(BasePoint):
     """Astronomy information."""
-    def __init__(self, location, sunrise, sunset, moonrise, moonset, moon_phase, *args, **kwargs):
+    def __init__(self, location, sunrise, sunset, moonrise, moonset, moon_phase, **kwargs):
         if isinstance(location, Location):
             self.location = location
         else:
@@ -141,17 +145,9 @@ class AstroPoint(BasePoint):
 class DailyPoint(BasePoint):
     """All information per day, inlcuding hourly info."""
     def __init__(self, location, day, astro, hour):
-        if isinstance(location, Location):
-            self.location = location
-        else:
-            self.location = Location.from_raw(location)
-        
-        # self.date = dt.strptime(date, "%Y-%m-%d %H:%M") # localtime
+        self.location = location if isinstance(location, Location) else Location.from_raw(location)
 
-        if isinstance(day, DayPoint):
-            self.day = day
-        else:
-            self.day = DayPoint.from_raw(location, day)
+        self.day = day if isinstance(day, DayPoint) else DayPoint.from_raw(location, day)
 
         self.astro = astro
 
@@ -172,7 +168,8 @@ class IpPoint(BasePoint):
         is_eu, geoname_id,
         city, region,
         lat, lon, tz_id,
-        *args, **kwargs):
+        **kwargs
+    ):
         self.location = Location(lat, lon, city, region=region, country=country_name, tz_id=tz_id)
         self.ip = ip
         self.type = type
