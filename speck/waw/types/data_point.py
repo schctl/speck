@@ -19,7 +19,7 @@ class BasePoint:
         return cls(location, **json.loads(data))
 
     def to_bytes(self):
-        """Return a json type object."""
+        """Return a bytes-like object."""
         return pickle.dumps(self)
 
 # Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses
@@ -155,13 +155,10 @@ class DailyPoint(BasePoint):
 
         self.astro = astro
 
-        self.hour = []
-
-        for i in hour:
-            if isinstance(i, HourlyPoint):
-                self.hour.append(i)
-            else:
-                self.hour.append(HourlyPoint.from_raw(location, i))
+        self.hour = [
+            i if isinstance(i, HourlyPoint) else HourlyPoint.from_raw(location, i)
+            for i in hour
+        ]
 
 class IpPoint(BasePoint):
     """IP Address information."""

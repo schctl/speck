@@ -14,13 +14,13 @@ class Widget:
 
     @property
     def internal(self):
-        """Internal tkinter widget object."""
+        """Internal Tkinter Widget."""
         return self._internal
 
     @property
     def position(self):
         """
-        Position of the widget relative to the
+        Intended position of the widget relative to the
         top left corner of the root.
         """
         return self._position

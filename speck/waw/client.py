@@ -34,7 +34,7 @@ class __DummyCache:
         pass
 
 class Client:
-    """weatherAPI client."""
+    """HTTPS client used to request data from weatherapi.com."""
 
     BASE = "https://api.weatherapi.com/v1"
 
@@ -96,7 +96,11 @@ class Client:
             raise errors.InternalError(f"Unable to fetch data at this time: {e.__traceback__}", 9999)
 
     def find_city(self, loc):
-        """Returns an array of city names and coordinates containing a search pattern."""
+        """
+        Try to find a city with a match from a known list of locations.
+        This method is highly unlikely to be used frequently, since weatherAPI tries
+        to interpret location names even if incorrect, but is provided anyway.
+        """
         return [ # Generates a list of city names containing the string `loc`
             i for i in self.cities if loc.lower() in i['name'].lower()
         ]
@@ -105,19 +109,17 @@ class Client:
         """
         Get current weather conditions in a location.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back. It could be following:
-
-                    - Latitude and Longitude (Decimal degree). e.g.:'48.8567,2.3508'
-                    - city name e.g.: 'Paris'
-                    - US zip e.g.: '10001'
-                    - UK postcode e.g: 'SW1'
-                    - Canada postal code e.g: 'G2J'
-                    - metar:<metar code> e.g: 'metar:EGLL'
-                    - iata:<3 digit airport code> e.g: 'iata:DXB'
-                    - auto:ip IP lookup e.g: 'auto:ip'
-                    - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
+        # Parameters
+        - `loc`: Query location to find data for. It could be following:
+            - Latitude and Longitude (Decimal degree). e.g.:'48.8567,2.3508'
+            - city name e.g.: 'Paris'
+            - US zip e.g.: '10001'
+            - UK postcode e.g: 'SW1'
+            - Canada postal code e.g: 'G2J'
+            - metar:<metar code> e.g: 'metar:EGLL'
+            - iata:<3 digit airport code> e.g: 'iata:DXB'
+            - auto:ip IP lookup e.g: 'auto:ip'
+            - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
         """
         mode = f"current-{loc}-now-{str(dt.now())[:15].replace(' ', '-')}"
 
@@ -145,12 +147,10 @@ class Client:
         """
         Get weather forecast for a location.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
-
-        * **days:** Number of days to forecast for. Maximum is 10.
+        # Parameters
+        - `loc`: See docs on method `current`.
+        - `days`: Number of days to restrict the forecast for.
+            weatherAPI allows up to 10 days, but it in practice the maximum is 3.
         """
         mode = f"forecast-{loc}-now-{str(dt.now()).split()[0]}-{days}"
 
@@ -176,12 +176,13 @@ class Client:
 
     def astronomy(self, loc):
         """
-        Get current astronomy information in a location.
+        Get astronomy information for a location.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
+        # Parameters
+        - `loc`: See docs on method `current`.
+
+        # Aliases
+        - `astro`
         """
         mode = f"astro-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -206,9 +207,11 @@ class Client:
         """
         Get information for an IP address.
 
-        Paramters
-        ---------
-        * **ip:** IP address string
+        # Parameters
+        - `ip`: IPv6 or IPv4 string.
+
+        # Aliases
+        - `ip`
         """
         mode = f"iplookup-{ip}"
 
@@ -231,12 +234,10 @@ class Client:
 
     def search(self, loc):
         """
-        Get an array of location objects based on query parameter.
+        Get a list of location objects based on query parameter.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
+        # Parameters
+        - `loc`: See docs on method `current`.
         """
         mode = f"search-{loc}"
 
@@ -263,12 +264,13 @@ class Client:
 
     def timezone_info(self, loc):
         """
-        Get timezone information for a location.
+        Get timezone and associated information for a location.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
+        # Parameters
+        - `loc`: See docs on method `current`.
+
+        # Aliases
+        - `tz`
         """
         # No cache
 
@@ -282,14 +284,15 @@ class Client:
 
     def sports_lookup(self, loc):
         """
-        Get listing of all upcoming sports events for football, cricket and golf.
-        Judging from the behaviour of the WeatherAPI Sports API, parameter `loc`
-        doesn't actually matter but is required anyway.
+        Get listing of all upcoming sports events for football,
+        cricket and golf. From the behaviour of the WeatherAPI Sports API,
+        parameter `loc` doesn't actually matter but is required anyway.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
+        # Parameters
+        - `loc`: See docs on method `current`.
+
+        # Aliases
+        - `sports`
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -314,15 +317,9 @@ class Client:
         """
         Get weather history for a location.
 
-        Paramters
-        ---------
-        * **loc:** Query parameter based on which data is sent back.
-                   See docs on method `current` for more info.
-
-        * **dt:** Restrict number of days of history to fetch.
-                  Should be on or after 2015-01-01.
-
-        # WARNING: This method has not been tested.
+        # Parameters
+        - `loc`: See docs on method `current`.
+        - `dt`: Datetime string in the format `YYY-MM-DD`. Data starting from this date will be returned.
         """
         mode = f"history-{loc}-now-{str(dt.now()).split()[0]}-{dt}"
 

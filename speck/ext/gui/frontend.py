@@ -1,4 +1,10 @@
-"""Prewritten GUI frontend for speck."""
+"""
+Sample tkinter frontend for speck.
+
+Authors:
+    Nevin Jose
+    Sachin Cherian
+"""
 
 import os
 from hashlib import md5
@@ -31,7 +37,8 @@ def _utf8_to_md5_hex(string):
 # -----------
 
 class SampleFrontend:
-    """GUI class."""
+    """Implementation for a sample frontend."""
+    
     def __init__(self, token, auth_file=_rootd('etc/auth.txt')):
         self.bg = None # Background image
         self.root = None
@@ -80,7 +87,7 @@ class SampleFrontend:
             # if this fails, there's no valid location
             # recognized by weatherAPI
 
-        except waw.errors.InvalidLocation:
+        except speck.waw.errors.InvalidLocation:
             loc = self.speck.find_city(loc) # try to find our own
 
             if len(loc) == 0:

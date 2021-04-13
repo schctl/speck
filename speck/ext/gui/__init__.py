@@ -1,5 +1,5 @@
 """
-# Tkinter frontend implementation for speck.
+Tkinter frontend implementation for speck.
 """
 
 from . import widget
