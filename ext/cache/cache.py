@@ -1,3 +1,7 @@
+"""
+Cache Manager.
+"""
+
 import os
 
 import zlib
@@ -38,7 +42,7 @@ class Cache:
         except FileNotFoundError:
             pass
 
-        return
+        return None
 
     def dump(self, name, data):
         """Writes data to a cache file with `name`. `name` must be kept track of manually."""

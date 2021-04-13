@@ -55,7 +55,7 @@ class Client:
             self.cities = json.loads(f.read())
 
     @staticmethod
-    def __error_code_to_error(response):
+    def __is_error_code(response):
         """
         Convert weatherapi.com provided error code to Error Type.
 
@@ -90,7 +90,8 @@ class Client:
     def __make_request(self, endpoint, parameters):
         """Private method to make a request to `weatherapi.com`."""
         try:
-            return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json() # Does the acutal request
+            # Does the acutal request
+            return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json()
         except Exception as e:
             raise errors.InternalError(f"Unable to fetch data at this time: {e.__traceback__}", 9999)
 
@@ -127,7 +128,7 @@ class Client:
 
         response = self.__make_request('current.json', f'?key={self.token}&q={loc}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e # We're not going to handle the error here, so anyone using the function can do it themselves
 
@@ -159,7 +160,7 @@ class Client:
 
         response = self.__make_request('forecast.json', f'?key={self.token}&q={loc}&days={min(days, 10)}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -190,7 +191,7 @@ class Client:
 
         response = self.__make_request('astronomy.json', f'?key={self.token}&q={loc}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -217,7 +218,7 @@ class Client:
 
         response = self.__make_request('ip.json', f'?key={self.token}&q={ip}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -246,7 +247,7 @@ class Client:
 
         response = self.__make_request('search.json', f'?key={self.token}&q={loc}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -273,7 +274,7 @@ class Client:
 
         response = self.__make_request('timezone.json', f'?key={self.token}&q={loc}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -298,7 +299,7 @@ class Client:
 
         response = self.__make_request('sports.json', f'?key={self.token}&q={loc}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 
@@ -332,7 +333,7 @@ class Client:
 
         response = self.__make_request('history.json', f'?key={self.token}&q={loc}&dt={min(dt, 10)}')
 
-        e = Client.__error_code_to_error(response)
+        e = Client.__is_error_code(response)
         if e:
             raise e
 

@@ -10,7 +10,14 @@ setup(
     license          = "MIT",
     author           = "Nevin Jose, Sachin Cherian",
     url              = "https://github.com/schctl/speck",
-    packages         = ["speck", "speck.waw", "speck.ext", "speck.ext.cache", "speck.ext.track", "speck.ext.gui"],
+    packages         = [
+        "speck",
+        "speck.waw",
+        "speck.ext",
+        "speck.ext.cache",
+        "speck.ext.track",
+        "speck.ext.gui"
+        ],
     description      = "A simple wrapper and frontend for weatherAPI.com",
     long_description = readf('README.txt'),
     install_requires = list(readf('requirements.txt').splitlines()),

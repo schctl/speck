@@ -6,13 +6,13 @@ from hashlib import md5
 import tkinter as tk
 from PIL import ImageTk
 
-from waw.client import Client
-
+import waw
 from ext import track
 
-from .calculator import Calculator
+from waw.client import Client
 
 from .style import SpeckStyle
+# from .calculator import Calculator
 from .widget import Widget, WidgetManager
 
 # -- Utils --
@@ -52,7 +52,7 @@ class SampleFrontend:
         )
 
     @staticmethod
-    def __generic_label(root, style, text):
+    def __gen_label(root, style, text):
         """Make a generic label so we don't have to do it ourselves."""
         return tk.Label(
             root,
@@ -63,12 +63,35 @@ class SampleFrontend:
         )
 
     @staticmethod
-    def __verify_credentials(uname, pwd):
+    def __verify_creds(uname, pwd):
         """This is just a dummy."""
         # We'll store our credentials in a file - not the best idea
         auth = _readf(_rootd('etc/auth.txt')).split()
         return _utf8_to_md5_hex(uname) == auth[0] and \
                _utf8_to_md5_hex(pwd)   == auth[1]
+
+    def __get_loc_meta(self, loc):
+        """Get all metadata for a location."""
+
+        try:
+            curr_i = self.speck.current(loc)
+            # if this fails, there's no valid location
+            # recognized by weatherAPI
+
+        except waw.errors.InvalidLocation:
+            loc = self.speck.find_city(loc) # try to find our own
+
+            if len(loc) == 0:
+                return None
+
+            loc = f"{loc[0]['lat']},{loc[0]['lon']}"
+
+            curr_i = self.speck.current(loc)
+
+        astro_i = self.speck.astro(loc)
+        fore_i  = self.speck.forecast(loc)
+
+        return curr_i, astro_i, fore_i
 
     # Flow --------------------------------------
 
@@ -124,7 +147,7 @@ class SampleFrontend:
                 tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
                 return
 
-            elif not SampleFrontend.__verify_credentials(
+            elif not SampleFrontend.__verify_creds(
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):
@@ -222,7 +245,7 @@ class SampleFrontend:
 
         if self.last_loc_fail:
             fail_loc = Widget(
-                SampleFrontend.__generic_label(
+                SampleFrontend.__gen_label(
                     self.root,
                     self.style,
                     "Unknown Location"
@@ -257,27 +280,18 @@ class SampleFrontend:
 
         # Get info ----------------
 
-        try:
-            curr_i = self.speck.current(loc) # if this fails, there's no valid location
+        data = self.__get_loc_meta(loc)
 
-        except waw.errors.InvalidLocation:
-            loc = self.speck.find_city(loc)
-
-            if len(loc) == 0:
-                self.last_loc_fail = True
-                self.location_entry() # if this fails as well, we go back to the location screen
-                return
-
-            loc = f"{loc[0]['lat']},{loc[0]['lon']}"
-
-            curr_i = self.speck.current(loc)
-
-        astro_i = self.speck.astro(loc)
-        fore_i  = self.speck.forecast(loc)
-
-        self.tracker.dump(curr_i.location.name, curr_i)
+        if not data:
+            self.last_loc_fail = True
+            self.location_entry()
+            return
 
         self.last_loc_fail = False
+
+        curr_i, astro_i, fore_i = data
+
+        self.tracker.dump(curr_i.location.name, curr_i)
 
         # Display ----------------
 
@@ -292,15 +306,15 @@ class SampleFrontend:
 
         #                                        # Root     # Style     # Text                                                                 # Pos
         lt_lbl     = \
-            Widget(SampleFrontend.__generic_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0", "+50"))
+            Widget(SampleFrontend.__gen_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0", "+50"))
         curr_lbl   = \
-            Widget(SampleFrontend.__generic_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0", "+30"))
+            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0", "+30"))
         fore_lbl_1 = \
-            Widget(SampleFrontend.__generic_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0", "+30"))
+            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0", "+30"))
         fore_lbl_2 = \
-            Widget(SampleFrontend.__generic_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0", "+30"))
+            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0", "+30"))
         astro_lbl  = \
-            Widget(SampleFrontend.__generic_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0", "+30"))
+            Widget(SampleFrontend.__gen_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0", "+30"))
 
         back_btn = Widget(tk.Button(
             self.root,

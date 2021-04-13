@@ -14,13 +14,19 @@ class Widget:
 
     @property
     def internal(self):
+        """Internal tkinter widget object."""
         return self._internal
 
     @property
     def position(self):
+        """
+        Position of the widget relative to the
+        top left corner of the root.
+        """
         return self._position
 
     def destroy(self):
+        """Destroy the internal tkinter widget if it exists."""
         if self._internal:
             self._internal.destroy()
 
@@ -77,7 +83,7 @@ class WidgetManager:
                         raise ValueError("Invalid format for widget position (Must be `+x`, `-x` or int).")
 
             except ValueError as e:
-                raise ValueError(f"Invalid format for widget position (Must be `+x`, `-x` or int). [{e}]")
+                raise ValueError from e
 
         elif isinstance(pos, int):
             return pos

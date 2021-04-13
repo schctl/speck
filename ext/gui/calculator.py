@@ -8,11 +8,14 @@ Authors:
 import tkinter as tk
 
 class Calculator:
+    """Simple calculator app."""
+
     def __init__(self):
         self.math = ""
         self.first_num = 1
 
     def run(self):
+        """Run the calculator."""
         root = tk.Tk()
         root.title("Simple Calculator")
         root.resizable(width=False, height="false")
