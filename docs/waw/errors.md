@@ -1,38 +1,38 @@
 # Module \<`errors`\>
 All exceptions that can be raised during handling of a weatherapi request.
 
-class \<`WeatherApiError(Exception)`\>
+<sup>*class*</sup> `WeatherApiError(Exception)`
 --------------------------------------
 Base exception.
 
-class \<`NoApiKey(WeatherApiError)`\>
+<sup>*class*</sup> `NoApiKey(WeatherApiError)`
 -------------------------------------
 Raised when no weatherapi key has been provided.
 
-class \<`InvalidApiKey(WeatherApiError)`\>
+<sup>*class*</sup> `InvalidApiKey(WeatherApiError)`
 ------------------------------------------
 Raised when an invalid weatherapi key has been provided.
 
-class \<`QuotaExceeded(WeatherApiError)`\>
+<sup>*class*</sup> `QuotaExceeded(WeatherApiError)`
 ------------------------------------------
 Raised when monthly requests limit has been reached.
 
-class \<`ApiKeyDisabled(WeatherApiError)`\>
+<sup>*class*</sup> `ApiKeyDisabled(WeatherApiError)`
 -------------------------------------------
 Raised when weatherapi key is disabled.
 
-class \<`QueryNotProvided(WeatherApiError)`\>
+<sup>*class*</sup> `QueryNotProvided(WeatherApiError)`
 ---------------------------------------------
 Raised when a query parameter has not been provided.
 
-class \<`InvalidRequestUrl(WeatherApiError)`\>
+<sup>*class*</sup> `InvalidRequestUrl(WeatherApiError)`
 ----------------------------------------------
 Raised when weatherapi request url is invalid.
 
-class \<`InvalidLocation(WeatherApiError)`\>
+<sup>*class*</sup> `InvalidLocation(WeatherApiError)`
 --------------------------------------------
 Raised when location request is not found.
 
-class \<`InternalError(WeatherApiError)`\>
+<sup>*class*</sup> `InternalError(WeatherApiError)`
 ------------------------------------------
 Raised when an internal weatherapi error is encountered.
