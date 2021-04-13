@@ -3,7 +3,6 @@ Package \<`cache`\>
 
 Utilities to store objects in "cache files". This package's primary purpose to reduce the amount of API calls required by [`waw`](../waw/waw.md)
 
-#
 
 <sup>*class*</sup> `Cache`
 -----------------

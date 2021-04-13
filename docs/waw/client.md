@@ -1,6 +1,5 @@
 # Module \<`client`\>
 
-#
 
 <sup>*class*</sup> `Client`
 ==================

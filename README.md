@@ -10,6 +10,10 @@ API and have thoroughly commented implementations. It also has a repository host
 
     https://github.com/schctl/speck
 
+## Documentation
+
+Documentation is available in markdown files [here](docs/README.md).
+
 ## City Data
 
 City data is from cities.json, and has been edited to remove irrelevant data.

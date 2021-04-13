@@ -2,7 +2,6 @@ Module \<`widget`\>
 ===================
 Widget helpers for tkinter.
 
-#
 
 <sup>*class*</sup> `Widget`
 ----------------------------

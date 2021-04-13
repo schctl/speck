@@ -2,7 +2,6 @@ Module \<`frontend`\>
 =====================
 Sample tkinter frontend for speck.
 
-#
 
 <sup>*class*</sup> `SampleFrontend`
 -----------------------------------

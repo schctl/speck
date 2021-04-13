@@ -2,7 +2,6 @@ Module \<`style`\>
 ==================
 Window styling utilities.
 
-#
 
 <sup>*class*</sup> `WindowStyle`
 -------------------------------

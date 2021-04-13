@@ -2,7 +2,6 @@ Package \<`track`\>
 ===================
 Utility module to keep track of temperature per location and graph them.
 
-#
 
 <sup>*method*</sup> `plot(tracker, name)`
 -----------------
@@ -26,7 +25,7 @@ Utility to dump speck objects into cache files, stored per day, in a "tracker di
 - `path`: `str`
 <br>        Path to the cache directory for tracked files.
 
-- `cache`: [`Cache`](../cache/cache.md)
+- `cache`: [`Cache`](../../cache/cache.md)
 
 ### Methods
 - `dump(self, name, data)`

@@ -1,7 +1,6 @@
 # Package \<`types`\>
 Utility types to hold weatherapi information.
 
-#
 
 ## Unit types
 

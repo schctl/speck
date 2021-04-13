@@ -2,10 +2,8 @@ Package \<`gui`\>
 =================
 Tkinter frontend implementation for speck.
 
-#
 
-Modules
--------
+### Modules
 - [`style`](style.md)
 - [`widget`](widget.md)
 - [`frontend`](frontend.md)
