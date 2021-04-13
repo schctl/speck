@@ -14,7 +14,7 @@ import pstats
 import cProfile
 # ---------------
 
-from gui.frontend import SampleFrontend
+from ext.gui.frontend import SampleFrontend
 
 if __name__ == '__main__':
     profile = cProfile.Profile()

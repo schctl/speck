@@ -5,7 +5,5 @@ A simple wrapper and frontend for weatherAPI.com. Licensed under
 the MIT license. See LICENSE.txt and README.txt for more information.
 """
 
-from . import cache
-from . import tracker
+from . import ext
 from . import waw
-from . import gui

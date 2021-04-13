@@ -6,19 +6,19 @@ from hashlib import md5
 import tkinter as tk
 from PIL import ImageTk
 
-import waw
-import track
-
 from waw.client import Client
+
+from ext import track
+
+from .calculator import Calculator
 
 from .style import SpeckStyle
 from .widget import Widget, WidgetManager
 
 # -- Utils --
-
 def _rootd(path):
     """Return absolute path of `path` relative to this file."""
-    return os.path.join(os.path.dirname(__file__), path)
+    return os.path.join(os.path.dirname(__file__), f"../../{path}")
 
 def _readf(fname):
     """Utility function to read a file."""
@@ -28,7 +28,6 @@ def _readf(fname):
 def _utf8_to_md5_hex(string):
     """Convert a UTF-8 encoded string to its md5 in hex format."""
     return md5(bytes(string, 'utf-8')).hexdigest()
-
 # -----------
 
 class SampleFrontend:
@@ -43,13 +42,13 @@ class SampleFrontend:
 
         self.widget_manager = WidgetManager()
 
-        self.style = SpeckStyle.from_file(_rootd('../etc/style.json'))
-        self.tracker = track.Tracker(_rootd('../.tracker'))
+        self.style = SpeckStyle.from_file(_rootd('etc/style.json'))
+        self.tracker = track.Tracker(_rootd('.tracker'))
 
         self.speck = Client(
-            _readf(_rootd('../token.txt')).rstrip(),
+            _readf(_rootd('token.txt')).rstrip(),
             use_cache=True,
-            cache_path=f"{_rootd('../.cache')}"
+            cache_path=f"{_rootd('.cache')}"
         )
 
     @staticmethod
@@ -67,7 +66,7 @@ class SampleFrontend:
     def __verify_credentials(uname, pwd):
         """This is just a dummy."""
         # We'll store our credentials in a file - not the best idea
-        auth = _readf(_rootd('../etc/auth.txt')).split()
+        auth = _readf(_rootd('etc/auth.txt')).split()
         return _utf8_to_md5_hex(uname) == auth[0] and \
                _utf8_to_md5_hex(pwd)   == auth[1]
 
@@ -81,7 +80,7 @@ class SampleFrontend:
         self.main_canvas.destroy()
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file=_rootd('../etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/base_logo.png'))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -173,7 +172,7 @@ class SampleFrontend:
 
         # Step 2
 
-        self.bg = ImageTk.PhotoImage(file=_rootd('../etc/exports/base_logo.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/base_logo.png'))
 
         self.main_canvas.destroy() # Clear the main canvas
         self.widget_manager.clear()
@@ -239,7 +238,7 @@ class SampleFrontend:
 
         # Step 3
 
-        self.bg = ImageTk.PhotoImage(file=_rootd('../etc/exports/secondary.png'))
+        self.bg = ImageTk.PhotoImage(file=_rootd('etc/exports/secondary.png'))
 
         self.main_canvas.destroy()
         self.widget_manager.clear()
