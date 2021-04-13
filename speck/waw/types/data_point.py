@@ -19,7 +19,7 @@ class BasePoint:
         return cls(location, **json.loads(data))
 
     def to_bytes(self):
-        """Return a json type object."""
+        """Return a bytes-like object."""
         return pickle.dumps(self)
 
 # Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses

@@ -1,6 +1,5 @@
 """
-All errors that can be raised during a weatherapi request.
-https://www.weatherapi.com/docs/
+All exceptions that can be raised during handling of a weatherapi request.
 """
 
 # Functions that make a request to weatherapi.com have the possibility
@@ -8,6 +7,7 @@ https://www.weatherapi.com/docs/
 
 # We use these custom error classes to make the error code more readable
 # and easier to handle
+
 class WeatherApiError(Exception):
     """Raised when an unknown weatherapi error is encountered."""
     def __init__(self, message, internal_code):
@@ -21,13 +21,13 @@ class InvalidApiKey(WeatherApiError):
     """Raised when an invalid weatherapi key has been provided."""
 
 class QuotaExceeded(WeatherApiError):
-    """Raised when monthly weatherapi requests has been exceeded."""
+    """Raised when monthly requests limit has been reached."""
 
 class ApiKeyDisabled(WeatherApiError):
     """Raised when weatherapi key is disabled."""
 
 class QueryNotProvided(WeatherApiError):
-    """Raised when location request has not been provided."""
+    """Raised when a query parameter has not been provided."""
 
 class InvalidRequestUrl(WeatherApiError):
     """Raised when weatherapi request url is invalid."""
