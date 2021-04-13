@@ -12,11 +12,11 @@ API and have thoroughly commented implementations. It also has a repository host
 
 ## Documentation
 
-Documentation is available in markdown files [here](docs/README.md).
+Documentation is available in markdown format [here](docs/README.md).
 
 ## City Data
 
-City data is from cities.json, and has been edited to remove irrelevant data.
+City data is from `cities.json`, and has been edited to remove irrelevant data.
 
     https://github.com/lutangar/cities.json
 
@@ -26,13 +26,13 @@ Install requirements by running:
 
     pip install -r requirements.txt
 
-Additionally, tkinter is required.
+Additionally, `tkinter` is required.
 
     https://wiki.python.org/moin/TkInter
 
 ## Usage
 
-Run the frontend with
+Run the frontend with:
 
     python ui_main.py
 
