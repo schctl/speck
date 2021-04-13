@@ -6,7 +6,7 @@ from datetime import datetime as dt
 class Tracker:
     """Utility to dump speck objects into cache files, stored per day."""
 
-    def __init__(self, path='cache/tracker'):
+    def __init__(self, path='.tracker'):
         self.path = path
         self.cache = Cache(self.path)
 

@@ -251,7 +251,7 @@ class SpeckFrontend:
 
         lt_lbl = tk.Label(
             self.root,
-            text = f"{str(curr_i.location.localtime)[:-3]} {curr_i.location.tz_id}",
+            text = f"{str(curr_i.location.localtime)[:-3]}\nTZ: {curr_i.location.tz_id}",
             font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
             fg   =  self.style.colors["secondary"].fg,
             bg   =  self.style.colors["secondary"].bg
@@ -264,9 +264,16 @@ class SpeckFrontend:
             fg   =  self.style.colors["secondary"].fg,
             bg   =  self.style.colors["secondary"].bg
         )
-        fore_lbl = tk.Label(
+        fore_lbl_1 = tk.Label(
             self.root,
-            text = f"Temp Avg: {fore_i[0].day.avgtemp_c}°C",
+            text = f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C",
+            font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
+        )
+        fore_lbl_2 = tk.Label(
+            self.root,
+            text = f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C",
             font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_small),
             fg   =  self.style.colors["secondary"].fg,
             bg   =  self.style.colors["secondary"].bg
@@ -300,13 +307,14 @@ class SpeckFrontend:
             command = lambda: speck_graph.plot(self.tracker, curr_i.location.name)
         )
 
-        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl, astro_lbl, back_btn, plot_btn])
+        self.active_widgets.extend([loc_lbl, lt_lbl, curr_lbl, fore_lbl_1, fore_lbl_2, astro_lbl, back_btn, plot_btn])
 
         self.main_canvas.create_window(42,  40,  anchor='nw', window=loc_lbl  )
         self.main_canvas.create_window(42,  90,  anchor='nw', window=lt_lbl   )
-        self.main_canvas.create_window(42,  120, anchor='nw', window=curr_lbl )
-        self.main_canvas.create_window(42,  150, anchor='nw', window=fore_lbl )
-        self.main_canvas.create_window(42,  180, anchor='nw', window=astro_lbl)
+        self.main_canvas.create_window(42,  150, anchor='nw', window=curr_lbl )
+        self.main_canvas.create_window(42,  180, anchor='nw', window=fore_lbl_1)
+        self.main_canvas.create_window(42,  210, anchor='nw', window=fore_lbl_2)
+        self.main_canvas.create_window(42,  240, anchor='nw', window=astro_lbl)
         self.main_canvas.create_window(28,  523, anchor='nw', window=back_btn )
         self.main_canvas.create_window(210, 523, anchor='nw', window=plot_btn )
 

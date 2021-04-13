@@ -16,7 +16,7 @@ class Speck:
 
     def __init__(self, token):
         self.token = token
-        self.cache = cache.Cache('cache/weather_cache')
+        self.cache = cache.Cache('.cache')
         self.session = requests.Session()
         
         # `os.path.abspath(os.path.dirname(__file__))` is the absolute location of the cities list file
