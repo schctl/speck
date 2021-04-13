@@ -51,8 +51,8 @@ class SpeckFrontend:
     @staticmethod
     def __verify_credentials(uname, pwd):
         # Kind of scuffed
-        return md5(bytes(uname, 'utf-8')).hexdigest() == '0816da75e13696127a3ca692ccc9d06b' and \
-               md5(bytes(pwd, 'utf-8')).hexdigest()   == 'e7604248bb637b6d0d7ba9b5bc07cc6f'
+        return md5(bytes(uname, 'utf-8')) .hexdigest() == '0816da75e13696127a3ca692ccc9d06b' and \
+               md5(bytes(pwd, 'utf-8'))   .hexdigest() == 'e7604248bb637b6d0d7ba9b5bc07cc6f'
 
     def __cleanup_active_widgets(self):
         for i in self.active_widgets:
@@ -176,8 +176,7 @@ class SpeckFrontend:
         location_input_entry.insert(0, "Search Location")
 
         def clear_location_entry(e):
-            if location_input_entry.get().lower() == "search location":
-                location_input_entry.delete(0, tk.END)
+            location_input_entry.delete(0, tk.END)
 
         location_input_entry.bind("<Button-1>", clear_location_entry)
 
@@ -221,19 +220,19 @@ class SpeckFrontend:
 
         try:
             curr_i = self.speck.current(loc)
-        except speck.errors.InvalidLocation:
+        except speck_wa.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             curr_i = self.speck.current(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             fore_i = self.speck.forecast(loc)
-        except speck.errors.InvalidLocation:
+        except speck_wa.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             fore_i = self.speck.forecast(f"{rloc['lat']},{rloc['lon']}")
 
         try:
             astro_i = self.speck.astro(loc)
-        except speck.errors.InvalidLocation:
+        except speck_wa.errors.InvalidLocation:
             rloc = self.speck.find_city(loc)[0]
             astro_i = self.speck.astro(f"{rloc['lat']},{rloc['lon']}")
 
