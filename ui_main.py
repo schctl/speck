@@ -14,7 +14,7 @@ import pstats
 import cProfile
 # ---------------
 
-from ext.gui.frontend import SampleFrontend
+from speck.ext.gui.frontend import SampleFrontend
 
 def vanilla_profile(func):
     """Profile a function."""
@@ -38,8 +38,9 @@ def vanilla_profile(func):
 @vanilla_profile
 def main():
     """Run the sample frontend app."""
-    app = SampleFrontend() # Create an instance
-    app.run()
+    with open('token.txt') as f:
+        app = SampleFrontend(f.read().rstrip()) # Create an instance
+        app.run()
 
 if __name__ == '__main__':
     main()

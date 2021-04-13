@@ -10,7 +10,7 @@ from datetime import datetime as dt
 
 import requests
 
-from ext.cache import Cache
+from speck.cache import Cache
 
 from . import errors
 from . import types

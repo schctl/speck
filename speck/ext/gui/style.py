@@ -1,5 +1,5 @@
 """
-Styling utilities for speck.
+Window styling utilities
 
 Authors:
     Sachin Cherian

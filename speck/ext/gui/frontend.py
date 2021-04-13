@@ -6,10 +6,10 @@ from hashlib import md5
 import tkinter as tk
 from PIL import ImageTk
 
-import waw
-from ext import track
+import speck.waw
+from speck.ext import track
 
-from waw.client import Client
+from speck.waw import Client
 
 from .style import SpeckStyle
 # from .calculator import Calculator
@@ -32,7 +32,7 @@ def _utf8_to_md5_hex(string):
 
 class SampleFrontend:
     """GUI class."""
-    def __init__(self):
+    def __init__(self, token, auth_file=_rootd('etc/auth.txt')):
         self.bg = None # Background image
         self.root = None
         self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
@@ -46,10 +46,13 @@ class SampleFrontend:
         self.tracker = track.Tracker(_rootd('.tracker'))
 
         self.speck = Client(
-            _readf(_rootd('token.txt')).rstrip(),
+            token,
             use_cache=True,
             cache_path=f"{_rootd('.cache')}"
         )
+
+        with open(auth_file, 'r') as f:
+            self.__auth = f.read().split()
 
     @staticmethod
     def __gen_label(root, style, text):
@@ -63,10 +66,9 @@ class SampleFrontend:
         )
 
     @staticmethod
-    def __verify_creds(uname, pwd):
+    def __verify_creds(auth, uname, pwd):
         """This is just a dummy."""
         # We'll store our credentials in a file - not the best idea
-        auth = _readf(_rootd('etc/auth.txt')).split()
         return _utf8_to_md5_hex(uname) == auth[0] and \
                _utf8_to_md5_hex(pwd)   == auth[1]
 
@@ -148,6 +150,7 @@ class SampleFrontend:
                 return
 
             elif not SampleFrontend.__verify_creds(
+                self.__auth,
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):

@@ -3,7 +3,7 @@
 import os
 from datetime import datetime as dt
 
-from ext.cache import Cache
+from speck.cache import Cache
 
 class Tracker:
     """Utility to dump speck objects into cache files, stored per day."""

@@ -13,11 +13,16 @@ setup(
     packages         = [
         "speck",
         "speck.waw",
+        "speck.waw.types",
+        "speck.cache",
         "speck.ext",
-        "speck.ext.cache",
+        "speck.ext",
         "speck.ext.track",
-        "speck.ext.gui"
+        "speck.ext.gui",
+        "speck.etc"
         ],
+    package_data = {'': ['etc/*', 'etc/exports/*']},
+    include_package_data = True,
     description      = "A simple wrapper and frontend for weatherAPI.com",
     long_description = readf('README.txt'),
     install_requires = list(readf('requirements.txt').splitlines()),

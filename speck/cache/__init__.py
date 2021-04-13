@@ -1,6 +1,5 @@
 """
-Cache utility to store and keep track on objects
-by name.
+Cache utility to store and keep track of objects by name.
 """
 
 # Cache is used in this library for the purpose of reducing API calls,
