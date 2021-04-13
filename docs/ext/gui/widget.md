@@ -2,6 +2,8 @@ Module \<`widget`\>
 ===================
 Widget helpers for tkinter.
 
+#
+
 <sup>*class*</sup> `Widget`
 ----------------------------
 Wrapper around Tkiner Widgets.

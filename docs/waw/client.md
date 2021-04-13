@@ -1,5 +1,7 @@
 # Module \<`client`\>
 
+#
+
 <sup>*class*</sup> `Client`
 ==================
 HTTPS client used to request data from weatherapi.com

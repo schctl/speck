@@ -1,6 +1,8 @@
 # Module \<`errors`\>
 All exceptions that can be raised during handling of a weatherapi request.
 
+#
+
 <sup>*class*</sup> `WeatherApiError(Exception)`
 --------------------------------------
 Base exception.
