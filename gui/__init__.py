@@ -4,7 +4,6 @@
 Licensed under the MIT license, see LICENSE for more information.
 """
 
-__authors__ = ['Nevin Jose', 'Sachin Cherian']
-
 from . import calculator
 from . import style
+from . import frontend

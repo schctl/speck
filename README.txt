@@ -32,7 +32,8 @@ Run the frontend with
 
     python ui_main.py
 
-The username and password entry screen is only intended as a dummy. To bypass this, set the `SPECK_DEV` environment variable.
+The username and password entry screen is only intended as a dummy. To bypass this,
+set the `SPECK_DEV` environment variable.
 
 ## Other links
 
@@ -43,11 +44,3 @@ Lgtm Code Analysis
 Project wiki
 
     https://github.com/schctl/speck/wiki
-
-## Notes
-
-- Some weatherAPI implementations have not been tested, due to time constraints. These need to be tested:
-  - [ ] Search and Autocomplete API
-  - [ ] IP lookup API
-  - [ ] History API
-  - [ ] Sports API
