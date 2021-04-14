@@ -31,7 +31,11 @@ class Widget:
             self._internal.destroy()
 
 class WidgetManager:
-    """Keep track of Tkinter Widgets."""
+    """
+    Keep track of Tkinter Widgets. The position of the widget can either be `int` or `str`.
+    If it is a `str`, it should begin with `+`/`-`/`int`, and will be positioned relative
+    to the last widget pushed onto the stack. Will be ignored for the first widget in the stack.
+    """
 
     def __init__(self):
         self._widgets = []

@@ -1,12 +1,24 @@
 import os
+import re
+
 from setuptools import setup
 
 def readf(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    print(os.path.join(os.path.dirname(__file__), fname))
+    with open(os.path.join(os.path.dirname(__file__), fname), 'r') as f:
+        return f.read()
+
+def get_version(fname):
+    return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
+    # re.MULTILINE tells `search` to compare each line instead of the whole text.
+    # \s - whitespace character
+    # [\'"] - either ' or "
+    # ([^\'"]*) - characters that are NOT ' or "
+    # .group(1) will return the first subgroup of the match - subgroups are enclosed in `()`
 
 setup(
     name     = "speck",
-    version  = readf('VERSION')[0],
+    version  = get_version('speck/__init__.py'),
     license  = "MIT",
     author   = "Nevin Jose, Sachin Cherian",
     description      = "A simple wrapper and frontend for weatherAPI.com",
