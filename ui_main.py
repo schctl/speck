@@ -12,7 +12,7 @@ import waw
 import ui
 import tracker
 
-from waw.speck import Speck
+from waw.client import Client
 
 import tkinter as tk
 from tkinter import messagebox
@@ -41,7 +41,7 @@ class SpeckFrontend:
         self.tracker = tracker.Tracker()
 
         with open("token.txt", "r") as f:
-            self.speck = Speck(f.read().rstrip())
+            self.speck = Client(f.read().rstrip())
 
     @staticmethod
     def __cleanup_widget(widget):

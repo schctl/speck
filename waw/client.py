@@ -10,7 +10,7 @@ from cache import Cache
 from . import errors
 from . import types
 
-class Speck:
+class Client:
     """weatherAPI client."""
     
     BASE = "https://api.weatherapi.com/v1"
@@ -97,7 +97,7 @@ class Speck:
 
         response = self.__make_request('current.json', f'?key={self.token}&q={loc}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e # We're not going to handle the error here, so anyone using the function can do it themselves
 
@@ -128,7 +128,7 @@ class Speck:
 
         response = self.__make_request('forecast.json', f'?key={self.token}&q={loc}&days={min(days, 10)}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
@@ -160,7 +160,7 @@ class Speck:
 
         response = self.__make_request('astronomy.json', f'?key={self.token}&q={loc}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
@@ -187,7 +187,7 @@ class Speck:
 
         response = self.__make_request('ip.json', f'?key={self.token}&q={ip}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
@@ -215,7 +215,7 @@ class Speck:
 
         response = self.__make_request('search.json', f'?key={self.token}&q={loc}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
@@ -238,7 +238,7 @@ class Speck:
 
         response = self.__make_request('timezone.json', f'?key={self.token}&q={loc}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
@@ -261,7 +261,7 @@ class Speck:
 
         response = self.__make_request('sports.json', f'?key={self.token}&q={loc}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e 
 
@@ -293,7 +293,7 @@ class Speck:
 
         response = self.__make_request('history.json', f'?key={self.token}&q={loc}&dt={min(dt, 10)}')
 
-        e = Speck.__error_code_to_error(response)
+        e = Client.__error_code_to_error(response)
         if e:
             raise e
 
