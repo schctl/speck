@@ -2,4 +2,6 @@
 # WeatherAPI API wrapper
 """
 
-from .client import *
+from . import types
+from . import errors
+from . import client

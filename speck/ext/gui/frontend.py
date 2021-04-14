@@ -15,7 +15,7 @@ from PIL import ImageTk
 import speck.waw
 from speck.ext import track
 
-from speck.waw import Client
+from speck.waw.client import Client
 
 from .style import SpeckStyle
 # from .calculator import Calculator
@@ -38,7 +38,7 @@ def _utf8_to_md5_hex(string):
 
 class SampleFrontend:
     """Implementation for a sample frontend."""
-    
+
     def __init__(self, token, auth_file=_rootd('etc/auth.txt')):
         self.bg = None # Background image
         self.root = None

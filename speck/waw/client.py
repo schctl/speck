@@ -15,22 +15,22 @@ from speck.cache import Cache
 from . import errors
 from . import types
 
-class __DummyCache:
+class _DummyCache:
     """
     Dummy cache type so checks don't have to be performed
     if `Client` has opt out of cache.
     """
 
-    def __init__(*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         pass
 
-    def read(*args, **kwargs):
+    def read(self, *args, **kwargs):
         pass
 
-    def dump(*args, **kwargs):
+    def dump(self, *args, **kwargs):
         pass
 
-    def cleanup(*args, **kwargs):
+    def cleanup(self, *args, **kwargs):
         pass
 
 class Client:
@@ -38,14 +38,14 @@ class Client:
 
     BASE = "https://api.weatherapi.com/v1"
 
-    def __init__(self, token, use_cache = False, cache_path = '.cache'):
+    def __init__(self, token, use_cache=False, cache_path='.cache'):
         self.token = token
         self.session = requests.Session()
 
         if use_cache:
             self.cache = Cache(cache_path)
         else:
-            self.cache = __DummyCache()
+            self.cache = _DummyCache()
 
         # This looks for the cities list file
         with open(

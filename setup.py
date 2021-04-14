@@ -12,14 +12,12 @@ setup(
     url      = "https://github.com/schctl/speck",
     packages = [
         "speck",
+        "speck.cache",
         "speck.waw",
         "speck.waw.types",
-        "speck.cache",
-        "speck.ext",
         "speck.ext",
         "speck.ext.track",
         "speck.ext.gui",
-        "speck.etc"
         ],
     package_data = {'': ['etc/*', 'etc/exports/*']},
     include_package_data = True,

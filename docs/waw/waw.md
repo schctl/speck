@@ -7,5 +7,4 @@ Waw is shorthand for **W**eather**A**pi **W**rapper. This is a minimal wrapper a
 - [types](types/types.md)
 ### Modules
 - [errors](errors.md)
-### Classes
-- [Client](client.md)
+- [client](client.md)

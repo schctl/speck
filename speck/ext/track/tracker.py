@@ -1,4 +1,9 @@
-"""Tracker class."""
+"""
+Tracker class.
+
+Authors:
+    Sachin Cherian
+"""
 
 import os
 from datetime import datetime as dt

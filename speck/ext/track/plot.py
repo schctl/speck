@@ -1,4 +1,9 @@
-"""Plot a graph from data stored by a `Tracker`."""
+"""
+Plot a graph from data stored by a `Tracker`.
+
+Authors:
+    Sachin Cherian
+"""
 
 from matplotlib import pyplot
 
