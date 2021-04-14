@@ -37,7 +37,7 @@ def main():
             print("Location cannot be empty.")
             continue
         except errors.InvalidLocation:
-            print("Unkown location.")
+            print("Unknown location.")
             continue
 
         print('---------------------')

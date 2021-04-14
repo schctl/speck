@@ -45,7 +45,7 @@ class SampleFrontend:
         self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
 
         self.entry_cleared = False # Check if uname and pwd entries have been cleared of defaults.
-        self.last_loc_fail = False
+        self.loc_e_cleared = False
 
         self.widget_manager = WidgetManager()
 
@@ -79,6 +79,14 @@ class SampleFrontend:
         return _utf8_to_md5_hex(uname) == auth[0] and \
                _utf8_to_md5_hex(pwd)   == auth[1]
 
+    def __warn(self, msg='Warning'):
+        """Display a warning in message box."""
+        tk.messagebox.showwarning('WARNING', msg)
+
+    def __err(self, msg='Error'):
+        """Display an error in message box."""
+        tk.messagebox.showerror('ERROR', msg)
+
     def __get_loc_meta(self, loc):
         """Get all metadata for a location."""
 
@@ -87,15 +95,18 @@ class SampleFrontend:
             # if this fails, there's no valid location
             # recognized by weatherAPI
 
-        except speck.waw.errors.InvalidLocation:
+        except speck.waw.errors.InvalidLocation as e:
             loc = self.speck.find_city(loc) # try to find our own
 
             if len(loc) == 0:
-                return None
+                raise speck.waw.errors.InvalidLocation('Unknown location.', e.internal_code)
 
             loc = f"{loc[0]['lat']},{loc[0]['lon']}"
 
             curr_i = self.speck.current(loc)
+
+        except Exception as e: # let caller handle any other error
+            raise e
 
         astro_i = self.speck.astro(loc)
         fore_i  = self.speck.forecast(loc)
@@ -153,7 +164,7 @@ class SampleFrontend:
                 pass
 
             elif not self.entry_cleared:
-                tk.messagebox.showwarning("ERROR", "ENTER USERNAME AND PASSWORD")
+                self.__err("ENTER USERNAME AND PASSWORD")
                 return
 
             elif not SampleFrontend.__verify_creds(
@@ -161,7 +172,7 @@ class SampleFrontend:
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):
-                tk.messagebox.showwarning("ERROR", "ENTER CORRECT USERNAME AND PASSWORD")
+                self.__err("ENTER CORRECT USERNAME AND PASSWORD")
                 return
 
             self.location_entry() # Move onto step 2
@@ -231,10 +242,17 @@ class SampleFrontend:
             ), (38, 355)
         )
 
+        def clear_location_entry(e):
+            if not self.loc_e_cleared:
+                location_input_entry.internal.delete(0, tk.END)
+                self.loc_e_cleared = True
+
+        self.loc_e_cleared = False
+
         location_input_entry.internal.insert(0, "Search Location")
         location_input_entry.internal.bind(
             "<Button-1>",
-            lambda _: location_input_entry.internal.delete(0, tk.END)
+            clear_location_entry
         )
 
         location_input_button = Widget(tk.Button(
@@ -252,17 +270,6 @@ class SampleFrontend:
 
         self.widget_manager.push(location_input_entry)
         self.widget_manager.push(location_input_button)
-
-        if self.last_loc_fail:
-            fail_loc = Widget(
-                SampleFrontend.__gen_label(
-                    self.root,
-                    self.style,
-                    "Unknown Location"
-                ),
-                ("-16", "+120")
-            )
-            self.widget_manager.push(fail_loc)
 
         self.widget_manager.render_all(self.main_canvas.internal)
 
@@ -290,16 +297,28 @@ class SampleFrontend:
 
         # Get info ----------------
 
-        data = self.__get_loc_meta(loc)
+        curr_i = None
+        astro_i = None
+        fore_i = None
 
-        if not data:
-            self.last_loc_fail = True
+        try:
+            curr_i, astro_i, fore_i = self.__get_loc_meta(loc)
+        except speck.waw.errors.InvalidLocation:
+            self.__err('Unknown location.')
             self.location_entry()
             return
-
-        self.last_loc_fail = False
-
-        curr_i, astro_i, fore_i = data
+        except speck.waw.errors.InternalError as e:
+            self.__err(f'Internal Error: {e}')
+            self.location_entry()
+            return
+        except speck.waw.errors.InvalidApiKey:
+            self.__err('Invalid API key. Get the API key from https://weatherapi.com/my')
+            self.location_entry()
+            return
+        except Exception as e:
+            self.__err(f'Query failed: {e}')
+            self.location_entry()
+            return
 
         self.tracker.dump(curr_i.location.name, curr_i)
 
