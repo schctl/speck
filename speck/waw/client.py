@@ -101,6 +101,10 @@ class Client:
         This method is highly unlikely to be used frequently, since weatherAPI tries
         to interpret location names even if incorrect, but is provided anyway.
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         return [ # Generates a list of city names containing the string `loc`
             i for i in self.cities if loc.lower() in i['name'].lower()
         ]
@@ -121,6 +125,10 @@ class Client:
             - auto:ip IP lookup e.g: 'auto:ip'
             - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         mode = f"current-{loc}-now-{str(dt.now())[:15].replace(' ', '-')}"
 
         n = self.cache.read(mode)
@@ -152,6 +160,10 @@ class Client:
         - `days`: Number of days to restrict the forecast for.
             weatherAPI allows up to 10 days, but it in practice the maximum is 3.
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         mode = f"forecast-{loc}-now-{str(dt.now()).split()[0]}-{days}"
 
         n = self.cache.read(mode)
@@ -184,6 +196,10 @@ class Client:
         # Aliases
         - `astro`
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         mode = f"astro-{loc}-now-{str(dt.now()).split()[0]}"
 
         n = self.cache.read(mode)
@@ -213,6 +229,10 @@ class Client:
         # Aliases
         - `ip`
         """
+
+        if ip == '':
+            raise errors.QueryNotProvided('IP cannot be empty.', 0)
+
         mode = f"iplookup-{ip}"
 
         n = self.cache.read(mode)
@@ -239,6 +259,10 @@ class Client:
         # Parameters
         - `loc`: See docs on method `current`.
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         mode = f"search-{loc}"
 
         n = self.cache.read(mode)
@@ -272,6 +296,10 @@ class Client:
         # Aliases
         - `tz`
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         # No cache
 
         response = self.__make_request('timezone.json', f'?key={self.token}&q={loc}')
@@ -321,6 +349,10 @@ class Client:
         - `loc`: See docs on method `current`.
         - `dt`: Datetime string in the format `YYY-MM-DD`. Data starting from this date will be returned.
         """
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
         mode = f"history-{loc}-now-{str(dt.now()).split()[0]}-{dt}"
 
         n = self.cache.read(mode)

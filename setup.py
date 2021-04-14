@@ -9,6 +9,9 @@ setup(
     version  = readf('VERSION')[0],
     license  = "MIT",
     author   = "Nevin Jose, Sachin Cherian",
+    description      = "A simple wrapper and frontend for weatherAPI.com",
+    long_description = readf('README.md'),
+    long_description_content_type = 'text/markdown',
     url      = "https://github.com/schctl/speck",
     packages = [
         "speck",
@@ -19,10 +22,8 @@ setup(
         "speck.ext.track",
         "speck.ext.gui",
         ],
-    package_data = {'': ['etc/*', 'etc/exports/*']},
+    package_data = {'': ['LICENSE', 'README.md', 'etc/*', 'etc/exports/*']},
     include_package_data = True,
-    description      = "A simple wrapper and frontend for weatherAPI.com",
-    long_description = readf('README.md'),
     install_requires = list(readf('requirements.txt').splitlines()),
     python_requires  = ">=3.6.0"
 )
