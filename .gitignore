@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # Utils
-cache/*
+.cache
+.tracker
 .vscode
 token.txt

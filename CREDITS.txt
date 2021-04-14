@@ -1,4 +1,4 @@
-List of people that have contributed to speck, sorted by name.
+# List of people that have contributed to speck, sorted by name.
 
 - Nevin Jose
   - https://github.com/FaZe-Vulcan

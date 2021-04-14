@@ -1,31 +1,35 @@
 """
-Styling utilities for speck.
+Window styling utilities.
 
 Authors:
-    2021 Sachin Cherian
+    Sachin Cherian
 """
 
 import json
 
 class WindowStyle:
+    """Details about the main window."""
     def __init__(self, width, height, *args, **kwargs):
         self.width = width
         self.height = height
 
 class FontStyle:
+    """Details about fonts to be used."""
     def __init__(self, family, sizes):
         self.family = family
-        
+
         self.size_big = sizes["big"]
         self.size_medium = sizes["medium"]
         self.size_small = sizes["small"]
 
 class ColorStyle:
+    """Details for colors to be used."""
     def __init__(self, fg, bg):
         self.fg = fg
         self.bg = bg
 
 class SpeckStyle:
+    """Container around all other styles."""
     def __init__(self, window, fonts, colors, *args, **kwargs):
         self.window = window
         self.fonts = fonts
@@ -33,6 +37,7 @@ class SpeckStyle:
 
     @classmethod
     def from_file(cls, file):
+        """Create an instance of `SpeckStyle`, with details read from a file with data in json format."""
         with open(file, 'r') as f:
             data = json.load(f)
 

@@ -2,17 +2,20 @@
 Sample Calculator.
 
 Authors:
-    2021 Nevin Jose
+    Nevin Jose
 """
 
 import tkinter as tk
 
 class Calculator:
+    """Simple calculator app."""
+
     def __init__(self):
-        self.math = ""
-        self.first_num = 1
+        self._math = ""
+        self._first_num = 1
 
     def run(self):
+        """Runs the calculator under a new Tk instance."""
         root = tk.Tk()
         root.title("Simple Calculator")
         root.resizable(width=False, height="false")
@@ -33,52 +36,52 @@ class Calculator:
             button_clear()
 
             e.insert(0, str(e.get()) + str(number))
-            
+
         def button_add():
-            self.math = 'add'
-            self.first_num = entry_get_int()
+            self._math = 'add'
+            self._first_num = entry_get_int()
 
-            button_clear() 
+            button_clear()
 
-        def button_sub():        
-            self.math = 'sub'
-            self.first_num = entry_get_int()
+        def button_sub():
+            self._math = 'sub'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_multiply():
-            self.math = 'mult'
-            self.first_num = entry_get_int()
+            self._math = 'mult'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_div():
-            self.math = 'div'
-            self.first_num = entry_get_int()
+            self._math = 'div'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_pwr():
-            self.math = 'pow'
-            self.first_num = entry_get_int()
+            self._math = 'pow'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_root():
-            self.math = 'root'
-            self.first_num = entry_get_int()
+            self._math = 'root'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_mod():
-            self.math = 'mod'
-            self.first_num = entry_get_int()
+            self._math = 'mod'
+            self._first_num = entry_get_int()
 
             button_clear()
 
         def button_quo():
-            self.math = 'floord'
-            self.first_num = entry_get_int()
+            self._math = 'floord'
+            self._first_num = entry_get_int()
 
             button_clear()
 
@@ -87,32 +90,32 @@ class Calculator:
 
             button_clear()
 
-            if self.math == 'add':
-                e.insert(0, self.first_num + int(second_num))
+            if self._math == 'add':
+                e.insert(0, self._first_num + int(second_num))
 
-            elif self.math == 'sub':
-                e.insert(0, self.first_num - int(second_num))
+            elif self._math == 'sub':
+                e.insert(0, self._first_num - int(second_num))
 
-            elif self.math == 'mult':
-                e.insert(0, self.first_num * int(second_num))
+            elif self._math == 'mult':
+                e.insert(0, self._first_num * int(second_num))
 
-            elif self.math == 'div':
+            elif self._math == 'div':
                 if second_num == 0:
                     print('not defined')
                 else:
-                    e.insert(0, self.first_num / int(second_num))
+                    e.insert(0, self._first_num / int(second_num))
 
-            elif self.math == 'pow':
-                e.insert(0, self.first_num ** int(second_num))
+            elif self._math == 'pow':
+                e.insert(0, self._first_num ** int(second_num))
 
-            elif self.math == 'root':
-                e.insert(0, int(second_num) ** (1 / self.first_num))
+            elif self._math == 'root':
+                e.insert(0, int(second_num) ** (1 / self._first_num))
 
-            elif self.math == 'mod':
-                e.insert(0, self.first_num % int(second_num))
+            elif self._math == 'mod':
+                e.insert(0, self._first_num % int(second_num))
 
-            elif self.math == 'floord':
-                e.insert(0, self.first_num // int(second_num)) 
+            elif self._math == 'floord':
+                e.insert(0, self._first_num // int(second_num))
 
         # -------------------------------------------------
 
