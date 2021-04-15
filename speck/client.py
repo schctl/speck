@@ -41,12 +41,14 @@ class Client:
     """
     Represents a connection to weatherapi.com.
     Use this class to interact with the weatherapi API.
+
+    :var session: A `requests.Session` object. Requests are made with this (``session.get``).
     """
 
     BASE = "https://api.weatherapi.com/v1"
 
     def __init__(self, token, use_cache=False, cache_path='.cache'):
-        self.token = token
+        self._token = token
         self.session = requests.Session()
 
         if use_cache:
@@ -81,6 +83,8 @@ class Client:
                 return errors.InvalidRequestUrl(message, code)
             elif code == 1006:
                 return errors.InvalidLocation(message, code)
+            elif code == 1008:
+                return errors.ApiKeyDisabled(message, code)
             elif code == 2006:
                 return errors.InvalidApiKey(message, code)
             elif code == 2007:
@@ -130,6 +134,8 @@ class Client:
              - **iata:<3 digit airport code>** *e.g: 'iata:DXB'*,\n
              - **auto:ip IP lookup** *e.g: 'auto:ip'*,\n
              - **IP address (IPv4 and IPv6 supported)** *e.g: '100.0.0.1*'
+
+        :rtype: :class:`types.HourlyPoint`
         """
 
         if loc == '':
@@ -142,7 +148,7 @@ class Client:
             # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
             return n
 
-        response = self.__make_request('current.json', f'?key={self.token}&q={loc}')
+        response = self.__make_request('current.json', f'?key={self._token}&q={loc}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -164,6 +170,8 @@ class Client:
         :param loc: See docs on method ``current``.
         :param days: Number of days to restrict the forecast for.
             WeatherAPI allows up to 10 days, but it in practice the maximum is 3.
+
+        :rtype: ``list[types.DailyPoint]``
         """
 
         if loc == '':
@@ -175,7 +183,7 @@ class Client:
         if n:
             return n
 
-        response = self.__make_request('forecast.json', f'?key={self.token}&q={loc}&days={min(days, 10)}')
+        response = self.__make_request('forecast.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -196,6 +204,8 @@ class Client:
         Get astronomy information for a location.
 
         :param loc: See docs on method ``current``.
+
+        :rtype: :class:`types.AstroPoint`
         """
 
         if loc == '':
@@ -207,7 +217,7 @@ class Client:
         if n:
             return n
 
-        response = self.__make_request('astronomy.json', f'?key={self.token}&q={loc}')
+        response = self.__make_request('astronomy.json', f'?key={self._token}&q={loc}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -225,6 +235,8 @@ class Client:
         Get information for an IP address.
 
         :param ip: IPv6 or IPv4 string.
+
+        :rtype: :class:`IpPoint`
         """
 
         if ip == '':
@@ -236,7 +248,7 @@ class Client:
         if n:
             return n
 
-        response = self.__make_request('ip.json', f'?key={self.token}&q={ip}')
+        response = self.__make_request('ip.json', f'?key={self._token}&q={ip}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -254,6 +266,8 @@ class Client:
         Get a list of location objects based on query parameter.
 
         :param loc: See docs on method ``current``.
+
+        :rtype: ``list[types.Location]``
         """
 
         if loc == '':
@@ -266,7 +280,7 @@ class Client:
         if n:
             return n
 
-        response = self.__make_request('search.json', f'?key={self.token}&q={loc}')
+        response = self.__make_request('search.json', f'?key={self._token}&q={loc}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -287,6 +301,8 @@ class Client:
         Get timezone and associated information for a location.
 
         :param loc: See docs on method ``current``.
+
+        :rtype: :class:`types.Location`
         """
 
         if loc == '':
@@ -294,7 +310,7 @@ class Client:
 
         # No cache
 
-        response = self.__make_request('timezone.json', f'?key={self.token}&q={loc}')
+        response = self.__make_request('timezone.json', f'?key={self._token}&q={loc}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -309,6 +325,8 @@ class Client:
         parameter `loc` doesn't actually matter but is required anyway.
 
         :param loc: See docs on method ``current``.
+
+        :rtype: ``dict{str: list[SportsPoint]}``
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -316,7 +334,7 @@ class Client:
         if n:
             return n
 
-        response = self.__make_request('sports.json', f'?key={self.token}&q={loc}')
+        response = self.__make_request('sports.json', f'?key={self._token}&q={loc}')
 
         e = Client.__is_error_code(response)
         if e:
@@ -336,6 +354,8 @@ class Client:
         :param loc: See docs on method ``current``.
         :param dt: Datetime string in the format `YYY-MM-DD`.
             Data starting from this date will be returned.
+
+        :rtype: ``list[types.DailyPoint]``
         """
 
         if loc == '':
@@ -347,8 +367,7 @@ class Client:
         if n:
             return n
 
-
-        response = self.__make_request('history.json', f'?key={self.token}&q={loc}&dt={min(dt, 10)}')
+        response = self.__make_request('history.json', f'?key={self._token}&q={loc}&dt={min(dt, 10)}')
 
         e = Client.__is_error_code(response)
         if e:

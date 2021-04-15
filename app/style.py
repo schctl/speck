@@ -16,12 +16,14 @@ __all__ = [
 
 class WindowStyle:
     """Details about the main window."""
+
     def __init__(self, width, height, *args, **kwargs):
         self.width = width
         self.height = height
 
 class FontStyle:
     """Details about fonts to be used."""
+
     def __init__(self, family, sizes):
         self.family = family
 
@@ -31,6 +33,7 @@ class FontStyle:
 
 class ColorStyle:
     """Details for colors to be used."""
+
     def __init__(self, fg, bg):
         self.fg = fg
         self.bg = bg

@@ -37,7 +37,16 @@ class BasePoint:
 # Inheritance only to implement `from_raw` and `from_json` automatically for all subclasses
 
 class Location(BasePoint):
-    """Represents location data such as coordinates, time zone, region, at a particular time."""
+    """
+    Represents location data such as coordinates, time zone, region, at a particular time.
+
+    :var lat: :class:`float`
+    :var lon: :class:`float`
+    :var name: :class:`str`
+    :var region: :class:`str`
+    :var tz_id: :class:`str`
+    :var localtime: :class:`datetime.datetime`
+    """
     def __init__(self,
         lat, lon, name, region=None, country=None, tz_id=None, localtime=None,
         **kwargs
@@ -61,7 +70,33 @@ class Location(BasePoint):
         return cls(**json.loads(data))
 
 class HourlyPoint(BasePoint):
-    """Represents weather data at a particular time in some location."""
+    """
+    Represents weather data at a particular time in some location.
+
+    :var location: :class:`Location`
+    :var time: :class:`datetime.datetime`
+    :var temp_c: :class:`types.Cel`
+    :var feelslike_c: :class:`types.Cel`
+    :var windchill_c: :class:`types.Cel`
+    :var heatindex_c: :class:`types.Cel`
+    :var dewpoint_c: :class:`types.Cel`
+    :var condition: :class:`dict`
+    :var wind_kph: :class:`types.Km`
+    :var gust_kph: :class:`types.Km`
+    :var wind_degree: :class:`int`
+    :var wind_dir: :class:`str`
+    :var pressure_mb: :class:`types.Mb`
+    :var precip_mm: :class:`types.Mm`
+    :var will_it_rain: :class:`int`
+    :var will_it_snow: :class:`int`
+    :var chance_of_rain: :class:`str`
+    :var chance_of_snow: :class:`str`
+    :var humidity: :class:`int`
+    :var cloud: :class:`int`
+    :var is_day: :class:`bool`
+    :var uv: :class:`float`
+    :var vis_km: :class:`types.Km`
+    """
     def __init__(
         self, location,
         temp_c, feelslike_c,
@@ -116,7 +151,20 @@ class HourlyPoint(BasePoint):
         self.vis_km = Km(vis_km)
 
 class DayPoint(BasePoint):
-    """The total conditions per day."""
+    """
+    The total conditions per day.
+
+    :var location: :class:`Location`
+    :var maxtemp_c: :class:`types.Cel`
+    :var mintemp_c: :class:`types.Cel`
+    :var avgtemp_c: :class:`types.Cel`
+    :var condition: :class:`dict`
+    :var maxwind_kph: :class:`types.Km`
+    :var totalprecip_mm: :class:`types.Mm`
+    :var avgvis_km: :class:`types.Km`
+    :var avghumidity: :class:`int`
+    :var uv: :class:`float`
+    """
     def __init__(
         self, location,
         maxtemp_c, mintemp_c, avgtemp_c, maxwind_kph,
@@ -143,7 +191,16 @@ class DayPoint(BasePoint):
         self.uv = uv
 
 class AstroPoint(BasePoint):
-    """Astronomy information."""
+    """
+    Astronomy information.
+
+    :var location: :class:`Location`
+    :var sunrise: :class:`str`
+    :var sunset: :class:`str`
+    :var moonrise: :class:`str`
+    :var moonset: :class:`str`
+    :var moon_phase: :class:`str`
+    """
     def __init__(self, location, sunrise, sunset, moonrise, moonset, moon_phase, **kwargs):
         if isinstance(location, Location):
             self.location = location
@@ -159,7 +216,14 @@ class AstroPoint(BasePoint):
         self.moon_phase = moon_phase
 
 class DailyPoint(BasePoint):
-    """All information per day, inlcuding hourly info."""
+    """
+    All information per day, inlcuding hourly info.
+
+    :var location: :class:`Location`
+    :var day: :class:`DayPoint`
+    :var astro: :class:`AstroPoint`
+    :var hour: ``list[HourlyPoint]``
+    """
     def __init__(self, location, day, astro, hour):
         self.location = location if isinstance(location, Location) else Location.from_raw(location)
 
@@ -173,7 +237,13 @@ class DailyPoint(BasePoint):
         ]
 
 class IpPoint(BasePoint):
-    """IP Address information."""
+    """
+    IP Address information.
+
+    :var location: :class:`Location`
+    :var ip: :class:`str`
+    :var type: :class:`str`
+    """
     def __init__(self,
         ip, type,
         continent_code, continent_name,
@@ -198,7 +268,15 @@ class IpPoint(BasePoint):
         return cls(**json.loads(data))
 
 class SportsPoint(BasePoint):
-    """Information about a sports event, such as stadium, region, start time, etc."""
+    """
+    Information about a sports event, such as stadium, region, start time, etc.
+
+    :var stadium: :class:`str`
+    :var country: :class:`str`
+    :var region: :class:`str`
+    :var tournament: :class:`str`
+    :var start: :class:`datetime.datetime`
+    """
     def __init__(self, stadium, country, region, tournament, start, match):
         self.stadium = stadium
         self.country = country # / Might wrap in a `Location` object

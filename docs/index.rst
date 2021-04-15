@@ -3,15 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to speck's documentation!
-=================================
+Welcome to speck
+================
+
+Speck is a minimal wrapper for weatherAPI.com
+
+Contents
+--------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
 
    examples
-   modules
+   API reference <modules>
 
 Indices and tables
 ------------------

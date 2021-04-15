@@ -1,7 +1,7 @@
+[//]: # (Speck is a minimal wrapper and frontend for weatherAPI.com)
+
 <h1 align="center">Speck</h1>
-
 <p align="center">Minimal wrapper and frontend for <a href="https://www.weatherapi.com/">weatherAPI.com</a></p>
-
 <p align="center">
     <a href="LICENSE"><img alt="LICENSE" src="https://img.shields.io/github/license/schctl/speck?style=for-the-badge"></a>
     <a href="https://speck.readthedocs.io/en/latest/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/speck?style=for-the-badge"></a>

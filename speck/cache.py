@@ -14,21 +14,34 @@ __all__ = [
 ]
 
 class CacheManager:
-    """Cache Manager class. Keeps track of and gets/updates data from cache files."""
+    """
+    Cache Manager class. Keeps track of and gets/updates data from cache files.
+
+    :param path: Path to the "cache directory". Cache files will be stored here.
+    """
 
     def __init__(self, path):
-        self.path = path
+        self._path = path
 
         Path(path).mkdir(parents=True, exist_ok=True) # Creates cache folder
 
         ## Cache is identified with its `name` attribute. Cache can be read by keeping track of this
         ## value and reading it with `read` later on.
 
+    @property
+    def path(self):
+        """
+        Returns the directory to which cache files are being stored.
+
+        :rtype: :class:`str`
+        """
+        return self._path
+
     def find_all(self):
         """Return a list of all tracked cache files."""
         return (
             i.rstrip('.dat')
-            for i in os.listdir(self.path)
+            for i in os.listdir(self._path)
         )
 
     def read(self, name):
@@ -37,7 +50,7 @@ class CacheManager:
         try:
             # Cache is stored as an object in a binary file,
             # which can be loaded as-is later on.
-            with open(f"{self.path}/{name}.dat", "rb") as f:
+            with open(f"{self._path}/{name}.dat", "rb") as f:
                 return pickle.loads(zlib.decompress(pickle.load(f)))
 
         except pickle.PickleError:
@@ -50,7 +63,7 @@ class CacheManager:
     def dump(self, name, data):
         """Writes data to a cache file with ``name``. ``name`` must be kept track of manually."""
 
-        with open(f"{self.path}/{name}.dat", "wb") as f:
+        with open(f"{self._path}/{name}.dat", "wb") as f:
             pickle.dump(zlib.compress(pickle.dumps(data)), f)
 
     def cleanup(self, name):
@@ -61,7 +74,7 @@ class CacheManager:
         # Removes all cache files matching the `name` pattern. `*` represents any set of characters.
 
         try:
-            for i in os.listdir(self.path):
+            for i in os.listdir(self._path):
                 for n, j in enumerate(els):
                     i = i.rstrip('.dat')
                     if not (
@@ -80,7 +93,7 @@ class CacheManager:
                         # If it is, we make sure its after the previous
                         # component (second check).
                 else:
-                    os.remove(f"{self.path}/{i}") # Delete the actual file
+                    os.remove(f"{self._path}/{i}") # Delete the actual file
 
         except FileNotFoundError:
             pass

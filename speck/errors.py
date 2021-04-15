@@ -21,9 +21,17 @@ __all__ = [
 ]
 
 class WeatherApiError(Exception):
-    """Raised when an unknown weatherapi error is encountered."""
+    """
+    Raised when an unknown weatherapi error is encountered.
+
+    :var internal_code: :class:`int`
+        The error code returned by weatherapi.
+    :var message: :class:`str`
+        A more detailed description of the error.
+    """
     def __init__(self, message, internal_code):
         self.internal_code = internal_code
+        self.message = message
         super().__init__(message)
 
 class NoApiKey(WeatherApiError):
