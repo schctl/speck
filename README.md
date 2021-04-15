@@ -15,7 +15,7 @@
 
 Speck can be installed as a library. First clone the repository.
 
-    git clone https://github.com/schctl/speck
+    git clone https://github.com/schctl/speck.git
 
 Then, from the root directory, run
 
@@ -31,10 +31,6 @@ The `speck` library must be installed for this to work.
 
 The username and password entry screen is only intended as a dummy. To make the app ignore this,
 set the `SPECK_DEV` environment variable. The username and password are `11C` and `11c2021`.
-
-### Documentation
-
-Documentation is available in markdown format [here](docs/README.md).
 
 ### Requirements
 
