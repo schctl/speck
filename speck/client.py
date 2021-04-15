@@ -340,7 +340,11 @@ class Client:
         if e:
             raise e
 
-        data = types.SportsPoint.from_raw(response)
+        data = {
+            j: [types.SportsPoint.from_raw(i) for i in response[j]]
+            for j in ['football', 'cricket', 'golf']
+        }
+
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, data)
