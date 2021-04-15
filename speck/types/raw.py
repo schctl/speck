@@ -11,6 +11,13 @@ from dataclasses import dataclass as __dc
 # such as __repr__() for user-defined classes
 # [docs](https://docs.python.org/3/library/dataclasses.html).
 
+__all__ = [
+    'Km',
+    'Mm',
+    'Mb',
+    'Cel'
+]
+
 @__dc(frozen=True)
 class Km:
     """Kilometer."""
@@ -19,22 +26,6 @@ class Km:
     def mi(self):
         """Equivalent miles."""
         return self.val * 0.6213
-
-    def __repr__(self):
-        return f"{self.val}"
-
-@__dc(frozen=True)
-class Cel:
-    """Celsius."""
-    val: float
-
-    def fahrenheit(self):
-        """Equivalent farenheit."""
-        return (self.val * 1.8) + 32
-
-    def kelvin(self):
-        """Equivalent farenheit."""
-        return self.val + 273.15
 
     def __repr__(self):
         return f"{self.val}"
@@ -59,6 +50,22 @@ class Mb:
     def inches(self):
         """Equivalent inches of Hg."""
         return self.val * 0.02952
+
+    def __repr__(self):
+        return f"{self.val}"
+
+@__dc(frozen=True)
+class Cel:
+    """Celsius."""
+    val: float
+
+    def fahrenheit(self):
+        """Equivalent farenheit."""
+        return (self.val * 1.8) + 32
+
+    def kelvin(self):
+        """Equivalent farenheit."""
+        return self.val + 273.15
 
     def __repr__(self):
         return f"{self.val}"

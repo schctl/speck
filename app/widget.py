@@ -5,6 +5,11 @@ Authors:
     Sachin Cherian
 """
 
+__all__ = [
+    'Widget',
+    'WidgetManager'
+]
+
 class Widget:
     """Wrapper around Tkiner Widgets."""
 

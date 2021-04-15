@@ -9,9 +9,11 @@ import pickle
 
 from pathlib import Path
 
-from datetime import datetime as dt
+__all__ = [
+    'CacheManager'
+]
 
-class Cache:
+class CacheManager:
     """Cache Manager utility. Keeps track of and gets/updates data from cache files."""
 
     def __init__(self, path):

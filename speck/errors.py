@@ -8,6 +8,18 @@ All exceptions that can be raised during handling of a weatherapi request.
 # We use these custom error classes to make the error code more readable
 # and easier to handle
 
+__all__ = [
+    'WeatherApiError',
+    'NoApiKey',
+    'InvalidApiKey',
+    'QuotaExceeded',
+    'ApiKeyDisabled',
+    'QueryNotProvided',
+    'InvalidRequestUrl',
+    'InvalidLocation',
+    'InternalError'
+]
+
 class WeatherApiError(Exception):
     """Raised when an unknown weatherapi error is encountered."""
     def __init__(self, message, internal_code):

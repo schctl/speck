@@ -7,6 +7,10 @@ Authors:
 
 import tkinter as tk
 
+__all__ = [
+    'Calculator'
+]
+
 class Calculator:
     """Simple calculator app."""
 

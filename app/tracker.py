@@ -8,14 +8,29 @@ Authors:
 import os
 from datetime import datetime as dt
 
-from speck.cache import Cache
+from speck import CacheManager
+from matplotlib import pyplot
+
+__all__ = [
+    'plot',
+    'Tracker'
+]
+
+def plot(tracker, name):
+    """Plot all values of temp_c stored by `tracker`."""
+    raw = sorted(tracker.find_all(name), key=lambda x: x[0])
+
+    # strftime formats the datetime object into a string
+    pyplot.plot([i[0].strftime("%Y-%m-%d") for i in raw], [i[1].temp_c.val for i in raw])
+    pyplot.title(name)
+    pyplot.show()
 
 class Tracker:
     """Utility to dump speck objects into cache files, stored per day, in a "tracker directory"."""
 
     def __init__(self, path='.tracker'):
         self.path = path
-        self.cache = Cache(self.path)
+        self.cache = CacheManager(self.path)
 
     def dump(self, name, data):
         """Dump an object into the tracker directory."""

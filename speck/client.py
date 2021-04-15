@@ -10,10 +10,14 @@ from datetime import datetime as dt
 
 import requests
 
-from speck.cache import Cache
+from speck.cache import CacheManager
 
 from . import errors
 from . import types
+
+__all__ = [
+    'Client'
+]
 
 class _DummyCache:
     """
@@ -43,13 +47,13 @@ class Client:
         self.session = requests.Session()
 
         if use_cache:
-            self.cache = Cache(cache_path)
+            self.cache = CacheManager(cache_path)
         else:
             self.cache = _DummyCache()
 
         # This looks for the cities list file
         with open(
-            os.path.join(os.path.dirname(__file__), '../etc/cities_p.json'),
+            os.path.join(os.path.dirname(__file__), 'etc/cities_p.json'),
             'r', encoding='utf-8'
         ) as f:
             self.cities = json.loads(f.read())

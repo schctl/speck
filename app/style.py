@@ -7,6 +7,13 @@ Authors:
 
 import json
 
+__all__ = [
+    'WindowStyle',
+    'FontStyle',
+    'ColorStyle',
+    'SpeckStyle'
+]
+
 class WindowStyle:
     """Details about the main window."""
     def __init__(self, width, height, *args, **kwargs):

@@ -27,14 +27,9 @@ setup(
     url      = "https://github.com/schctl/speck",
     packages = [
         "speck",
-        "speck.cache",
-        "speck.waw",
-        "speck.waw.types",
-        "speck.ext",
-        "speck.ext.track",
-        "speck.ext.gui",
+        "speck.types"
         ],
-    package_data = {'': ['LICENSE', 'README.md', 'etc/*', 'etc/exports/*']},
+    package_data = {'': ['LICENSE', 'README.md', 'speck/etc/*']},
     include_package_data = True,
     install_requires = list(readf('requirements.txt').splitlines()),
     python_requires  = ">=3.6.0"

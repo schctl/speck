@@ -9,22 +9,24 @@ Authors:
 import os
 from hashlib import md5
 
+import speck
+
 import tkinter as tk
 from PIL import ImageTk
 
-import speck.waw
-from speck.ext import track
-
-from speck.waw.client import Client
-
 from .style import SpeckStyle
-# from .calculator import Calculator
+from .tracker import Tracker, plot
+from .calculator import Calculator
 from .widget import Widget, WidgetManager
+
+__all__ = [
+    'SpeckApp'
+]
 
 # -- Utils --
 def _rootd(path):
     """Return absolute path of `path` relative to this file."""
-    return os.path.join(os.path.dirname(__file__), f"../../{path}")
+    return os.path.join(os.path.dirname(__file__), path)
 
 def _readf(fname):
     """Utility function to read a file."""
@@ -36,7 +38,7 @@ def _utf8_to_md5_hex(string):
     return md5(bytes(string, 'utf-8')).hexdigest()
 # -----------
 
-class SampleFrontend:
+class SpeckApp:
     """Implementation for a sample frontend."""
 
     def __init__(self, token, auth_file=_rootd('etc/auth.txt')):
@@ -50,9 +52,9 @@ class SampleFrontend:
         self.widget_manager = WidgetManager()
 
         self.style = SpeckStyle.from_file(_rootd('etc/style.json'))
-        self.tracker = track.Tracker(_rootd('.tracker'))
+        self.tracker = Tracker(_rootd('.tracker'))
 
-        self.speck = Client(
+        self.speck = speck.Client(
             token,
             use_cache=True,
             cache_path=f"{_rootd('.cache')}"
@@ -167,7 +169,7 @@ class SampleFrontend:
                 self.__err("ENTER USERNAME AND PASSWORD")
                 return
 
-            elif not SampleFrontend.__verify_creds(
+            elif not SpeckApp.__verify_creds(
                 self.__auth,
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
@@ -335,15 +337,15 @@ class SampleFrontend:
 
         #                                        # Root     # Style     # Text                                                                 # Pos
         lt_lbl     = \
-            Widget(SampleFrontend.__gen_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0", "+50"))
+            Widget(SpeckApp.__gen_label(self.root, self.style, f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"), ("+0", "+50"))
         curr_lbl   = \
-            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0", "+30"))
+            Widget(SpeckApp.__gen_label(self.root, self.style, f"Current Temp: {curr_i.temp_c}°"),                                    ("+0", "+30"))
         fore_lbl_1 = \
-            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0", "+30"))
+            Widget(SpeckApp.__gen_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),                ("+0", "+30"))
         fore_lbl_2 = \
-            Widget(SampleFrontend.__gen_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0", "+30"))
+            Widget(SpeckApp.__gen_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),                ("+0", "+30"))
         astro_lbl  = \
-            Widget(SampleFrontend.__gen_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0", "+30"))
+            Widget(SpeckApp.__gen_label(self.root, self.style, f"{astro_i.moon_phase}"),                                              ("+0", "+30"))
 
         back_btn = Widget(tk.Button(
             self.root,
@@ -365,7 +367,7 @@ class SampleFrontend:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: track.plot(self.tracker, curr_i.location.name)
+            command = lambda: plot(self.tracker, curr_i.location.name)
             ),
             (196, 523) # pos
         )
