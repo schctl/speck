@@ -52,12 +52,12 @@ class Location(BasePoint):
 
     @classmethod
     def from_raw(cls, data):
-        """Return `Location` object from json converted `weatherapi` response."""
+        """Return ``Location`` object from json converted ``weatherapi`` response."""
         return cls(**data)
 
     @classmethod
     def from_json(cls, data):
-        """Return `Location` object from raw `weatherapi` response."""
+        """Return ``Location`` object from raw ``weatherapi`` response."""
         return cls(**json.loads(data))
 
 class HourlyPoint(BasePoint):
@@ -189,12 +189,12 @@ class IpPoint(BasePoint):
 
     @classmethod
     def from_raw(cls, data):
-        """Return `IpPoint` object from json converted `weatherapi` response."""
+        """Return ``IpPoint`` object from json converted ``weatherapi`` response."""
         return cls(**data)
 
     @classmethod
     def from_json(cls, data):
-        """Return `IpPoint` object from raw `weatherapi` response."""
+        """Return ``IpPoint`` object from raw ``weatherapi`` response."""
         return cls(**json.loads(data))
 
 class SportsPoint(BasePoint):
@@ -208,10 +208,10 @@ class SportsPoint(BasePoint):
 
     @classmethod
     def from_raw(cls, data):
-        """Return `SportEventPoint` object from json converted `weatherapi` response."""
+        """Return ``SportEventPoint`` object from json converted ``weatherapi`` response."""
         return cls(**data)
 
     @classmethod
     def from_json(cls, data):
-        """Return `SportEventPoint` object from raw `weatherapi` response."""
+        """Return ``SportEventPoint`` object from raw ``weatherapi`` response."""
         return cls(**json.loads(data))

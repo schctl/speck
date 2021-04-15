@@ -25,14 +25,15 @@ class CacheManager:
         ## value and reading it with `read` later on.
 
     def find_all(self):
-        """Return a list of all tracked Cache files."""
+        """Return a list of all tracked cache files."""
         return (
             i.rstrip('.dat')
             for i in os.listdir(self.path)
         )
 
     def read(self, name):
-        """Tries to read cache with `name`. Returns `None` if no such file is found."""
+        """Tries to read cache with ``name``. Returns ``None`` if no such file is found."""
+
         try:
             # Cache is stored as an object in a binary file,
             # which can be loaded as-is later on.
@@ -47,12 +48,14 @@ class CacheManager:
         return None
 
     def dump(self, name, data):
-        """Writes data to a cache file with `name`. `name` must be kept track of manually."""
+        """Writes data to a cache file with ``name``. ``name`` must be kept track of manually."""
+
         with open(f"{self.path}/{name}.dat", "wb") as f:
             pickle.dump(zlib.compress(pickle.dumps(data)), f)
 
     def cleanup(self, name):
-        """Cleans up all cache files with a given `name`. Supports wildcard (*) deletion."""
+        """Cleans up all cache files with a given ``name``. Supports wildcard (*) deletion."""
+
         els = name.split('*') # splits across *, - removes the * as well
 
         # Removes all cache files matching the `name` pattern. `*` represents any set of characters.

@@ -66,10 +66,7 @@ class Client:
         """
         Convert weatherapi.com provided error code to Error Type.
 
-        Parameters
-        ----------
-        response
-            The raw weatherapi.com response.
+        :param response: The raw weatherapi.com response.
         """
         if "error" in response:
             code = response['error']['code']
@@ -123,19 +120,16 @@ class Client:
         """
         Get current weather conditions in a location.
 
-        Parameters
-        ----------
-        loc
-            Query location to find data for. It could be following:
-                 * Latitude and Longitude (Decimal degree). e.g.:'48.8567,2.3508'
-                 * city name e.g.: 'Paris'
-                 * US zip e.g.: '10001'
-                 * UK postcode e.g: 'SW1'
-                 * Canada postal code e.g: 'G2J'
-                 * metar:<metar code> e.g: 'metar:EGLL'
-                 * iata:<3 digit airport code> e.g: 'iata:DXB'
-                 * auto:ip IP lookup e.g: 'auto:ip'
-                 * IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
+        :param loc: Query location to find data for. It could be following:\n
+             - **Latitude and Longitude (Decimal degree)**. *e.g:'48.8567,2.3508'*,\n
+             - **city name** *e.g: 'Paris'*,\n
+             - **US zip** *e.g: '10001'*,\n
+             - **UK postcode** *e.g: 'SW1'*,\n
+             - **Canada postal code** *e.g: 'G2J'*,\n
+             - **metar:<metar code>** *e.g: 'metar:EGLL'*,\n
+             - **iata:<3 digit airport code>** *e.g: 'iata:DXB'*,\n
+             - **auto:ip IP lookup** *e.g: 'auto:ip'*,\n
+             - **IP address (IPv4 and IPv6 supported)** *e.g: '100.0.0.1*'
         """
 
         if loc == '':
@@ -167,12 +161,8 @@ class Client:
         """
         Get weather forecast for a location.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
-        days:
-            Number of days to restrict the forecast for.
+        :param loc: See docs on method ``current``.
+        :param days: Number of days to restrict the forecast for.
             WeatherAPI allows up to 10 days, but it in practice the maximum is 3.
         """
 
@@ -205,14 +195,7 @@ class Client:
         """
         Get astronomy information for a location.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
-
-        Aliases
-        -------
-        ``astro``
+        :param loc: See docs on method ``current``.
         """
 
         if loc == '':
@@ -241,14 +224,7 @@ class Client:
         """
         Get information for an IP address.
 
-        Parameters
-        ----------
-        ip
-            IPv6 or IPv4 string.
-
-        Aliases
-        -------
-        ``ip``
+        :param ip: IPv6 or IPv4 string.
         """
 
         if ip == '':
@@ -277,10 +253,7 @@ class Client:
         """
         Get a list of location objects based on query parameter.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
+        :param loc: See docs on method ``current``.
         """
 
         if loc == '':
@@ -313,14 +286,7 @@ class Client:
         """
         Get timezone and associated information for a location.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
-
-        Aliases
-        -------
-        ``tz``
+        :param loc: See docs on method ``current``.
         """
 
         if loc == '':
@@ -342,14 +308,7 @@ class Client:
         cricket and golf. From the behaviour of the WeatherAPI Sports API,
         parameter `loc` doesn't actually matter but is required anyway.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
-
-        Aliases
-        -------
-        ``sports``
+        :param loc: See docs on method ``current``.
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -374,12 +333,9 @@ class Client:
         """
         Get weather history for a location.
 
-        Parameters
-        ----------
-        loc
-            See docs on method ``current``.
-        dt
-            Datetime string in the format `YYY-MM-DD`. Data starting from this date will be returned.
+        :param loc: See docs on method ``current``.
+        :param dt: Datetime string in the format `YYY-MM-DD`.
+            Data starting from this date will be returned.
         """
 
         if loc == '':

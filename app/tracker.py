@@ -17,7 +17,8 @@ __all__ = [
 ]
 
 def plot(tracker, name):
-    """Plot all values of temp_c stored by `tracker`."""
+    """Plot all values of temp_c stored by ``tracker``."""
+
     raw = sorted(tracker.find_all(name), key=lambda x: x[0])
 
     # strftime formats the datetime object into a string

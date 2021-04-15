@@ -16,21 +16,38 @@ def get_version(fname):
     # ([^\'"]*) - characters that are NOT ' or "
     # .group(1) will return the first subgroup of the match - subgroups are enclosed in `()`
 
+version = get_version('speck/__init__.py')
+
+install_requires = list(readf('requirements.txt').splitlines())
+extras_require = {
+    'docs': [
+        'sphinx==3.5.3',
+        'sphinx-press-theme'
+    ]
+}
+
+packages = [
+    "speck",
+    "speck.types",
+    "speck.etc"
+]
+package_data = {
+    '': ['LICENSE', 'README.md', 'etc/*']
+}
+
 setup(
-    name     = "speck",
-    version  = get_version('speck/__init__.py'),
-    license  = "MIT",
-    author   = "Nevin Jose, Sachin Cherian",
-    description      = "A simple wrapper and frontend for weatherAPI.com",
+    name = "speck",
+    version = version,
+    license = "MIT",
+    author = "Nevin Jose, Sachin Cherian",
+    description = "A simple wrapper and frontend for weatherAPI.com",
     long_description = readf('README.md'),
     long_description_content_type = 'text/markdown',
-    url      = "https://github.com/schctl/speck",
-    packages = [
-        "speck",
-        "speck.types"
-        ],
-    package_data = {'': ['LICENSE', 'README.md', 'speck/etc/*']},
+    url = "https://github.com/schctl/speck",
+    packages = packages,
+    package_data = package_data,
     include_package_data = True,
-    install_requires = list(readf('requirements.txt').splitlines()),
-    python_requires  = ">=3.6.0"
+    install_requires = install_requires,
+    extras_require = extras_require,
+    python_requires = ">=3.6.0"
 )
