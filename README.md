@@ -11,7 +11,7 @@
 
 ## Usage
 
-## Installation
+### Installation
 
 Speck can be installed as a library. First clone the repository.
 
