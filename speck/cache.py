@@ -1,5 +1,5 @@
 """
-Cache Manager.
+Cache utility.
 """
 
 import os
@@ -14,7 +14,7 @@ __all__ = [
 ]
 
 class CacheManager:
-    """Cache Manager utility. Keeps track of and gets/updates data from cache files."""
+    """Cache Manager class. Keeps track of and gets/updates data from cache files."""
 
     def __init__(self, path):
         self.path = path

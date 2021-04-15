@@ -1,5 +1,5 @@
 """
-WeatherAPI Client.
+WeatherAPI client implementation.
 Use this to make requests to weatherapi.com.
 """
 
@@ -38,7 +38,10 @@ class _DummyCache:
         pass
 
 class Client:
-    """HTTPS client used to request data from weatherapi.com."""
+    """
+    Represents a connection to weatherapi.com.
+    Use this class to interact with the weatherapi API.
+    """
 
     BASE = "https://api.weatherapi.com/v1"
 
@@ -63,7 +66,10 @@ class Client:
         """
         Convert weatherapi.com provided error code to Error Type.
 
-        * Parameter `response` should be the raw weatherapi.com response.
+        Parameters
+        ----------
+        response
+            The raw weatherapi.com response.
         """
         if "error" in response:
             code = response['error']['code']
@@ -92,7 +98,7 @@ class Client:
         return
 
     def __make_request(self, endpoint, parameters):
-        """Private method to make a request to `weatherapi.com`."""
+        """Private method to make a request to ``weatherapi.com``."""
         try:
             # Does the acutal request
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json()
@@ -117,17 +123,19 @@ class Client:
         """
         Get current weather conditions in a location.
 
-        # Parameters
-        - `loc`: Query location to find data for. It could be following:
-            - Latitude and Longitude (Decimal degree). e.g.:'48.8567,2.3508'
-            - city name e.g.: 'Paris'
-            - US zip e.g.: '10001'
-            - UK postcode e.g: 'SW1'
-            - Canada postal code e.g: 'G2J'
-            - metar:<metar code> e.g: 'metar:EGLL'
-            - iata:<3 digit airport code> e.g: 'iata:DXB'
-            - auto:ip IP lookup e.g: 'auto:ip'
-            - IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
+        Parameters
+        ----------
+        loc
+            Query location to find data for. It could be following:
+                 * Latitude and Longitude (Decimal degree). e.g.:'48.8567,2.3508'
+                 * city name e.g.: 'Paris'
+                 * US zip e.g.: '10001'
+                 * UK postcode e.g: 'SW1'
+                 * Canada postal code e.g: 'G2J'
+                 * metar:<metar code> e.g: 'metar:EGLL'
+                 * iata:<3 digit airport code> e.g: 'iata:DXB'
+                 * auto:ip IP lookup e.g: 'auto:ip'
+                 * IP address (IPv4 and IPv6 supported) e.g: '100.0.0.1'
         """
 
         if loc == '':
@@ -159,10 +167,13 @@ class Client:
         """
         Get weather forecast for a location.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
-        - `days`: Number of days to restrict the forecast for.
-            weatherAPI allows up to 10 days, but it in practice the maximum is 3.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
+        days:
+            Number of days to restrict the forecast for.
+            WeatherAPI allows up to 10 days, but it in practice the maximum is 3.
         """
 
         if loc == '':
@@ -194,11 +205,14 @@ class Client:
         """
         Get astronomy information for a location.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
 
-        # Aliases
-        - `astro`
+        Aliases
+        -------
+        ``astro``
         """
 
         if loc == '':
@@ -227,11 +241,14 @@ class Client:
         """
         Get information for an IP address.
 
-        # Parameters
-        - `ip`: IPv6 or IPv4 string.
+        Parameters
+        ----------
+        ip
+            IPv6 or IPv4 string.
 
-        # Aliases
-        - `ip`
+        Aliases
+        -------
+        ``ip``
         """
 
         if ip == '':
@@ -260,8 +277,10 @@ class Client:
         """
         Get a list of location objects based on query parameter.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
         """
 
         if loc == '':
@@ -294,11 +313,14 @@ class Client:
         """
         Get timezone and associated information for a location.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
 
-        # Aliases
-        - `tz`
+        Aliases
+        -------
+        ``tz``
         """
 
         if loc == '':
@@ -320,11 +342,14 @@ class Client:
         cricket and golf. From the behaviour of the WeatherAPI Sports API,
         parameter `loc` doesn't actually matter but is required anyway.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
 
-        # Aliases
-        - `sports`
+        Aliases
+        -------
+        ``sports``
         """
         mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
 
@@ -349,9 +374,12 @@ class Client:
         """
         Get weather history for a location.
 
-        # Parameters
-        - `loc`: See docs on method `current`.
-        - `dt`: Datetime string in the format `YYY-MM-DD`. Data starting from this date will be returned.
+        Parameters
+        ----------
+        loc
+            See docs on method ``current``.
+        dt
+            Datetime string in the format `YYY-MM-DD`. Data starting from this date will be returned.
         """
 
         if loc == '':
@@ -383,17 +411,17 @@ class Client:
     # Aliases ---------------------------------------
 
     def astro(self, *args, **kwargs):
-        """Alias for `astronomy`."""
+        """Alias for ``astronomy``."""
         return self.astronomy(*args, **kwargs)
 
     def ip(self, *args, **kwargs):
-        """Alias for `ip_lookup`."""
+        """Alias for ``ip_lookup``."""
         return self.ip_lookup(*args, **kwargs)
 
     def tz(self, *args, **kwargs):
-        """Alias for `timezone_info`."""
+        """Alias for ``timezone_info``."""
         return self.timezone_info(*args, **kwargs)
 
     def sports(self, *args, **kwargs):
-        """Alias for `sports_lookup`."""
+        """Alias for ``sports_lookup``."""
         return self.sports_lookup(*args, **kwargs)
