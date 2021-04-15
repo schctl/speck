@@ -9,20 +9,28 @@
     <a href="https://github.com/schctl/speck/releases"><img alt="TAG" src="https://img.shields.io/github/v/tag/schctl/speck?label=Latest&style=for-the-badge"></a>
 </p>
 
-## City Data
-
-City data is from [`cities.json`](https://github.com/lutangar/cities.json), and has been edited to remove irrelevant data.
-
 ## Usage
+
+### Installation
+
+Speck can be installed as a library. First clone the repository.
+
+    git clone https://github.com/schctl/speck
+
+Then, from the root directory, run
+
+    pip install .
 
 ### GUI Frontend
 
-Run the frontend with:
+To run the speck app, run `__main__.py`.
 
-    python ui_main.py
+    python __main__.py
 
-The username and password entry screen is only intended as a dummy. To bypass this,
-set the `SPECK_DEV` environment variable.
+The `speck` library must be installed for this to work.
+
+The username and password entry screen is only intended as a dummy. To make the app ignore this,
+set the `SPECK_DEV` environment variable. The username and password are `11C` and `11c2021`.
 
 ### Documentation
 
@@ -36,18 +44,12 @@ Install requirements by running:
 
 Additionally, [`tkinter`](https://wiki.python.org/moin/TkInter) is required, for [`ext.gui`](docs/ext/gui/gui.md).
 
-### Installation
 
-To install speck, first clone the repository.
+## City Data
 
-    git clone https://github.com/schctl/speck
-
-Then, from the root directory, run
-
-    pip install .
-
+City data is from [`cities.json`](https://github.com/lutangar/cities.json), and has been edited to remove irrelevant data.
 
 ## Other links
 
-- [Lgtm Code Analysis](https://lgtm.com/projects/g/schctl/speck/context:python)
+- [Lgtm Analysis](https://lgtm.com/projects/g/schctl/speck/context:python)
 - [Project wiki](https://github.com/schctl/speck/wiki)
