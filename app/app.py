@@ -351,7 +351,7 @@ class SpeckApp:
             self.root,
             text    = "Back",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 8,
+            width   = 4,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
@@ -359,17 +359,29 @@ class SpeckApp:
             ),
             (26,  523) # pos
         )
+        calc_btn = Widget(tk.Button(
+            self.root,
+            text    = "Calculator",
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            width   = 6,
+            fg      = self.style.colors["primary"].fg,
+            bg      = self.style.colors["primary"].bg,
+            bd      = 0,
+            command = lambda: Calculator().run()
+            ),
+            (110, 523) # pos
+        )
         plot_btn = Widget(tk.Button(
             self.root,
             text    = "Plot",
             font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 8,
+            width   = 4,
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
             command = lambda: plot(self.tracker, curr_i.location.name)
             ),
-            (196, 523) # pos
+            (206, 523) # pos
         )
 
         self.widget_manager.extend([
@@ -380,6 +392,7 @@ class SpeckApp:
             fore_lbl_2,
             astro_lbl,
             back_btn,
+            calc_btn,
             plot_btn
         ])
 
