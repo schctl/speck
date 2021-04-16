@@ -29,13 +29,13 @@ class _DummyCache:
         pass
 
     def read(self, *args, **kwargs):
-        pass
+        return None
 
     def dump(self, *args, **kwargs):
-        pass
+        return None
 
     def cleanup(self, *args, **kwargs):
-        pass
+        return None
 
 class Client:
     """
@@ -141,7 +141,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"current-{loc}-now-{str(dt.now())[:15].replace(' ', '-')}"
+        mode = f"current-{loc.lower()}-now-{str(dt.now())[:15].replace(' ', '-')}"
 
         n = self.cache.read(mode)
         if n:
@@ -171,13 +171,14 @@ class Client:
         :param days: Number of days to restrict the forecast for.
             WeatherAPI allows up to 10 days, but it in practice the maximum is 3.
 
-        :rtype: ``list[types.DailyPoint]``
+        :returns: A tuple with the current weather, and a list of forecasted days.
+        :rtype: ``(types.HourlyPoint, list[types.DailyPoint])``
         """
 
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"forecast-{loc}-now-{str(dt.now()).split()[0]}-{days}"
+        mode = f"forecast-{loc.lower()}-now-{str(dt.now())[:15].replace(' ', '-')}"
 
         n = self.cache.read(mode)
         if n:
@@ -189,10 +190,13 @@ class Client:
         if e:
             raise e
 
-        data = [
-            types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"])
-            for i in response["forecast"]["forecastday"]
-        ]
+        data = (
+            types.HourlyPoint.from_raw(response["location"], response["current"]),
+            [
+                types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"])
+                for i in response["forecast"]["forecastday"]
+            ]
+        )
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, data)
@@ -211,7 +215,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"astro-{loc}-now-{str(dt.now()).split()[0]}"
+        mode = f"astro-{loc.lower()}-now-{str(dt.now()).split()[0]}"
 
         n = self.cache.read(mode)
         if n:
@@ -273,7 +277,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"search-{loc}"
+        mode = f"search-{loc.lower()}"
 
         n = self.cache.read(mode)
 
@@ -328,7 +332,7 @@ class Client:
 
         :rtype: ``dict{str: list[SportsPoint]}``
         """
-        mode = f"sports-{loc}-now-{str(dt.now()).split()[0]}"
+        mode = f"sports-{loc.lower()}-now-{str(dt.now()).split()[0]}"
 
         n = self.cache.read(mode)
         if n:
@@ -365,7 +369,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"history-{loc}-now-{str(dt.now()).split()[0]}-{dt}"
+        mode = f"history-{loc.lower()}-now-{str(dt.now()).split()[0]}-{dt}"
 
         n = self.cache.read(mode)
         if n:

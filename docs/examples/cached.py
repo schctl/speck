@@ -7,7 +7,8 @@ from datetime import datetime
 
 def main():
     cl = speck.Client(
-        os.environ['WEATHERAPI_TOKEN'] # Get from https://www.weatherapi.com/my/
+        os.environ['WEATHERAPI_TOKEN'], # Get from https://www.weatherapi.com/my/
+        use_cache=True
     )
 
     while input('Continue? [y/n] ').lower() in ['yes', 'y']:

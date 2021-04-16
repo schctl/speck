@@ -1,5 +1,6 @@
 """
 Cache utility.
+The primary purpose of this is to reduce the number of required API calls.
 """
 
 import os

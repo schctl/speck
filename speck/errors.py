@@ -35,19 +35,19 @@ class WeatherApiError(Exception):
         super().__init__(message)
 
 class NoApiKey(WeatherApiError):
-    """Raised when no weatherapi key has been provided."""
+    """Raised when no weatherapi key has been provided in a request."""
 
 class InvalidApiKey(WeatherApiError):
-    """Raised when an invalid weatherapi key has been provided."""
+    """Raised when an invalid weatherapi key has been used for a request."""
 
 class QuotaExceeded(WeatherApiError):
     """Raised when monthly requests limit has been reached."""
 
 class ApiKeyDisabled(WeatherApiError):
-    """Raised when weatherapi key is disabled."""
+    """Raised when weatherapi key used for a request has been disabled."""
 
 class QueryNotProvided(WeatherApiError):
-    """Raised when a query parameter has not been provided."""
+    """Raised when a query parameter has not been provided for a request."""
 
 class InvalidRequestUrl(WeatherApiError):
     """Raised when weatherapi request url is invalid."""

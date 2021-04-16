@@ -93,25 +93,24 @@ class SpeckApp:
         """Get all metadata for a location."""
 
         try:
-            curr_i = self.speck.current(loc)
+            (curr_i, fore_i) = self.speck.forecast(loc)
             # if this fails, there's no valid location
             # recognized by weatherAPI
 
-        except speck.waw.errors.InvalidLocation as e:
+        except speck.errors.InvalidLocation as e:
             loc = self.speck.find_city(loc) # try to find our own
 
             if len(loc) == 0:
-                raise speck.waw.errors.InvalidLocation('Unknown location.', e.internal_code)
+                raise speck.errors.InvalidLocation('Unknown location.', e.internal_code)
 
             loc = f"{loc[0]['lat']},{loc[0]['lon']}"
 
-            curr_i = self.speck.current(loc)
+            (curr_i, fore_i) = self.speck.forecast(loc)
 
         except Exception as e: # let caller handle any other error
             raise e
 
         astro_i = self.speck.astro(loc)
-        fore_i  = self.speck.forecast(loc)
 
         return curr_i, astro_i, fore_i
 
@@ -305,15 +304,15 @@ class SpeckApp:
 
         try:
             curr_i, astro_i, fore_i = self.__get_loc_meta(loc)
-        except speck.waw.errors.InvalidLocation:
+        except speck.errors.InvalidLocation:
             self.__err('Unknown location.')
             self.location_entry()
             return
-        except speck.waw.errors.InternalError as e:
+        except speck.errors.InternalError as e:
             self.__err(f'Internal Error: {e}')
             self.location_entry()
             return
-        except speck.waw.errors.InvalidApiKey:
+        except speck.errors.InvalidApiKey:
             self.__err('Invalid API key. Get the API key from https://weatherapi.com/my')
             self.location_entry()
             return
