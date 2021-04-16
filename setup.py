@@ -3,13 +3,16 @@ import re
 
 from setuptools import setup
 
+# Utils ----------------
+
 def readf(fname):
     print(os.path.join(os.path.dirname(__file__), fname))
     with open(os.path.join(os.path.dirname(__file__), fname), 'r') as f:
         return f.read()
 
-# From discord.py
+# From discord.py ------
 # https://github.com/Rapptz/discord.py
+
 def get_version(fname):
     return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
     # re.MULTILINE tells `search` to compare each line instead of the whole text.
@@ -18,15 +21,21 @@ def get_version(fname):
     # ([^\'"]*) - characters that are NOT ' or "
     # .group(1) will return the first subgroup of the match - subgroups are enclosed in `()`
 
+# ----------------------
+
 version = get_version('speck/__init__.py')
+
+# Requirements ---------
 
 install_requires = list(readf('requirements.txt').splitlines())
 extras_require = {
     'docs': [
-        'sphinx==3.5.3',
+        'sphinx',
         'sphinx-press-theme'
     ]
 }
+
+# ----------------------
 
 packages = [
     "speck",

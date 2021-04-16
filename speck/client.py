@@ -104,7 +104,7 @@ class Client:
 
         try:
             # Does the acutal request
-            return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json()
+            return self.session.get(f"{self.BASE}/{endpoint}{parameters}", timeout=(4, 4)).json()
         except Exception as e:
             raise errors.InternalError(f"Unable to fetch data at this time: {e.__traceback__}", 9999)
 
@@ -143,7 +143,9 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"current-{loc.lower()}-now-{str(dt.now())[:15].replace(' ', '-')}"
+        mode = f"current-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
+
+        # https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
 
         n = self.cache.read(mode)
         if n:
@@ -180,7 +182,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"forecast-{loc.lower()}-now-{str(dt.now())[:15].replace(' ', '-')}"
+        mode = f"forecast-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
 
         n = self.cache.read(mode)
         if n:
@@ -217,7 +219,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"astro-{loc.lower()}-now-{str(dt.now()).split()[0]}"
+        mode = f"astro-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}"
 
         n = self.cache.read(mode)
         if n:
@@ -334,7 +336,7 @@ class Client:
 
         :rtype: ``dict{str: list[SportsPoint]}``
         """
-        mode = f"sports-{loc.lower()}-now-{str(dt.now()).split()[0]}"
+        mode = f"sports-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}"
 
         n = self.cache.read(mode)
         if n:
@@ -371,7 +373,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"history-{loc.lower()}-now-{str(dt.now()).split()[0]}-{dt}"
+        mode = f"history-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}-{dt}"
 
         n = self.cache.read(mode)
         if n:
