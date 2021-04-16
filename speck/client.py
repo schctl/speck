@@ -10,7 +10,7 @@ from datetime import datetime as dt
 
 import requests
 
-from speck.cache import CacheManager
+from speck.cache import FileCacheManager
 
 from . import errors
 from . import types
@@ -52,7 +52,7 @@ class Client:
         self.session = requests.Session()
 
         if use_cache:
-            self.cache = CacheManager(cache_path)
+            self.cache = FileCacheManager(cache_path)
         else:
             self.cache = _DummyCache()
 
@@ -70,6 +70,7 @@ class Client:
 
         :param response: The raw weatherapi.com response.
         """
+
         if "error" in response:
             code = response['error']['code']
             message = response['error']['message']
@@ -100,6 +101,7 @@ class Client:
 
     def __make_request(self, endpoint, parameters):
         """Private method to make a request to ``weatherapi.com``."""
+
         try:
             # Does the acutal request
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}").json()

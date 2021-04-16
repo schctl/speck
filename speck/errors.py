@@ -29,6 +29,7 @@ class WeatherApiError(Exception):
     :var message: :class:`str`
         A more detailed description of the error.
     """
+
     def __init__(self, message, internal_code):
         self.internal_code = internal_code
         self.message = message

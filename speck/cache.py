@@ -11,12 +11,20 @@ import pickle
 from pathlib import Path
 
 __all__ = [
-    'CacheManager'
+    'FileCacheManager'
 ]
 
-class CacheManager:
+class BufferedCacheManager:
     """
-    Cache Manager class. Keeps track of and gets/updates data from cache files.
+    Buffered Cache Manager implementation. Keeps track of cache in memory.
+    """
+
+    def __init__(self, path):
+        raise NotImplementedError
+
+class FileCacheManager:
+    """
+    File based Cache Manager implementation. Keeps track of and gets/updates data from cache files.
 
     :param path: Path to the "cache directory". Cache files will be stored here.
     """
@@ -40,6 +48,7 @@ class CacheManager:
 
     def find_all(self):
         """Return a list of all tracked cache files."""
+
         return (
             i.rstrip('.dat')
             for i in os.listdir(self._path)

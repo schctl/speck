@@ -49,6 +49,7 @@ class SpeckStyle:
     @classmethod
     def from_file(cls, file):
         """Create an instance of ``SpeckStyle``, with details read from a file with data in json format."""
+
         with open(file, 'r') as f:
             data = json.load(f)
 

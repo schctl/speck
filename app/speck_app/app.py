@@ -94,8 +94,6 @@ class SpeckApp:
 
         try:
             (curr_i, fore_i) = self.speck.forecast(loc)
-            # if this fails, there's no valid location
-            # recognized by weatherAPI
 
         except speck.errors.InvalidLocation as e:
             loc = self.speck.find_city(loc) # try to find our own

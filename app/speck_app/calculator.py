@@ -20,6 +20,7 @@ class Calculator:
 
     def run(self):
         """Runs the calculator under a new Tk instance."""
+
         root = tk.Tk()
         root.title("Simple Calculator")
         root.resizable(width=False, height="false")

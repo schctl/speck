@@ -11,7 +11,7 @@ __all__ = [
 ]
 
 class Widget:
-    """Wrapper around Tkiner Widgets."""
+    """Wrapper around Tkiner Widgets. Intended to be used with a 'Widget Manager' implmentation."""
 
     def __init__(self, internal, position):
         self._internal = internal
@@ -37,9 +37,10 @@ class Widget:
 
 class WidgetManager:
     """
-    Keep track of Tkinter Widgets. The position of the widget can either be ``int`` or ``str``.
-    If it is a ``str``, it should begin with ``+``/``-``/``int``, and will be positioned relative
-    to the last widget pushed onto the stack. Will be ignored for the first widget in the stack.
+    Basic implementation for a widget manager, to keep track of Tkinter Widgets. The position of
+    the widget can either be ``int`` or ``str``. If it is a ``str``, it should begin with
+    ``+``/``-``/``int``, and will be positioned relative to the last widget pushed onto the stack.
+    Will be ignored for the first widget in the stack.
     """
 
     def __init__(self):
@@ -73,6 +74,7 @@ class WidgetManager:
 
     def __get_position_from_prev(self, index, position_index): # position_index -> x/y -> 0/1
         """Get position of previous widget in the stack."""
+
         pos = self._widgets[index].position[position_index]
 
         # TODO: more descriptive errors.
@@ -102,6 +104,7 @@ class WidgetManager:
 
     def render_all(self, canvas):
         """Render all widgets currently in the stack onto a canvas."""
+
         for n, i in enumerate(self._widgets):
             x_pos = self.__get_position_from_prev(n, 0)
             y_pos = self.__get_position_from_prev(n, 1)
