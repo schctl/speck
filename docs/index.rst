@@ -6,6 +6,8 @@
 Welcome to speck
 ================
 
+.. image:: images/landing.png
+
 Speck is a minimal wrapper for weatherAPI.com
 
 Contents

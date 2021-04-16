@@ -7,6 +7,6 @@ Basic client
    :language: python
 
 Cached client
-------------
+-------------
 .. literalinclude:: examples/cached.py
    :language: python
