@@ -329,7 +329,8 @@ class SpeckApp:
             font = (self.style.fonts ["primary"]  .family, self.style.fonts["primary"].size_medium),
             fg   =  self.style.colors["secondary"].fg,
             bg   =  self.style.colors["secondary"].bg
-            ), (42, 40)
+            ),
+            (42, 40)
         )
 
         #                                        # Root     # Style     # Text                                                                 # Pos
@@ -376,7 +377,7 @@ class SpeckApp:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: plot(self.tracker, curr_i.location.name)
+            command = lambda: plot(fore_i, self.tracker, curr_i.location.name)
             ),
             (206, 523) # pos
         )
