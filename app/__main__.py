@@ -14,7 +14,7 @@ import pstats
 import cProfile
 # ---------------
 
-from app.app import SpeckApp
+from speck_app.app import SpeckApp
 
 def _rootd(path):
     """Return absolute path of `path` relative to this file."""

@@ -8,6 +8,8 @@ def readf(fname):
     with open(os.path.join(os.path.dirname(__file__), fname), 'r') as f:
         return f.read()
 
+# From discord.py
+# https://github.com/Rapptz/discord.py
 def get_version(fname):
     return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
     # re.MULTILINE tells `search` to compare each line instead of the whole text.
