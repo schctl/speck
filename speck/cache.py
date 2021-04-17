@@ -59,7 +59,7 @@ class FileCacheManager:
 
         try:
             # Cache is stored as an object in a binary file,
-            # which can be loaded as-is later on.
+            # which can be loaded into an object directly later on.
             with open(f"{self._path}/{name}.dat", "rb") as f:
                 return pickle.loads(zlib.decompress(pickle.load(f)))
 
