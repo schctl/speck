@@ -10,6 +10,8 @@
     <a href="https://github.com/schctl/speck"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/schctl/speck?label=Stars&logo=GitHub&style=for-the-badge"></a>
 </p>
 
+[Wiki](https://github.com/schctl/speck/wiki)
+
 ## Usage
 
 ### Installation
