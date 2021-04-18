@@ -47,7 +47,7 @@ package_data = {
 }
 
 setup(
-    name = "speck",
+    name = "speck-wrapper",
     version = version,
     license = "MIT",
     author = "Nevin Jose, Sachin Cherian",

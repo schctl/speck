@@ -16,6 +16,14 @@
 
 ### Installation
 
+#### With `pip`
+
+Speck is packaged publicly on PyPi as [`speck-wrapper`](https://pypi.org/project/speck-wrapper/) *(don't confuse with [`speck`](https://pypi.org/project/speck/))*.
+
+    pip install speck-wrapper
+
+#### From source
+
 Speck can be installed as a library. First clone the repository.
 
     git clone https://github.com/schctl/speck.git

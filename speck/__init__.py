@@ -11,7 +11,7 @@ __authors__ = [
     'Nevin Jose',
     'Sachin Cherian'
 ]
-__version__ = 'v0.3.5'
+__version__ = 'v0.3.6'
 
 from .cache import *
 from .client import *
