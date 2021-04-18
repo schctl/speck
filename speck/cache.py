@@ -94,8 +94,8 @@ class FileCacheManager:
                         ):
                         break
 
-                        # Explanation for above if statement
-                        # ----------------------------------
+                        # Explanation for above check
+                        # ---------------------------
                         # `els` is a list of all components split across *.
                         # We check if each component of `else` is in
                         # the file name being checked (`j in i`).

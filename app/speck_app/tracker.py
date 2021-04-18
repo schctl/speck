@@ -9,8 +9,9 @@ import os
 from datetime import datetime as dt
 from datetime import timedelta as td
 
-from speck import FileCacheManager
 from matplotlib import pyplot
+
+from speck import FileCacheManager
 
 __all__ = [
     'plot',
