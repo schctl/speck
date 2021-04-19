@@ -10,32 +10,13 @@ from datetime import datetime as dt
 
 import requests
 
-from speck.cache import FileCacheManager
-
+from . import cache
 from . import errors
 from . import types
 
 __all__ = [
     'Client'
 ]
-
-class _DummyCache:
-    """
-    Dummy cache type so checks don't have to be performed
-    if `Client` has opt out of cache.
-    """
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    def read(self, *args, **kwargs):
-        return None
-
-    def dump(self, *args, **kwargs):
-        return None
-
-    def cleanup(self, *args, **kwargs):
-        return None
 
 class Client:
     """
@@ -47,14 +28,17 @@ class Client:
 
     BASE = "https://api.weatherapi.com/v1"
 
-    def __init__(self, token, use_cache=False, cache_path='.cache'):
+    def __init__(self, token, use_cache=False, cache_file=False, cache_path='.cache'):
         self._token = token
         self.session = requests.Session()
 
         if use_cache:
-            self.cache = FileCacheManager(cache_path)
+            if cache_file:
+                self.cache = cache.FileCacheManager(cache_path)
+            else:
+                self.cache = cache.BufferedCacheManager(cache_path)
         else:
-            self.cache = _DummyCache()
+            self.cache = cache.CacheManager(cache_path)
 
         # This looks for the cities list file
         with open(
@@ -106,7 +90,7 @@ class Client:
             # Does the acutal request
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}", timeout=(4, 4)).json()
         except Exception as e:
-            raise errors.InternalError(f"Unable to fetch data at this time: {e.__traceback__}", 9999)
+            raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
 
     def find_city(self, loc):
         """

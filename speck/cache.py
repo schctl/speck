@@ -4,6 +4,7 @@ The primary purpose of this is to reduce the number of required API calls.
 """
 
 import os
+import sys
 
 import zlib
 import pickle
@@ -11,18 +12,106 @@ import pickle
 from pathlib import Path
 
 __all__ = [
+    'CacheManager',
+    'BufferedCacheManager',
     'FileCacheManager'
 ]
 
-class BufferedCacheManager:
+class CacheManager:
+    """
+    Abstract class representing a cache manager.
+    """
+
+    def __init__(self, path):
+        pass
+
+    @property
+    def path(self):
+        return None
+
+    def find_all(self):
+        return None
+
+    def read(self, name):
+        return None
+
+    def dump(self, name):
+        return None
+
+    def cleanup(self, name):
+        return None
+
+    def debug_size(self):
+        return sys.getsizeof(self)
+
+
+class BufferedCacheManager(CacheManager):
     """
     Buffered Cache Manager implementation. Keeps track of cache in memory.
     """
 
-    def __init__(self, path):
-        raise NotImplementedError
+    def __init__(self, path=None):
+        self._buf = {}
 
-class FileCacheManager:
+        super().__init__(path)
+
+    @property
+    def path(self):
+        """Returns ``None``. Only here to work with the same interface as ``FileCacheManager``."""
+        return None
+
+    def find_all(self):
+        """
+        Find all cache stored in memory.
+
+        :rtype: :class:`str`
+        """
+        return (
+            i
+            for i in self._buf
+        )
+
+    def read(self, name):
+        """Reads cache with ``name`` if it exists."""
+        if name in self._buf:
+            return pickle.loads(zlib.decompress(self._buf[name]))
+
+        return None
+
+    def dump(self, name, data):
+        """Save data into cache."""
+        self._buf[name] = zlib.compress(pickle.dumps(data))
+
+    def cleanup(self, name):
+        """Cleanup all cache with a ``name``. Supports wildcard (*) deletion."""
+
+        els = name.split('*') # splits across *
+
+        for i in self._buf:
+            for n, j in enumerate(els):
+                i = i.rstrip('.dat')
+                if not (
+                    j == '' or ( j in i and \
+                        (i.index(j) >= i.index(els[0 if n < 1 else n - 1]))
+                        )
+                    ):
+                    break
+
+                    # Explanation for above check
+                    # ---------------------------
+                    # `els` is a list of all components split across *.
+                    # We check if each component of `else` is in
+                    # the file name being checked (`j in i`).
+                    # If the component is empty, we can skip directly.
+                    # If it is, we make sure its after the previous
+                    # component (second check).
+            else:
+                del self._buf[i]
+
+    def debug_size(self):
+        return sys.getsizeof(self._buf)
+
+class FileCacheManager(CacheManager):
     """
     File based Cache Manager implementation. Keeps track of and gets/updates data from cache files.
 
@@ -31,6 +120,8 @@ class FileCacheManager:
 
     def __init__(self, path):
         self._path = path
+
+        super().__init__(path)
 
         Path(path).mkdir(parents=True, exist_ok=True) # Creates cache folder
 
@@ -47,8 +138,11 @@ class FileCacheManager:
         return self._path
 
     def find_all(self):
-        """Return a list of all tracked cache files."""
+        """
+        Return a list of all tracked cache files.
 
+        :rtype: :class:`str`
+        """
         return (
             i.rstrip('.dat')
             for i in os.listdir(self._path)
@@ -72,14 +166,13 @@ class FileCacheManager:
 
     def dump(self, name, data):
         """Writes data to a cache file with ``name``. ``name`` must be kept track of manually."""
-
         with open(f"{self._path}/{name}.dat", "wb") as f:
             pickle.dump(zlib.compress(pickle.dumps(data)), f)
 
     def cleanup(self, name):
         """Cleans up all cache files with a given ``name``. Supports wildcard (*) deletion."""
 
-        els = name.split('*') # splits across *, - removes the * as well
+        els = name.split('*') # splits across *
 
         # Removes all cache files matching the `name` pattern. `*` represents any set of characters.
 
