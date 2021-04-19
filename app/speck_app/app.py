@@ -7,6 +7,7 @@ Authors:
 """
 
 import os
+import sys
 from hashlib import md5
 
 import speck
@@ -57,8 +58,11 @@ class SpeckApp:
         self.speck = speck.Client(
             token,
             use_cache=True,
-            cache_path=f"{_rootd('.cache')}"
+            cache_file=True,
+            cache_path=_rootd('.cache')
         )
+
+        print("Using cache of type:", type(self.speck.cache))
 
         with open(auth_file, 'r') as f:
             self.__auth = f.read().split()
@@ -266,6 +270,8 @@ class SpeckApp:
         # Step 3
 
         self.__clear_with_bg('etc/exports/secondary.png')
+
+        print("Cache:", self.speck.cache.debug_size(), "bytes") # Debug cache size in mem
 
         # Get info ----------------
 
