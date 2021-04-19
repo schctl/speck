@@ -23,7 +23,7 @@ class Km:
     """Kilometer."""
     val: float
 
-    def mi(self):
+    def miles(self):
         """Equivalent miles."""
         return self.val * 0.6213
 

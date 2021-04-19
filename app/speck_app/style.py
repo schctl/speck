@@ -17,7 +17,7 @@ __all__ = [
 class WindowStyle:
     """Details about the main window."""
 
-    def __init__(self, width, height, *args, **kwargs):
+    def __init__(self, width, height):
         self.width = width
         self.height = height
 

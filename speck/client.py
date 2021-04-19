@@ -131,9 +131,10 @@ class Client:
 
         # https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
 
+        # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
+
         n = self.cache.read(mode)
         if n:
-            # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
             return n
 
         response = self.__make_request('current.json', f'?key={self._token}&q={loc}')
@@ -142,7 +143,8 @@ class Client:
         if e:
             raise e # We're not going to handle the error here, so anyone using the function can do it themselves
 
-        data = types.HourlyPoint.from_raw(response["location"], response["current"]) # Creates the `HourlyPoint` object
+        # Creates the `HourlyPoint` object
+        data = types.HourlyPoint.from_raw(response["location"], response["current"])
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
         self.cache.dump(mode, data) # Writes cache

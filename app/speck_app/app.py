@@ -7,13 +7,13 @@ Authors:
 """
 
 import os
-import speck
 
 import tkinter as tk
 from PIL import ImageTk
 
-from . import utils
+import speck
 
+from . import utils
 from .style import SpeckStyle
 from .tracker import Tracker, plot
 from .calculator import Calculator
@@ -111,11 +111,13 @@ class SpeckApp:
         self.main_canvas.internal.pack(fill="both", expand=True)
         self.main_canvas.internal.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
 
-    def __warn(self, msg='Warning'):
+    @staticmethod
+    def __warn(msg):
         """Display a warning in message box."""
         tk.messagebox.showwarning('WARNING', msg)
 
-    def __err(self, msg='Error'):
+    @staticmethod
+    def __err(msg):
         """Display an error in message box."""
         tk.messagebox.showerror('ERROR', msg)
 
@@ -155,7 +157,7 @@ class SpeckApp:
                 pass
 
             elif not self.entry_cleared:
-                self.__err("ENTER USERNAME AND PASSWORD")
+                SpeckApp.__err("ENTER USERNAME AND PASSWORD")
                 return
 
             elif not SpeckApp.__verify_creds(
@@ -163,7 +165,7 @@ class SpeckApp:
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):
-                self.__err("ENTER CORRECT USERNAME AND PASSWORD")
+                SpeckApp.__err("ENTER CORRECT USERNAME AND PASSWORD")
                 return
 
             self.location_entry() # Move onto step 2
@@ -264,19 +266,19 @@ class SpeckApp:
             try:
                 info = self.__get_loc_meta(loc)
             except speck.errors.InvalidLocation:
-                self.__err('Unknown location.')
+                SpeckApp.__err('Unknown location.')
                 self.location_entry()
                 return
             except speck.errors.InternalError as e:
-                self.__err(f'Internal Error: {e}')
+                SpeckApp.__err(f'Internal Error: {e}')
                 self.location_entry()
                 return
             except speck.errors.InvalidApiKey:
-                self.__err('Invalid API key. Get the API key from https://weatherapi.com/my')
+                SpeckApp.__err('Invalid API key. Get the API key from https://weatherapi.com/my')
                 self.location_entry()
                 return
             except speck.WeatherApiError as e:
-                self.__err(f'Query failed: {e.message}')
+                SpeckApp.__err(f'Query failed: {e.message}')
                 self.location_entry()
                 return
 
@@ -298,14 +300,14 @@ class SpeckApp:
 
         lt_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
-                                        self.style,f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"),
-                                        ("+0", "+50")
+                self.style,f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"),
+                ("+0", "+50")
             )
         curr_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
-                                        self.style,
-                                        f"Current Temp: {curr_i.temp_c}°C"),
-                                        ("+0", "+30")
+                self.style,
+                f"Current Temp: {curr_i.temp_c}°C"),
+                ("+0", "+30")
             )
 
         forecast_btn = Widget(tk.Button(
@@ -402,9 +404,17 @@ class SpeckApp:
         )
 
         fore_lbl_1 = \
-            Widget(SpeckApp.__gen_label(self.root, self.style, f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"), ("+0", "+40"))
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"Maximum Temp tomorrow: {fore_i[0].day.maxtemp_c}°C"),
+                ("+0", "+40")
+            )
         fore_lbl_2 = \
-            Widget(SpeckApp.__gen_label(self.root, self.style, f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"), ("+0", "+30"))
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"Minimum Temp tomorrow: {fore_i[0].day.mintemp_c}°C"),
+                ("+0", "+30")
+            )
 
         back_btn = Widget(tk.Button(
             self.root,

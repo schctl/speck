@@ -252,9 +252,7 @@ class IpPoint(BasePoint):
     """
     def __init__(self,
         ip, type,
-        continent_code, continent_name,
-        country_code, country_name,
-        is_eu, geoname_id,
+        country_name,
         city, region,
         lat, lon, tz_id,
         **kwargs

@@ -25,23 +25,24 @@ class CacheManager:
     def __init__(self, path):
         pass
 
-    @property
-    def path(self):
-        return None
-
     def find_all(self):
+        """Find all stored cache."""
         return None
 
     def read(self, name):
+        """Reads cache with ``name`` if it exists."""
         return None
 
-    def dump(self, name):
+    def dump(self, name, data):
+        """Save data into cache."""
         return None
 
     def cleanup(self, name):
+        """Cleanup all cache with a ``name``"""
         return None
 
     def debug_size(self):
+        """Get size of cache for debugging."""
         return sys.getsizeof(self)
 
 
@@ -54,11 +55,6 @@ class BufferedCacheManager(CacheManager):
         self._buf = {}
 
         super().__init__(path)
-
-    @property
-    def path(self):
-        """Returns ``None``. Only here to work with the same interface as ``FileCacheManager``."""
-        return None
 
     def find_all(self):
         """
@@ -109,6 +105,11 @@ class BufferedCacheManager(CacheManager):
                 del self._buf[i]
 
     def debug_size(self):
+        """
+        Get size of internal cache for debugging.
+
+        :returns: Cache size in memory in bytes.
+        """
         return sys.getsizeof(self._buf)
 
 class FileCacheManager(CacheManager):

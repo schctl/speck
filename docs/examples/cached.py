@@ -1,8 +1,6 @@
 import os
 import speck
 
-from speck import errors
-
 from datetime import datetime
 
 def main():
@@ -18,22 +16,8 @@ def main():
             start = datetime.now()
             (current, forecast) = cl.forecast(location)
             stop = datetime.now()
-
-        except errors.InvalidApiKey:
-            print("Invalid api key provided.")
-            break
-        except errors.QuotaExceeded:
-            print("weatherAPI ratelimit reached.")
-            continue
-        except errors.ApiKeyDisabled:
-            print("Provided API key has been disabled.")
-            break
-        except errors.QueryNotProvided:
-            print("Location cannot be empty.")
-            continue
-        except errors.InvalidLocation:
-            print("Unknown location.")
-            continue
+        except speck.errors.WeatherApiError as e:
+            print(e.message)
 
         print('---------------------')
         print(f'Query: {(stop - start).total_seconds()}')

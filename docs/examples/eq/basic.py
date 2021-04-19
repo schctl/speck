@@ -20,21 +20,7 @@ def main():
         stop = datetime.now()
 
         if 'error' in response:
-            if response['error']['code'] == 2006:
-                print("Invalid api key provided.")
-                break
-            elif response['error']['code'] == 2007:
-                print("weatherAPI ratelimit reached.")
-                continue
-            elif response['error']['code'] == 1008:
-                print("Provided API key has been disabled.")
-                break
-            elif response['error']['code'] == 1003:
-                print("Location cannot be empty.")
-                continue
-            elif response['error']['code'] == 1006:
-                print("Unknown location.")
-                continue
+            print(response["error"]["message"])
 
         print('---------------------')
         print(f'Query: {(stop - start).total_seconds()}')

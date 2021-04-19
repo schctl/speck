@@ -11,21 +11,7 @@ BASE = "https://api.weatherapi.com/v1"
 
 def display_details(response, query):
     if 'error' in response:
-        if response['error']['code'] == 2006:
-            print("Invalid api key provided.")
-            return
-        elif response['error']['code'] == 2007:
-            print("weatherAPI ratelimit reached.")
-            return
-        elif response['error']['code'] == 1008:
-            print("Provided API key has been disabled.")
-            return
-        elif response['error']['code'] == 1003:
-            print("Location cannot be empty.")
-            return
-        elif response['error']['code'] == 1006:
-            print("Unknown location.")
-            return
+        print(response["error"]["message"])
 
     print('---------------------')
     print(f'Query: {query}')
