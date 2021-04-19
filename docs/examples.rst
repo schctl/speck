@@ -5,13 +5,13 @@ Basic client
 ------------
 .. literalinclude:: examples/basic.py
    :language: python
-   :emphasize-lines: 18
+   :emphasize-lines: 16
 
 Cached client
 -------------
 .. literalinclude:: examples/cached.py
    :language: python
-   :emphasize-lines: 11
+   :emphasize-lines: 9
 
 
 Equivalent code without speck for comparison
@@ -22,4 +22,4 @@ Cached client
 
 .. literalinclude:: examples/eq/cached.py
    :language: python
-   :emphasize-lines: 55-58
+   :emphasize-lines: 41-44
