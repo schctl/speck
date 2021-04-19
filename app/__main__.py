@@ -14,11 +14,8 @@ import pstats
 import cProfile
 # ---------------
 
+from speck_app import utils
 from speck_app.app import SpeckApp
-
-def _rootd(path):
-    """Return absolute path of `path` relative to this file."""
-    return os.path.join(os.path.dirname(__file__), path)
 
 def vanilla_profile(func):
     """Profile a function."""
@@ -42,7 +39,7 @@ def vanilla_profile(func):
 @vanilla_profile
 def main():
     """Run the sample frontend app."""
-    with open(_rootd('token.txt')) as f:
+    with open(utils.rootd('../token.txt')) as f:
         app = SpeckApp(f.read().rstrip()) # Create an instance
         app.run()
 

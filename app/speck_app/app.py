@@ -7,13 +7,12 @@ Authors:
 """
 
 import os
-import sys
-from hashlib import md5
-
 import speck
 
 import tkinter as tk
 from PIL import ImageTk
+
+from . import utils
 
 from .style import SpeckStyle
 from .tracker import Tracker, plot
@@ -23,26 +22,10 @@ from .widget import Widget, WidgetManager
 __all__ = [
     'SpeckApp'
 ]
-
-# -- Utils --
-def _rootd(path):
-    """Return absolute path of `path` relative to this file."""
-    return os.path.join(os.path.dirname(__file__), path)
-
-def _readf(fname):
-    """Utility function to read a file."""
-    with open(fname, 'r') as f:
-        return f.read()
-
-def _utf8_to_md5_hex(string):
-    """Convert a UTF-8 encoded string to its md5 in hex format."""
-    return md5(bytes(string, 'utf-8')).hexdigest()
-# -----------
-
 class SpeckApp:
     """Implementation for a sample frontend."""
 
-    def __init__(self, token, auth_file=_rootd('etc/auth.txt')):
+    def __init__(self, token, auth_file=utils.rootd('etc/auth.txt')):
         self.bg = None # Background image
         self.root = None
         self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
@@ -52,20 +35,22 @@ class SpeckApp:
 
         self.widget_manager = WidgetManager()
 
-        self.style = SpeckStyle.from_file(_rootd('etc/style.json'))
-        self.tracker = Tracker(_rootd('.tracker'))
+        self.style = SpeckStyle.from_file(utils.rootd('etc/style.json'))
+        self.tracker = Tracker(utils.rootd('.tracker'))
 
         self.speck = speck.Client(
             token,
             use_cache=True,
             cache_file=True,
-            cache_path=_rootd('.cache')
+            cache_path=utils.rootd('.cache')
         )
 
         print("Using cache of type:", type(self.speck.cache))
 
         with open(auth_file, 'r') as f:
             self.__auth = f.read().split()
+
+    # Utils ------------------------------
 
     @staticmethod
     def __gen_label(root, style, text):
@@ -82,16 +67,8 @@ class SpeckApp:
     def __verify_creds(auth, uname, pwd):
         """This is just a dummy."""
         # We'll store our credentials in a file - not the best idea
-        return _utf8_to_md5_hex(uname) == auth[0] and \
-               _utf8_to_md5_hex(pwd)   == auth[1]
-
-    def __warn(self, msg='Warning'):
-        """Display a warning in message box."""
-        tk.messagebox.showwarning('WARNING', msg)
-
-    def __err(self, msg='Error'):
-        """Display an error in message box."""
-        tk.messagebox.showerror('ERROR', msg)
+        return utils.utf8_to_md5_hex(uname) == auth[0] and \
+               utils.utf8_to_md5_hex(pwd)   == auth[1]
 
     def __get_loc_meta(self, loc):
         """Get all metadata for a location."""
@@ -120,7 +97,7 @@ class SpeckApp:
         self.main_canvas.destroy()
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file=_rootd(bg_path))
+        self.bg = ImageTk.PhotoImage(file=utils.rootd(bg_path))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
@@ -133,6 +110,14 @@ class SpeckApp:
 
         self.main_canvas.internal.pack(fill="both", expand=True)
         self.main_canvas.internal.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
+
+    def __warn(self, msg='Warning'):
+        """Display a warning in message box."""
+        tk.messagebox.showwarning('WARNING', msg)
+
+    def __err(self, msg='Error'):
+        """Display an error in message box."""
+        tk.messagebox.showerror('ERROR', msg)
 
     # Flow --------------------------------------
 
@@ -311,12 +296,12 @@ class SpeckApp:
             (42, 40)
         )
 
-        lt_lbl     = \
+        lt_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
                                         self.style,f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"),
                                         ("+0", "+50")
             )
-        curr_lbl   = \
+        curr_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
                                         self.style,
                                         f"Current Temp: {curr_i.temp_c}°C"),
