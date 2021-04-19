@@ -21,6 +21,22 @@ __all__ = [
 class BasePoint:
     """Abstract class representing a single data point."""
     @classmethod
+    def from_raw(cls, data):
+        """Return new instance of child from json converted `weatherapi` response."""
+        return cls(**data) # Unpacking uses the dict's keys are keyword arguments
+
+    @classmethod
+    def from_json(cls, data):
+        """Return new instance of child from raw `weatherapi` response."""
+        return cls(**json.loads(data))
+
+    def to_bytes(self):
+        """Return a bytes-like object."""
+        return pickle.dumps(self)
+
+class BasePointLoc:
+    """``BasePoint`` with extra location parameter."""
+    @classmethod
     def from_raw(cls, location, data):
         """Return new instance of child from json converted `weatherapi` response."""
         return cls(location, **data) # Unpacking uses the dict's keys are keyword arguments
@@ -59,17 +75,7 @@ class Location(BasePoint):
         self.tz_id = tz_id
         self.localtime = dt.strptime(localtime, "%Y-%m-%d %H:%M") if localtime else None
 
-    @classmethod
-    def from_raw(cls, data):
-        """Return ``Location`` object from json converted ``weatherapi`` response."""
-        return cls(**data)
-
-    @classmethod
-    def from_json(cls, data):
-        """Return ``Location`` object from raw ``weatherapi`` response."""
-        return cls(**json.loads(data))
-
-class HourlyPoint(BasePoint):
+class HourlyPoint(BasePointLoc):
     """
     Represents weather data at a particular time in some location.
 
@@ -150,7 +156,7 @@ class HourlyPoint(BasePoint):
         self.uv = uv
         self.vis_km = Km(vis_km)
 
-class DayPoint(BasePoint):
+class DayPoint(BasePointLoc):
     """
     The total conditions per day.
 
@@ -190,7 +196,7 @@ class DayPoint(BasePoint):
 
         self.uv = uv
 
-class AstroPoint(BasePoint):
+class AstroPoint(BasePointLoc):
     """
     Astronomy information.
 
@@ -215,7 +221,7 @@ class AstroPoint(BasePoint):
 
         self.moon_phase = moon_phase
 
-class DailyPoint(BasePoint):
+class DailyPoint(BasePointLoc):
     """
     All information per day, inlcuding hourly info.
 
@@ -257,16 +263,6 @@ class IpPoint(BasePoint):
         self.ip = ip
         self.type = type
 
-    @classmethod
-    def from_raw(cls, data):
-        """Return ``IpPoint`` object from json converted ``weatherapi`` response."""
-        return cls(**data)
-
-    @classmethod
-    def from_json(cls, data):
-        """Return ``IpPoint`` object from raw ``weatherapi`` response."""
-        return cls(**json.loads(data))
-
 class SportsPoint(BasePoint):
     """
     Information about a sports event, such as stadium, region, start time, etc.
@@ -276,6 +272,7 @@ class SportsPoint(BasePoint):
     :var region: :class:`str`
     :var tournament: :class:`str`
     :var start: :class:`datetime.datetime`
+    :var match: :class:`str`
     """
     def __init__(self, stadium, country, region, tournament, start, match):
         self.stadium = stadium
@@ -283,13 +280,4 @@ class SportsPoint(BasePoint):
         self.region = region   # /
         self.tournament = tournament
         self.start = dt.strptime(start, "%Y-%m-%d %H:%M") if start else None
-
-    @classmethod
-    def from_raw(cls, data):
-        """Return ``SportEventPoint`` object from json converted ``weatherapi`` response."""
-        return cls(**data)
-
-    @classmethod
-    def from_json(cls, data):
-        """Return ``SportEventPoint`` object from raw ``weatherapi`` response."""
-        return cls(**json.loads(data))
+        self.match = match
