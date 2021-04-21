@@ -3,11 +3,9 @@
 <h1 align="center">Speck</h1>
 <p align="center">Minimal wrapper and frontend for <a href="https://www.weatherapi.com/">weatherAPI.com</a></p>
 <p align="center">
-    <a href="LICENSE"><img alt="LICENSE" src="https://img.shields.io/github/license/schctl/speck?style=for-the-badge"></a>
     <a href="https://speck.readthedocs.io/en/latest/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/speck?style=for-the-badge"></a>
-    <a href="https://github.com/schctl/speck/releases"><img alt="TAG" src="https://img.shields.io/github/v/tag/schctl/speck?label=Latest&style=for-the-badge"></a>
+    <a href="https://pypi.org/project/speck-wrapper/"><img alt="PyPI" src="https://img.shields.io/pypi/v/speck-wrapper?style=for-the-badge"></a>
     <a href="https://lgtm.com/projects/g/schctl/speck/context:python"><img alt="LGTM Grade" src="https://img.shields.io/lgtm/grade/python/github/schctl/speck?label=Code&style=for-the-badge"></a>
-    <a href="https://github.com/schctl/speck"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/schctl/speck?label=Stars&logo=GitHub&style=for-the-badge"></a>
 </p>
 
 [Wiki](https://github.com/schctl/speck/wiki)
