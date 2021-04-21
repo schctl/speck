@@ -32,13 +32,13 @@ Then, from the root directory, run
 
 ### GUI Frontend
 
-To run the speck app, run `__main__.py` under `app`.
-
-    python app
-
 The `speck` library must be installed for this to work, in addition to requirements listed in `app/requirements.txt`.
 
     pip install -r app/requirements.txt
+
+To run the speck app, run `__main__.py` under `app`.
+
+    cd app && python __main__.py
 
 The username and password entry screen is only intended as a dummy. To make the app ignore this,
 set the `SPECK_DEV` environment variable. The username and password are `11C` and `11c2021`.
