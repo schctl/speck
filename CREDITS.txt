@@ -1,9 +1,0 @@
-# List of people that have contributed to speck, sorted by name.
-
-- Nevin Jose
-  - https://github.com/FaZe-Vulcan
-  - Tkinter frontend
-
-- Sachin Cherian
-  - https://github.com/schctl
-  - Minimal API wrapper for weatherAPI
