@@ -60,7 +60,7 @@ class BufferedCacheManager(CacheManager):
         """
         Find all cache stored in memory.
 
-        :rtype: :class:`str`
+        :rtype: :class:`generator`
         """
         return (
             i
@@ -83,6 +83,8 @@ class BufferedCacheManager(CacheManager):
 
         els = name.split('*') # splits across *
 
+        need_remove = []
+
         for i in self._buf:
             for n, j in enumerate(els):
                 i = i.rstrip('.dat')
@@ -102,7 +104,10 @@ class BufferedCacheManager(CacheManager):
                     # If it is, we make sure its after the previous
                     # component (second check).
             else:
-                del self._buf[i]
+                need_remove.append(i)
+
+        for i in need_remove:
+            del self._buf[i]
 
     def debug_size(self):
         """
@@ -142,7 +147,7 @@ class FileCacheManager(CacheManager):
         """
         Return a list of all tracked cache files.
 
-        :rtype: :class:`str`
+        :rtype: :class:`generator`
         """
         return (
             i.rstrip('.dat')
@@ -180,10 +185,10 @@ class FileCacheManager(CacheManager):
         try:
             for i in os.listdir(self._path):
                 for n, j in enumerate(els):
-                    i = i.rstrip('.dat')
+                    k = i.rstrip('.dat')
                     if not (
                         j == '' or ( j in i and \
-                            (i.index(j) >= i.index(els[0 if n < 1 else n - 1]))
+                            (k.index(j) >= k.index(els[0 if n < 1 else n - 1]))
                             )
                         ):
                         break

@@ -130,6 +130,7 @@ dmypy.json
 
 # Utils
 .cache
+.test-cache
 .tracker
 .vscode
 token.txt

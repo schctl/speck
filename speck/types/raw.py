@@ -2,7 +2,7 @@
 Utility classes for easy conversions.
 """
 
-from dataclasses import dataclass as __dc
+from dataclasses import dataclass
 
 # The use of dataclasses here
 # ---------------------------
@@ -18,7 +18,7 @@ __all__ = [
     'Cel'
 ]
 
-@__dc(frozen=True)
+@dataclass(frozen=True)
 class Km:
     """Kilometer."""
     val: float
@@ -30,7 +30,7 @@ class Km:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True)
+@dataclass(frozen=True)
 class Mm:
     """Milimeters."""
     val: float
@@ -42,7 +42,7 @@ class Mm:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True)
+@dataclass(frozen=True)
 class Mb:
     """Milibar."""
     val: float
@@ -54,7 +54,7 @@ class Mb:
     def __repr__(self):
         return f"{self.val}"
 
-@__dc(frozen=True)
+@dataclass(frozen=True)
 class Cel:
     """Celsius."""
     val: float
