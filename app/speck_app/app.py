@@ -1,9 +1,5 @@
 """
 Sample tkinter frontend for speck.
-
-Authors:
-    Nevin Jose
-    Sachin Cherian
 """
 
 import os
@@ -297,16 +293,46 @@ class SpeckApp:
             ),
             (42, 40)
         )
-
         lt_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
                 self.style,f"{str(curr_i.location.localtime)[:-3][5:]} {curr_i.location.tz_id}"),
-                ("+0", "+50")
+                ("+0", "+35")
+            )
+
+        cond_lbl = \
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                curr_i.condition['text']),
+                ("+0", "+40")
             )
         curr_lbl = \
             Widget(SpeckApp.__gen_label(self.root,
                 self.style,
                 f"Current Temp: {curr_i.temp_c}°C"),
+                ("+0", "+30")
+            )
+        feelslike_lbl = \
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"Feels like: {curr_i.feelslike_c}°C"),
+                ("+0", "+30")
+            )
+        precip_lbl = \
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"Rain: {curr_i.precip_mm} mm"),
+                ("+0", "+30")
+            )
+        humidity_lbl = \
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"Humidity: {curr_i.humidity}"),
+                ("+0", "+30")
+            )
+        uv_lbl = \
+            Widget(SpeckApp.__gen_label(self.root,
+                self.style,
+                f"UV: {curr_i.uv}"),
                 ("+0", "+30")
             )
 
@@ -320,7 +346,7 @@ class SpeckApp:
             bd      = 0,
             command = lambda: self.forecast_screen(info)
             ),
-            (26, 300) # pos
+            ("+0", "+75") # pos
         )
 
         back_btn = Widget(tk.Button(
@@ -374,13 +400,20 @@ class SpeckApp:
 
         self.widget_manager.extend([
             loc_lbl,
+
             lt_lbl,
+            cond_lbl,
             curr_lbl,
+            feelslike_lbl,
+            precip_lbl,
+            humidity_lbl,
+            uv_lbl,
+            forecast_btn,
+
             back_btn,
             calc_btn,
             plot_btn,
             docs_btn,
-            forecast_btn
         ])
         self.widget_manager.render_all(self.main_canvas.internal)
 
@@ -416,6 +449,19 @@ class SpeckApp:
                 ("+0", "+30")
             )
 
+        astro_btn = Widget(tk.Button(
+            self.root,
+            text    = "Astronomy",
+            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
+            width   = 8,
+            fg      = self.style.colors["secondary"].fg,
+            bg      = self.style.colors["secondary"].bg,
+            bd      = 0,
+            command = lambda: self.astro_screen(info)
+            ),
+            ("+0", "+75") # pos
+        )
+
         back_btn = Widget(tk.Button(
             self.root,
             text    = "Back",
@@ -440,18 +486,6 @@ class SpeckApp:
             ),
             ("+70", 523) # pos
         )
-        astro_btn = Widget(tk.Button(
-            self.root,
-            text    = "Astronomy",
-            font    = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_small),
-            width   = 8,
-            fg      = self.style.colors["secondary"].fg,
-            bg      = self.style.colors["secondary"].bg,
-            bd      = 0,
-            command = lambda: self.astro_screen(info)
-            ),
-            (26, 300) # pos
-        )
         docs_btn = Widget(tk.Button(
             self.root,
             text    = "?",
@@ -467,13 +501,14 @@ class SpeckApp:
 
         self.widget_manager.extend([
             loc_lbl,
+
             fore_lbl_1,
             fore_lbl_2,
             astro_btn,
+
             back_btn,
             calc_btn,
             docs_btn,
-            astro_btn,
         ])
         self.widget_manager.render_all(self.main_canvas.internal)
 
@@ -545,11 +580,13 @@ class SpeckApp:
 
         self.widget_manager.extend([
             loc_lbl,
+
             moon_lbl,
             sunrise_lbl,
             moonrise_lbl,
             moonset_lbl,
             sunset_lbl,
+
             back_btn,
             calc_btn,
             docs_btn
