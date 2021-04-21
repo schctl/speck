@@ -88,7 +88,8 @@ class Client:
 
         try:
             # Does the acutal request
-            return self.session.get(f"{self.BASE}/{endpoint}{parameters}", timeout=(4, 4)).json()
+            return self.session.get(f"{self.BASE}/{endpoint}{parameters}",
+                                    timeout=(4, 4)).json()
         except Exception as e:
             raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
 
@@ -102,7 +103,7 @@ class Client:
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        return [ # Generates a list of city names containing the string `loc`
+        return [  # Generates a list of city names containing the string `loc`
             i for i in self.cities if loc.lower() in i['name'].lower()
         ]
 
@@ -141,7 +142,7 @@ class Client:
 
         e = Client.__is_error_code(response)
         if e:
-            raise e # We're not going to handle the error here, so anyone using the function can do it themselves
+            raise e
 
         # Creates the `HourlyPoint` object
         data = types.HourlyPoint.from_raw(response["location"], response["current"])
@@ -151,7 +152,7 @@ class Client:
 
         return data
 
-        ## The same pattern is followed for all other API methods implemented.
+        # The same pattern is followed for all other API methods implemented.
 
     def forecast(self, loc, days=3):
         """

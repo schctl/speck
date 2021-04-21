@@ -89,7 +89,7 @@ class BufferedCacheManager(CacheManager):
             for n, j in enumerate(els):
                 i = i.rstrip('.dat')
                 if not (
-                    j == '' or ( j in i and \
+                    j == '' or (j in i and
                         (i.index(j) >= i.index(els[0 if n < 1 else n - 1]))
                         )
                     ):
@@ -129,7 +129,7 @@ class FileCacheManager(CacheManager):
 
         super().__init__(path)
 
-        Path(path).mkdir(parents=True, exist_ok=True) # Creates cache folder
+        Path(path).mkdir(parents=True, exist_ok=True)  # Creates cache folder
 
         ## Cache is identified with its `name` attribute. Cache can be read by keeping track of this
         ## value and reading it with `read` later on.
@@ -187,7 +187,7 @@ class FileCacheManager(CacheManager):
                 for n, j in enumerate(els):
                     k = i.rstrip('.dat')
                     if not (
-                        j == '' or ( j in i and \
+                        j == '' or (j in i and
                             (k.index(j) >= k.index(els[0 if n < 1 else n - 1]))
                             )
                         ):

@@ -146,11 +146,11 @@ class Calculator:
         tk.Button(root, text="x",     padx=40, pady=20, command=button_multiply)         .grid(row=3, column=3, columnspan=1)
         tk.Button(root, text="/",     padx=40, pady=20, command=button_div)              .grid(row=2, column=3, columnspan=1)
 
-        tk.Button(root, text="x^y",   padx=33, pady=20, command=button_pwr)              .grid(row=1, column=2,columnspan=1)
-        tk.Button(root, text="x√",    padx=36, pady=20, command=button_root)             .grid(row=1, column=1,columnspan=1)
-        tk.Button(root, text="%",     padx=38, pady=20, command=button_mod)              .grid(row=1, column=0,columnspan=1)
-        tk.Button(root, text="//",    padx=38, pady=20, command=button_quo)              .grid(row=1, column=3,columnspan=1)
+        tk.Button(root, text="x^y",   padx=33, pady=20, command=button_pwr)              .grid(row=1, column=2, columnspan=1)
+        tk.Button(root, text="x√",    padx=36, pady=20, command=button_root)             .grid(row=1, column=1, columnspan=1)
+        tk.Button(root, text="%",     padx=38, pady=20, command=button_mod)              .grid(row=1, column=0, columnspan=1)
+        tk.Button(root, text="//",    padx=38, pady=20, command=button_quo)              .grid(row=1, column=3, columnspan=1)
 
-        #put buttons on screen
+        # put buttons on screen
 
         root.mainloop()

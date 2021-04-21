@@ -6,7 +6,7 @@ import json
 import pickle
 from datetime import datetime as dt
 
-from .raw import *
+from . import raw
 
 __all__ = [
     'Location',
@@ -23,7 +23,8 @@ class BasePoint:
     @classmethod
     def from_raw(cls, data):
         """Return new instance of child from json converted `weatherapi` response."""
-        return cls(**data) # Unpacking uses the dict's keys are keyword arguments
+        # Unpacking uses the dict's keys are keyword arguments
+        return cls(**data)
 
     @classmethod
     def from_json(cls, data):
@@ -125,23 +126,23 @@ class HourlyPoint(BasePointLoc):
         self.time = dt.strptime(last_updated if not time else time, "%Y-%m-%d %H:%M") \
                     if (last_updated or time) else None
 
-        self.temp_c = Cel(temp_c)
-        self.feelslike_c = Cel(feelslike_c)
+        self.temp_c = raw.Cel(temp_c)
+        self.feelslike_c = raw.Cel(feelslike_c)
 
-        self.windchill_c = Cel(windchill_c)
-        self.heatindex_c = Cel(heatindex_c)
-        self.dewpoint_c = Cel(dewpoint_c)
+        self.windchill_c = raw.Cel(windchill_c)
+        self.heatindex_c = raw.Cel(heatindex_c)
+        self.dewpoint_c = raw.Cel(dewpoint_c)
 
         self.condition = condition
 
-        self.wind_kph = Km(wind_kph)
-        self.gust_kph = Km(gust_kph)
+        self.wind_kph = raw.Km(wind_kph)
+        self.gust_kph = raw.Km(gust_kph)
 
         self.wind_degree = wind_degree
         self.wind_dir = wind_dir
 
-        self.pressure_mb = Mb(pressure_mb)
-        self.precip_mm = Mm(precip_mm)
+        self.pressure_mb = raw.Mb(pressure_mb)
+        self.precip_mm = raw.Mm(precip_mm)
 
         self.will_it_rain = will_it_rain
         self.will_it_snow = will_it_snow
@@ -154,7 +155,7 @@ class HourlyPoint(BasePointLoc):
         self.is_day = bool(is_day)
 
         self.uv = uv
-        self.vis_km = Km(vis_km)
+        self.vis_km = raw.Km(vis_km)
 
 class DayPoint(BasePointLoc):
     """
@@ -182,16 +183,16 @@ class DayPoint(BasePointLoc):
         else:
             self.location = Location.from_raw(location)
 
-        self.maxtemp_c = Cel(maxtemp_c)
-        self.mintemp_c = Cel(mintemp_c)
-        self.avgtemp_c = Cel(avgtemp_c)
+        self.maxtemp_c = raw.Cel(maxtemp_c)
+        self.mintemp_c = raw.Cel(mintemp_c)
+        self.avgtemp_c = raw.Cel(avgtemp_c)
 
         self.condition = condition
 
-        self.maxwind_kph = Km(maxwind_kph)
+        self.maxwind_kph = raw.Km(maxwind_kph)
 
-        self.totalprecip_mm = Mm(totalprecip_mm)
-        self.avgvis_km = Km(avgvis_km)
+        self.totalprecip_mm = raw.Mm(totalprecip_mm)
+        self.avgvis_km = raw.Km(avgvis_km)
         self.avghumidity = avghumidity
 
         self.uv = uv
