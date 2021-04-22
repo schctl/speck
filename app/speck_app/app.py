@@ -19,7 +19,7 @@ __all__ = [
     'SpeckApp'
 ]
 class SpeckApp:
-    """Implementation for a sample frontend."""
+    """Implementation for a speck frontend app."""
 
     def __init__(self, token, auth_file=utils.rootd('etc/auth.txt')):
         self.bg = None # Background image
@@ -51,6 +51,7 @@ class SpeckApp:
     @staticmethod
     def __gen_label(root, style, text):
         """Make a generic label so we don't have to do it ourselves."""
+
         return tk.Label(
             root,
             text = text,
@@ -62,12 +63,14 @@ class SpeckApp:
     @staticmethod
     def __verify_creds(auth, uname, pwd):
         """This is just a dummy."""
+
         # We'll store our credentials in a file - not the best idea
         return utils.utf8_to_md5_hex(uname) == auth[0] and \
                utils.utf8_to_md5_hex(pwd)   == auth[1]
 
     def __get_loc_meta(self, loc):
         """Get all metadata for a location."""
+
         try:
             (curr_i, fore_i) = self.speck.forecast(loc)
 
@@ -90,6 +93,7 @@ class SpeckApp:
 
     def __clear_with_bg(self, bg_path):
         """Clear the main canvas and set a background image."""
+
         self.main_canvas.destroy()
         self.widget_manager.clear()
 
@@ -420,6 +424,7 @@ class SpeckApp:
 
     def forecast_screen(self, info):
         """Show all forecast information."""
+
         self.__clear_with_bg('etc/exports/secondary.png')
 
         # -------------------------
@@ -595,6 +600,7 @@ class SpeckApp:
 
     def docs(self, parent, *args, **kwargs):
         """Link to the documentation."""
+
         self.__clear_with_bg('etc/exports/rick.png')
 
         back_btn = Widget(tk.Button(

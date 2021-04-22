@@ -1,8 +1,5 @@
 """
 Tracker class.
-
-Authors:
-    Sachin Cherian
 """
 
 import os

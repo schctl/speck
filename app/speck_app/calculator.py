@@ -1,8 +1,5 @@
 """
 Sample Calculator.
-
-Authors:
-    Nevin Jose
 """
 
 import tkinter as tk

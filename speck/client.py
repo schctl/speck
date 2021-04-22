@@ -181,6 +181,8 @@ class Client:
         if e:
             raise e
 
+        # `data` here is a tuple of the current weather (`HourlyPoint`)
+        # and a list of forecasted days (`DailyPoint`s).
         data = (
             types.HourlyPoint.from_raw(response["location"], response["current"]),
             [
@@ -335,6 +337,9 @@ class Client:
         if e:
             raise e
 
+        # `SportsPoint` contains data per sports event. It's not specific
+        # to any type of sport, nor is it a collection. We use a dictionary
+        # with the type of sport as a key, and list of `SportsPoints` as its value.
         data = {
             j: [types.SportsPoint.from_raw(i) for i in response[j]]
             for j in ['football', 'cricket', 'golf']
@@ -346,41 +351,51 @@ class Client:
 
         return data
 
-    def history(self, loc, dt):
+    def history(self, loc, days):
         """
-        Get weather history for a location.
+        Get weather history for a location. This hasn't been tested
+        since it requires a paid weatherapi.com plan, but should work.
 
         :param loc: See docs on method ``current``.
         :param dt: Datetime string in the format `YYY-MM-DD`.
             Data starting from this date will be returned.
 
-        :rtype: ``list[types.DailyPoint]``
+        :returns: A tuple with the current weather, and a list of historical
+                  weather per day.
+        :rtype: ``(types.HourlyPoint, list[types.DailyPoint])``
         """
+        # weatherapi returns history data as an `Forecast` object as per their API.
+        # https://www.weatherapi.com/docs/#apis-history
 
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
-        mode = f"history-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}-{dt}"
+        mode = f"history-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
 
         n = self.cache.read(mode)
         if n:
             return n
 
-        response = self.__make_request('history.json', f'?key={self._token}&q={loc}&dt={min(dt, 10)}')
+        response = self.__make_request('history.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
         e = Client.__is_error_code(response)
         if e:
             raise e
 
-        data = [
-            types.DailyPoint(n["location"], i["day"], i["astro"], i["hour"])
-            for i in n["forecast"]["forecastday"]
-        ]
+        # `data` here is a tuple of the current weather (`HourlyPoint`)
+        # and a list of historical days (`DailyPoint`s).
+        data = (
+            types.HourlyPoint.from_raw(response["location"], response["current"]),
+            [
+                types.DailyPoint(response["location"], i["day"], i["astro"], i["hour"])
+                for i in response["forecast"]["forecastday"]
+            ]
+        )
 
         self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
         self.cache.dump(mode, data)
 
-        return data # `forecast->forecastday` is a list of all daily forecasts
+        return data
 
     # Aliases ---------------------------------------
 

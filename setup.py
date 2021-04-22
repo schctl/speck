@@ -1,3 +1,7 @@
+"""
+Setup file. `pip` uses this to install `speck`.
+"""
+
 import os
 import re
 
@@ -10,22 +14,26 @@ def readf(fname):
     with open(os.path.join(os.path.dirname(__file__), fname), 'r') as f:
         return f.read()
 
-# From discord.py ------
-# https://github.com/Rapptz/discord.py
+# From discord.py
+# https://github.com/Rapptz/discord.py/blob/master/setup.py#L10
 
 def get_version(fname):
     return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
-    # re.MULTILINE tells `search` to compare each line instead of the whole text.
-    # \s - whitespace character
-    # [\'"] - either ' or "
-    # ([^\'"]*) - characters that are NOT ' or "
-    # .group(1) will return the first subgroup of the match - subgroups are enclosed in `()`
-
-# ----------------------
-
-version = get_version('speck/__init__.py')
+    # +------------------------------------------------------------+
+    # | Regex                                                      |
+    # +------------------------------------------------------------+
+    # | - re.MULTILINE tells `search` to compare each line         |
+    # |     instead of the whole text.                             |
+    # | - \s - whitespace character                                |
+    # | - [\'"] - either ' or "                                    |
+    # | - ([^\'"]*) - characters that are NOT ' or "               |
+    # |     .group(1) will return the first subgroup of the match  |
+    # |     subgroups are enclosed in `()`                         |
+    # +------------------------------------------------------------+
 
 # Requirements ---------
+
+version = get_version('speck/__init__.py')
 
 install_requires = list(readf('requirements.txt').splitlines())
 extras_require = {
@@ -35,8 +43,6 @@ extras_require = {
     ]
 }
 
-# ----------------------
-
 packages = [
     "speck",
     "speck.types",
@@ -45,6 +51,8 @@ packages = [
 package_data = {
     '': ['LICENSE', 'README.md', 'etc/*']
 }
+
+# ----------------------
 
 setup(
     name = "speck-wrapper",

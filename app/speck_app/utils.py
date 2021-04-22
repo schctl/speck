@@ -1,6 +1,7 @@
 """
-Utility functions.
+Commonly used functions.
 """
+
 import os
 from hashlib import md5
 

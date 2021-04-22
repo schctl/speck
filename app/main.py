@@ -1,9 +1,5 @@
 """
-Frontend for speck.
-
-Authors:
-    Nevin Jose
-    Sachin Cherian
+Runs the speck frontend.
 """
 
 import os

@@ -14,15 +14,11 @@
 
 ### Installation
 
-#### With `pip`
-
 Speck is packaged publicly on PyPi as [`speck-wrapper`](https://pypi.org/project/speck-wrapper/) *(don't confuse with [`speck`](https://pypi.org/project/speck/))*.
 
     pip install speck-wrapper
 
-#### From source
-
-Speck can be installed as a library. First clone the repository.
+To install from source, first clone the repository.
 
     git clone https://github.com/schctl/speck.git
 
@@ -36,9 +32,9 @@ The `speck` library must be installed for this to work, in addition to requireme
 
     pip install -r app/requirements.txt
 
-To run the speck app, run `__main__.py` under `app`.
+To run the speck app, run `main.py` under `app`.
 
-    cd app && python __main__.py
+    cd app && python main.py
 
 The username and password entry screen is only intended as a dummy. To make the app ignore this,
 set the `SPECK_DEV` environment variable. The username and password are `11C` and `11c2021`.

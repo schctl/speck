@@ -1,8 +1,5 @@
 """
 Window styling utilities.
-
-Authors:
-    Sachin Cherian
 """
 
 import json

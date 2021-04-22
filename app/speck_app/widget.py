@@ -1,8 +1,5 @@
 """
 Widget helpers for tkinter.
-
-Authors:
-    Sachin Cherian
 """
 
 __all__ = [
@@ -10,8 +7,13 @@ __all__ = [
     'WidgetManager'
 ]
 
+
 class Widget:
-    """Wrapper around Tkiner Widgets. Intended to be used with a 'Widget Manager' implmentation."""
+    """
+    The Widget class is a utility wrapped around tkinter widgets.
+    It is intended to be used with a "manager" class, and its attributes
+    are kept ambiguous on purpose to the manager can parse them itself.
+    """
 
     def __init__(self, internal, position):
         self._internal = internal
@@ -57,8 +59,13 @@ class WidgetManager:
         return len(self._widgets) - 1
 
     def pop(self, _id):
-        """Remove a widget from the lift by index."""
+        """Remove a widget from the stack by index."""
         return self._widgets.pop(_id)
+
+    # `empty` reassigns an empty list with 0 space to the stack.
+    # `clear` only removes each widget, but the stack takes up
+    # the same space in memory. This may be faster since
+    # it won't have to be reallocated (until it takes up > `size` again).
 
     def clear(self):
         """Clear all widgets."""
