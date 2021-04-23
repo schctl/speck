@@ -16,6 +16,9 @@ from . import types
 
 __all__ = ['Client']
 
+_FROM_CACHE = 'c'
+_FROM_RESPONSE = 'r'
+
 class Client:
     """
     Represents a connection to weatherapi.com.
@@ -94,14 +97,20 @@ class Client:
             raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
 
     def __generic_request(self, loc, mode, endpoint, parameters, *args, **kwargs):
-        """Generic request method, covering any endpoint and parameters."""
+        """
+        Generic request method, covering any endpoint and parameters.
+
+        :returns: ``(str, response)``. Response can be a `types` object, or a raw
+            weatherapi response. The first element of the tuple is either
+            ``_FROM_CACHE`` or ``_FROM_RESPONSE``.
+        """
 
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
         n = self.cache.read(mode)
         if n:
-            return n
+            return (_FROM_CACHE, n)
 
         response = self.__make_request(endpoint, parameters)
 
@@ -109,7 +118,13 @@ class Client:
         if e:
             raise e
 
-        return response
+        return (_FROM_RESPONSE, response)
+
+    # All implementations should follow the same naming pattern.
+    # `{type}-{location}-now-{time-identifier}`
+    # Old cache will be cleaned up disregarding `time-identifier`.
+    # So, any cache starting with `{type}-{location}` will be deleted
+    # if a new cache starting with `{type}-{location}` is dumped.
 
     def __cache_dump(self, data, mode):
         """Dump response cache with name ``mode``."""
@@ -149,30 +164,18 @@ class Client:
         :rtype: :class:`types.HourlyPoint`
         """
 
-        if loc == '':
-            raise errors.QueryNotProvided('Location cannot be empty.', 0)
-
+        # https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
         mode = f"current-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
 
-        # https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
+        _type, response = self.__generic_request(loc, mode, 'current.json', f'?key={self._token}&q={loc}')
 
-        # If cache exists (not None), it will be read and an `HourlyPoint` object will be returned
-
-        n = self.cache.read(mode)
-        if n:
-            return n
-
-        response = self.__make_request('current.json', f'?key={self._token}&q={loc}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         # Creates the `HourlyPoint` object
         data = types.HourlyPoint.from_raw(response["location"], response["current"])
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
-        self.cache.dump(mode, data) # Writes cache
+        self.__cache_dump(data, mode)
 
         return data
 
@@ -190,20 +193,12 @@ class Client:
         :rtype: ``(types.HourlyPoint, list[types.DailyPoint])``
         """
 
-        if loc == '':
-            raise errors.QueryNotProvided('Location cannot be empty.', 0)
-
         mode = f"forecast-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
 
-        n = self.cache.read(mode)
-        if n:
-            return n
+        _type, response = self.__generic_request(loc, mode, 'forecast.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
-        response = self.__make_request('forecast.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         # `data` here is a tuple of the current weather (`HourlyPoint`)
         # and a list of forecasted days (`DailyPoint`s).
@@ -215,8 +210,7 @@ class Client:
             ]
         )
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
-        self.cache.dump(mode, data)
+        self.__cache_dump(data, mode)
 
         return data
 
@@ -229,25 +223,16 @@ class Client:
         :rtype: :class:`types.AstroPoint`
         """
 
-        if loc == '':
-            raise errors.QueryNotProvided('Location cannot be empty.', 0)
-
         mode = f"astro-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}"
 
-        n = self.cache.read(mode)
-        if n:
-            return n
+        _type, response = self.__generic_request(loc, mode, 'astronomy.json', f'?key={self._token}&q={loc}')
 
-        response = self.__make_request('astronomy.json', f'?key={self._token}&q={loc}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         data = types.AstroPoint.from_raw(response["location"], response["astronomy"]["astro"])
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
-        self.cache.dump(mode, data)
+        self.__cache_dump(data, mode)
 
         return data
 
@@ -260,24 +245,17 @@ class Client:
         :rtype: :class:`IpPoint`
         """
 
-        if ip == '':
-            raise errors.QueryNotProvided('IP cannot be empty.', 0)
-
         mode = f"iplookup-{ip}"
 
-        n = self.cache.read(mode)
-        if n:
-            return n
+        _type, response = self.__generic_request(ip, mode, 'ip.json', f'?key={self._token}&q={ip}')
 
-        response = self.__make_request('ip.json', f'?key={self._token}&q={ip}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         data = types.IpPoint.from_raw(response)
 
         self.cache.dump(mode, data)
+        # cleanup not required here
 
         return data
 
@@ -290,21 +268,12 @@ class Client:
         :rtype: ``list[types.Location]``
         """
 
-        if loc == '':
-            raise errors.QueryNotProvided('Location cannot be empty.', 0)
-
         mode = f"search-{loc.lower()}"
 
-        n = self.cache.read(mode)
+        _type, response = self.__generic_request(loc, mode, 'search.json', f'?key={self._token}&q={loc}')
 
-        if n:
-            return n
-
-        response = self.__make_request('search.json', f'?key={self._token}&q={loc}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         data = [
             types.Location.from_raw(i)
@@ -328,6 +297,7 @@ class Client:
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
         # No cache
+        # since localtime is a returned parameter.
 
         response = self.__make_request('timezone.json', f'?key={self._token}&q={loc}')
 
@@ -349,15 +319,10 @@ class Client:
         """
         mode = f"sports-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d')}"
 
-        n = self.cache.read(mode)
-        if n:
-            return n
+        _type, response = self.__generic_request(loc, mode, 'sports.json', f'?key={self._token}&q={loc}')
 
-        response = self.__make_request('sports.json', f'?key={self._token}&q={loc}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         # `SportsPoint` contains data per sports event. It's not specific
         # to any type of sport, nor is it a collection. We use a dictionary
@@ -368,8 +333,7 @@ class Client:
         }
 
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
-        self.cache.dump(mode, data)
+        self.__cache_dump(data, mode)
 
         return data
 
@@ -389,23 +353,15 @@ class Client:
         # weatherapi returns history data as an `Forecast` object as per their API.
         # https://www.weatherapi.com/docs/#apis-history
 
-        if loc == '':
-            raise errors.QueryNotProvided('Location cannot be empty.', 0)
-
         mode = f"history-{loc.lower()}-now-{dt.now().strftime('%Y-%m-%d-%H-%M')[:-1]}"
 
-        n = self.cache.read(mode)
-        if n:
-            return n
+        _type, response = self.__generic_request(loc, mode, 'history.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
-        response = self.__make_request('history.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
-
-        e = Client.__is_error_code(response)
-        if e:
-            raise e
+        if _type == _FROM_CACHE:
+            return response
 
         # `data` here is a tuple of the current weather (`HourlyPoint`)
-        # and a list of historical days (`DailyPoint`s).
+        # and a list of forecasted days (`DailyPoint`s).
         data = (
             types.HourlyPoint.from_raw(response["location"], response["current"]),
             [
@@ -414,10 +370,7 @@ class Client:
             ]
         )
 
-        self.cache.cleanup(mode.split('-now-')[0] + '-now-*')
-        self.cache.dump(mode, data)
-
-        return data
+        self.__cache_dump(data, mode)
 
     # Aliases ---------------------------------------
 

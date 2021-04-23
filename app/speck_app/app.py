@@ -601,6 +601,16 @@ class SpeckApp:
 
         self.__clear_with_bg('etc/exports/rick.png')
 
+        docs_label = Widget(tk.Label(
+            self.root,
+            text = "speck.rtfd.io",
+            font = (self.style.fonts["primary"].family, self.style.fonts["primary"].size_big),
+            fg   =  self.style.colors["secondary"].fg,
+            bg   =  self.style.colors["secondary"].bg
+            ),
+            (84, 140)
+        )
+
         back_btn = Widget(tk.Button(
             self.root,
             text    = "Back",
@@ -614,7 +624,7 @@ class SpeckApp:
             (28,  523) # pos
         )
 
-        self.widget_manager.push(back_btn)
+        self.widget_manager.extend([docs_label, back_btn])
         self.widget_manager.render_all(self.main_canvas.internal)
 
     # -------------------------------------------
