@@ -14,9 +14,7 @@ from . import cache
 from . import errors
 from . import types
 
-__all__ = [
-    'Client'
-]
+__all__ = ['Client']
 
 class Client:
     """
@@ -46,6 +44,8 @@ class Client:
             'r', encoding='utf-8'
         ) as f:
             self.cities = json.loads(f.read())
+
+    # Utils ----------------------
 
     @staticmethod
     def __is_error_code(response):
@@ -93,13 +93,37 @@ class Client:
         except Exception as e:
             raise errors.InternalError(f"Unable to fetch data at this time: {e}", 9999)
 
+    def __generic_request(self, loc, mode, endpoint, parameters, *args, **kwargs):
+        """Generic request method, covering any endpoint and parameters."""
+
+        if loc == '':
+            raise errors.QueryNotProvided('Location cannot be empty.', 0)
+
+        n = self.cache.read(mode)
+        if n:
+            return n
+
+        response = self.__make_request(endpoint, parameters)
+
+        e = Client.__is_error_code(response)
+        if e:
+            raise e
+
+        return response
+
+    def __cache_dump(self, data, mode):
+        """Dump response cache with name ``mode``."""
+        self.cache.cleanup(mode.split('-now-')[0] + '-now-*') # Discard any old cache
+        self.cache.dump(mode, data) # Writes cache
+
+    # ----------------------------
+
     def find_city(self, loc):
         """
         Try to find a city with a match from a known list of locations.
         This method is highly unlikely to be used frequently, since weatherAPI tries
         to interpret location names even if incorrect, but is provided anyway.
         """
-
         if loc == '':
             raise errors.QueryNotProvided('Location cannot be empty.', 0)
 
@@ -253,7 +277,6 @@ class Client:
 
         data = types.IpPoint.from_raw(response)
 
-        # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, data)
 
         return data
@@ -288,7 +311,6 @@ class Client:
             for i in response
         ]
 
-        # self.cache.cleanup(mode) # We don't need this here
         self.cache.dump(mode, data)
 
         return data

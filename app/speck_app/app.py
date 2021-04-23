@@ -15,9 +15,7 @@ from .tracker import Tracker, plot
 from .calculator import Calculator
 from .widget import Widget, WidgetManager
 
-__all__ = [
-    'SpeckApp'
-]
+__all__ = ['SpeckApp']
 class SpeckApp:
     """Implementation for a speck frontend app."""
 

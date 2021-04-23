@@ -180,8 +180,6 @@ class FileCacheManager(CacheManager):
 
         els = name.split('*') # splits across *
 
-        # Removes all cache files matching the `name` pattern. `*` represents any set of characters.
-
         try:
             for i in os.listdir(self._path):
                 for n, j in enumerate(els):
@@ -192,15 +190,6 @@ class FileCacheManager(CacheManager):
                             )
                         ):
                         break
-
-                        # Explanation for above check
-                        # ---------------------------
-                        # `els` is a list of all components split across *.
-                        # We check if each component of `else` is in
-                        # the file name being checked (`j in i`).
-                        # If the component is empty, we can skip directly.
-                        # If it is, we make sure its after the previous
-                        # component (second check).
                 else:
                     os.remove(f"{self._path}/{i}") # Delete the actual file
 

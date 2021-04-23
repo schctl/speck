@@ -5,6 +5,12 @@ Commonly used functions.
 import os
 from hashlib import md5
 
+__all__ = [
+    'rootd',
+    'readf',
+    'utf8_to_md5_hex'
+]
+
 def rootd(path):
     """Return absolute path of `path` relative to this file."""
     return os.path.join(os.path.dirname(__file__), path)
