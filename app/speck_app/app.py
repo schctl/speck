@@ -363,7 +363,7 @@ class SpeckApp:
             bd      = 0,
             command = self.location_entry
             ),
-            (26,  523) # pos
+            (28,  523) # pos
         )
         calc_btn = Widget(tk.Button(
             self.root,
@@ -477,7 +477,7 @@ class SpeckApp:
             bd      = 0,
             command = lambda: self.info_screen(None, info)
             ),
-            (26,  523) # pos
+            (28,  523) # pos
         )
         calc_btn = Widget(tk.Button(
             self.root,
@@ -556,7 +556,7 @@ class SpeckApp:
             bd      = 0,
             command = lambda: self.forecast_screen(info)
             ),
-            (26,  523) # pos
+            (28,  523) # pos
         )
         calc_btn = Widget(tk.Button(
             self.root,
@@ -613,7 +613,7 @@ class SpeckApp:
             bd      = 0,
             command = lambda: parent(*args, **kwargs)
             ),
-            (26,  523) # pos
+            (28,  523) # pos
         )
 
         self.widget_manager.push(back_btn)
