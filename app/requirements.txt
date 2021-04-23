@@ -1,2 +1,2 @@
 pillow
-matplotlib
+matplotlib==3.3

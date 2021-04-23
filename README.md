@@ -28,11 +28,17 @@ Then, from the root directory, run
 
 ### GUI Frontend
 
+#### Install
+
+Install scripts in `scripts` will automate the install for you.
+
+**Manual install**
+
 The `speck` library must be installed for this to work, in addition to requirements listed in `app/requirements.txt`.
 
     pip install -r app/requirements.txt
 
-To run the speck app, run `main.py` under `app`.
+#### To run the speck app, run `main.py` under `app`.
 
     cd app && python main.py
 
