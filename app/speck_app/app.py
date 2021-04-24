@@ -5,7 +5,6 @@ Sample tkinter frontend for speck.
 import os
 
 import tkinter as tk
-from PIL import ImageTk
 
 import speck
 
@@ -95,7 +94,7 @@ class SpeckApp:
         self.main_canvas.destroy()
         self.widget_manager.clear()
 
-        self.bg = ImageTk.PhotoImage(file=utils.rootd(bg_path))
+        self.bg = tk.PhotoImage(file=utils.rootd(bg_path))
 
         self.main_canvas = Widget(tk.Canvas(
             self.root,
