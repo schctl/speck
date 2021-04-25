@@ -48,7 +48,7 @@ class CacheManager:
 
 class BufferedCacheManager(CacheManager):
     """
-    Buffered Cache Manager implementation. Keeps track of cache in memory.
+    Buffered Cache Manager implementation. Stored cache in memory.
     """
 
     def __init__(self, path=None):
@@ -62,10 +62,7 @@ class BufferedCacheManager(CacheManager):
 
         :rtype: :class:`generator`
         """
-        return (
-            i
-            for i in self._buf
-        )
+        return (i for i in self._buf)
 
     def read(self, name):
         """Reads cache with ``name`` if it exists."""
@@ -172,13 +169,14 @@ class FileCacheManager(CacheManager):
 
     def dump(self, name, data):
         """Writes data to a cache file with ``name``. ``name`` must be kept track of manually."""
+
         with open(f"{self._path}/{name}.dat", "wb") as f:
             pickle.dump(zlib.compress(pickle.dumps(data)), f)
 
     def cleanup(self, name):
         """Cleans up all cache files with a given ``name``. Supports wildcard (*) deletion."""
 
-        els = name.split('*') # splits across *
+        els = name.split('*')
 
         try:
             for i in os.listdir(self._path):
@@ -191,7 +189,7 @@ class FileCacheManager(CacheManager):
                         ):
                         break
                 else:
-                    os.remove(f"{self._path}/{i}") # Delete the actual file
+                    os.remove(f"{self._path}/{i}") # Delete the file
 
         except FileNotFoundError:
             pass

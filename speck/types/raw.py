@@ -21,7 +21,7 @@ __all__ = [
 @dataclass(frozen=True)
 class Km:
     """Kilometer."""
-    val: float
+    val: float = 0
 
     def miles(self):
         """Equivalent miles."""
@@ -33,7 +33,7 @@ class Km:
 @dataclass(frozen=True)
 class Mm:
     """Milimeters."""
-    val: float
+    val: float = 0
 
     def inches(self):
         """Equivalent inches."""
@@ -45,7 +45,7 @@ class Mm:
 @dataclass(frozen=True)
 class Mb:
     """Milibar."""
-    val: float
+    val: float = 0
 
     def inches(self):
         """Equivalent inches of Hg."""
@@ -57,7 +57,7 @@ class Mb:
 @dataclass(frozen=True)
 class Cel:
     """Celsius."""
-    val: float
+    val: float = -273.15
 
     def fahrenheit(self):
         """Equivalent farenheit."""

@@ -16,8 +16,9 @@ from . import types
 
 __all__ = ['Client']
 
-_FROM_CACHE = 'c'
-_FROM_RESPONSE = 'r'
+# some constants
+_TYPE_CACHE = 'c'
+_TYPE_JSON = 'r'
 
 class Client:
     """
@@ -102,7 +103,7 @@ class Client:
 
         :returns: ``(str, response)``. Response can be a `types` object, or a raw
             weatherapi response. The first element of the tuple is either
-            ``_FROM_CACHE`` or ``_FROM_RESPONSE``.
+            ``_TYPE_CACHE`` or ``_TYPE_JSON``.
         """
 
         if loc == '':
@@ -110,7 +111,7 @@ class Client:
 
         n = self.cache.read(mode)
         if n:
-            return (_FROM_CACHE, n)
+            return (_TYPE_CACHE, n)
 
         response = self.__make_request(endpoint, parameters)
 
@@ -118,7 +119,7 @@ class Client:
         if e:
             raise e
 
-        return (_FROM_RESPONSE, response)
+        return (_TYPE_JSON, response)
 
     # All implementations should follow the same naming pattern.
     # `{type}-{location}-now-{time-identifier}`
@@ -146,6 +147,17 @@ class Client:
             i for i in self.cities if loc.lower() in i['name'].lower()
         ]
 
+    # The cache implementation keeps track of data
+    # with their ``name``s. We use ``location``+``ident``
+    # (``ident`` is some identifier - usually time) as the
+    # name to decide whether the cache is outdated or not.
+    # If ``ident`` is some time, then its generalized to a range
+    # (say if current time is ``2021-04-01 19:20:30``
+    # -> ``2021-04-01 19``), so anything else within that range
+    # get matched.'
+    # ``2021-04-01 19:05:51`` -> ``2021-04-01 19``
+    # ``2021-04-01 19:45:21`` -> ``2021-04-01 19``
+
     def current(self, loc):
         """
         Get current weather conditions in a location.
@@ -169,7 +181,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'current.json', f'?key={self._token}&q={loc}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         # Creates the `HourlyPoint` object
@@ -197,7 +209,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'forecast.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         # `data` here is a tuple of the current weather (`HourlyPoint`)
@@ -227,7 +239,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'astronomy.json', f'?key={self._token}&q={loc}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         data = types.AstroPoint.from_raw(response["location"], response["astronomy"]["astro"])
@@ -249,7 +261,7 @@ class Client:
 
         _type, response = self.__generic_request(ip, mode, 'ip.json', f'?key={self._token}&q={ip}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         data = types.IpPoint.from_raw(response)
@@ -272,7 +284,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'search.json', f'?key={self._token}&q={loc}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         data = [
@@ -321,7 +333,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'sports.json', f'?key={self._token}&q={loc}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         # `SportsPoint` contains data per sports event. It's not specific
@@ -357,7 +369,7 @@ class Client:
 
         _type, response = self.__generic_request(loc, mode, 'history.json', f'?key={self._token}&q={loc}&days={min(days, 10)}')
 
-        if _type == _FROM_CACHE:
+        if _type == _TYPE_CACHE:
             return response
 
         # `data` here is a tuple of the current weather (`HourlyPoint`)

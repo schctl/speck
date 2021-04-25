@@ -1,5 +1,5 @@
 """
-Window styling utilities.
+UI styling utilities.
 """
 
 import json

@@ -1,5 +1,5 @@
 """
-Setup file. `pip` uses this to install `speck`.
+Setup file. ``pip`` uses this to get the package configuration.
 """
 
 import os
@@ -10,14 +10,12 @@ from setuptools import setup
 # Utils ----------------
 
 def readf(fname):
-    print(os.path.join(os.path.dirname(__file__), fname))
     with open(os.path.join(os.path.dirname(__file__), fname), 'r') as f:
         return f.read()
 
-# From discord.py
-# https://github.com/Rapptz/discord.py/blob/master/setup.py#L10
-
 def get_version(fname):
+    # From discord.py
+    # https://github.com/Rapptz/discord.py/blob/master/setup.py#L10
     return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
     # +------------------------------------------------------------+
     # | Regex                                                      |
@@ -40,6 +38,9 @@ extras_require = {
     'docs': [
         'sphinx',
         'sphinx-press-theme'
+    ],
+    'tests': [
+        'pytest'
     ]
 }
 
@@ -49,7 +50,7 @@ packages = [
     "speck.etc"
 ]
 package_data = {
-    '': ['LICENSE', 'README.md', 'etc/*']
+    '': ['LICENSE', 'README', 'etc/*']
 }
 
 # ----------------------
@@ -60,7 +61,7 @@ setup(
     license = "MIT",
     author = "Nevin Jose, Sachin Cherian",
     description = "A simple wrapper and frontend for weatherAPI.com",
-    long_description = readf('README.md'),
+    long_description = readf('README'),
     long_description_content_type = 'text/markdown',
     url = "https://github.com/schctl/speck",
     packages = packages,

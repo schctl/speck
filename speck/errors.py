@@ -4,9 +4,8 @@ All exceptions that can be raised during handling of a weatherapi request.
 
 # Functions that make a request to weatherapi.com have the possibility
 # of raising one of these errors depending on the response.
-
 # We use these custom error classes to make the error code more readable
-# and easier to handle
+# and easier to handle.
 
 __all__ = [
     'WeatherApiError',

@@ -23,7 +23,7 @@ class BasePoint:
     @classmethod
     def from_raw(cls, data):
         """Return new instance of child from json converted `weatherapi` response."""
-        # Unpacking uses the dict's keys are keyword arguments
+        # Unpacking uses the dict's keys as keyword arguments
         return cls(**data)
 
     @classmethod
@@ -229,7 +229,7 @@ class DailyPoint(BasePointLoc):
     :var location: :class:`Location`
     :var day: :class:`DayPoint`
     :var astro: :class:`AstroPoint`
-    :var hour: ``list[HourlyPoint]``
+    :var hour: list[:class:`HourlyPoint`]
     """
     def __init__(self, location, day, astro, hour):
         self.location = location if isinstance(location, Location) else Location.from_raw(location)

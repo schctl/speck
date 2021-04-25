@@ -12,7 +12,7 @@ class Widget:
     """
     The Widget class is a utility wrapped around tkinter widgets.
     It is intended to be used with a "manager" class, and its attributes
-    are kept ambiguous on purpose to the manager can parse them itself.
+    are kept ambiguous on purpose to the manager can use them more flexibly.
     """
 
     def __init__(self, internal, position):
@@ -39,10 +39,12 @@ class Widget:
 
 class WidgetManager:
     """
-    Basic implementation for a widget manager, to keep track of Tkinter Widgets. The position of
-    the widget can either be ``int`` or ``str``. If it is a ``str``, it should begin with
-    ``+``/``-``/``int``, and will be positioned relative to the last widget pushed onto the stack.
-    Will be ignored for the first widget in the stack.
+    Basic implementation for a widget manager, to keep track of Tkinter Widgets. 
+
+    Widgets must have ``internal`` attribute which points to actual Tkinter widget object, and
+    a ``position`` attribute which can either be ``int`` or ``str``. If it is a ``str``,
+    it should begin with ``+``/``-``/``int``, and will be positioned relative to the last widget
+    pushed onto the stack. The prefix will be ignored for the first widget in the stack.
     """
 
     def __init__(self):
@@ -103,7 +105,7 @@ class WidgetManager:
             except ValueError as e:
                 raise ValueError from e
 
-        elif isinstance(pos, int):
+        elif isinstance(pos, int) or isinstance(pos, float):
             return pos
 
         else:

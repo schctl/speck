@@ -10,7 +10,12 @@ class Calculator:
     """Simple calculator app."""
 
     def __init__(self):
+        # "state" variable
+        # stores what operation to perform
+        # on the last stored value and
+        # incoming value
         self._math = ""
+        # stored value
         self._first_num = 1
 
     def run(self):

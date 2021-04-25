@@ -15,6 +15,7 @@ from .calculator import Calculator
 from .widget import Widget, WidgetManager
 
 __all__ = ['SpeckApp']
+
 class SpeckApp:
     """Implementation for a speck frontend app."""
 
@@ -80,9 +81,6 @@ class SpeckApp:
             loc = f"{loc[0]['lat']},{loc[0]['lon']}"
 
             (curr_i, fore_i) = self.speck.forecast(loc)
-
-        except Exception as e: # let caller handle any other error
-            raise e
 
         astro_i = self.speck.astro(loc)
 
