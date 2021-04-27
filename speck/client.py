@@ -384,6 +384,8 @@ class Client:
 
         self.__cache_dump(data, mode)
 
+        return data
+
     # Aliases ---------------------------------------
 
     def astro(self, *args, **kwargs):
