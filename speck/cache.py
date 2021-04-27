@@ -80,11 +80,12 @@ class BufferedCacheManager(CacheManager):
 
         els = name.split('*') # splits across *
 
+        print(els)
+
         need_remove = []
 
         for i in self._buf:
             for n, j in enumerate(els):
-                i = i.rstrip('.dat')
                 if not (
                     j == '' or (j in i and
                         (i.index(j) >= i.index(els[0 if n < 1 else n - 1]))
@@ -96,7 +97,7 @@ class BufferedCacheManager(CacheManager):
                     # ---------------------------
                     # `els` is a list of all components split across *.
                     # We check if each component of `else` is in
-                    # the file name being checked (`j in i`).
+                    # the cache name being checked (`j in i`).
                     # If the component is empty, we can skip directly.
                     # If it is, we make sure its after the previous
                     # component (second check).
@@ -128,8 +129,8 @@ class FileCacheManager(CacheManager):
 
         Path(path).mkdir(parents=True, exist_ok=True)  # Creates cache folder
 
-        ## Cache is identified with its `name` attribute. Cache can be read by keeping track of this
-        ## value and reading it with `read` later on.
+        # Cache is identified with its `name` attribute. Cache can be read by keeping track of this
+        # value and reading it with `read` later on.
 
     @property
     def path(self):
@@ -147,7 +148,7 @@ class FileCacheManager(CacheManager):
         :rtype: :class:`generator`
         """
         return (
-            i.rstrip('.dat')
+            ''.join(i.split('.')[:-1]) if i.endswith('.dat') else i
             for i in os.listdir(self._path)
         )
 
@@ -181,9 +182,9 @@ class FileCacheManager(CacheManager):
         try:
             for i in os.listdir(self._path):
                 for n, j in enumerate(els):
-                    k = i.rstrip('.dat')
+                    k = ''.join(i.split('.')[:-1]) if i.endswith('.dat') else i
                     if not (
-                        j == '' or (j in i and
+                        j == '' or (j in k and
                             (k.index(j) >= k.index(els[0 if n < 1 else n - 1]))
                             )
                         ):
