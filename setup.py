@@ -50,7 +50,7 @@ packages = [
     "speck.etc"
 ]
 package_data = {
-    '': ['LICENSE', 'README', 'etc/*']
+    '': ['LICENSE', 'README', 'etc/*', 'etc/cities/*']
 }
 
 # ----------------------

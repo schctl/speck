@@ -3,7 +3,7 @@ Commonly used functions.
 """
 
 import os
-from hashlib import md5
+from hashlib import sha256
 
 __all__ = [
     'rootd',
@@ -22,4 +22,4 @@ def readf(fname):
 
 def utf8_to_md5_hex(string):
     """Convert a UTF-8 encoded string to its md5 in hex format."""
-    return md5(bytes(string, 'utf-8')).hexdigest()
+    return sha256(bytes(string, 'utf-8')).hexdigest()

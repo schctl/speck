@@ -44,7 +44,7 @@ class Client:
 
         # This looks for the cities list file
         with open(
-            os.path.join(os.path.dirname(__file__), 'etc/cities_p.json'),
+            os.path.join(os.path.dirname(__file__), 'etc/cities/cities_p.json'),
             'r', encoding='utf-8'
         ) as f:
             self.cities = json.loads(f.read())
