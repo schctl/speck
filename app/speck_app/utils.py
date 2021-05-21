@@ -20,6 +20,6 @@ def readf(fname):
     with open(fname, 'r') as f:
         return f.read()
 
-def utf8_to_md5_hex(string):
-    """Convert a UTF-8 encoded string to its md5 in hex format."""
+def utf8_to_sha256(string):
+    """Convert a UTF-8 encoded string to its sha256 in hex format."""
     return sha256(bytes(string, 'utf-8')).hexdigest()

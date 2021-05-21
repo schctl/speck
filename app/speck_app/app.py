@@ -24,8 +24,8 @@ class SpeckApp:
         self.root = None
         self.main_canvas = Widget(None, (0, 0)) # Main canvas - everything gets drawn on here.
 
-        self.entry_cleared = False # Check if uname and pwd entries have been cleared of defaults.
-        self.loc_e_cleared = False
+        self._entry_cleared = False # Check if uname and pwd entries have been cleared of defaults.
+        self._loc_cleared = False
 
         self.widget_manager = WidgetManager()
 
@@ -63,8 +63,8 @@ class SpeckApp:
         """This is just a dummy."""
 
         # We'll store our credentials in a file - not the best idea
-        return utils.utf8_to_md5_hex(uname) == auth[0] and \
-               utils.utf8_to_md5_hex(pwd)   == auth[1]
+        return utils.utf8_to_sha256(uname) == auth[0] and \
+               utils.utf8_to_sha256(pwd)   == auth[1]
 
     def __get_loc_meta(self, loc):
         """Get all metadata for a location."""
@@ -107,12 +107,12 @@ class SpeckApp:
         self.main_canvas.internal.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
 
     @staticmethod
-    def __warn(msg):
+    def warn(msg):
         """Display a warning in message box."""
         tk.messagebox.showwarning('WARNING', msg)
 
     @staticmethod
-    def __err(msg):
+    def err(msg):
         """Display an error in message box."""
         tk.messagebox.showerror('ERROR', msg)
 
@@ -151,8 +151,8 @@ class SpeckApp:
             if 'SPECK_DEV' in os.environ:
                 pass
 
-            elif not self.entry_cleared:
-                SpeckApp.__err("ENTER USERNAME AND PASSWORD")
+            elif not self._entry_cleared:
+                self.err("ENTER USERNAME AND PASSWORD")
                 return
 
             elif not SpeckApp.__verify_creds(
@@ -160,19 +160,19 @@ class SpeckApp:
                 welcome_username_entry.internal.get(),
                 welcome_password_entry.internal.get()
                 ):
-                SpeckApp.__err("ENTER CORRECT USERNAME AND PASSWORD")
+                self.err("ENTER CORRECT USERNAME AND PASSWORD")
                 return
 
             self.location_entry() # Move onto step 2
 
         def entry_clear(_):
-            if not self.entry_cleared: # Make sure we're not deleting any input
+            if not self._entry_cleared: # Make sure we're not deleting any input
                 welcome_username_entry.internal.delete(0, tk.END) # Clear defaults
                 welcome_password_entry.internal.delete(0, tk.END)
                 # change pw to ***
                 welcome_password_entry.internal.config(show='*')
 
-                self.entry_cleared = True
+                self._entry_cleared = True
 
         # bind the entry boxes, ie when you click it, the text on input box shd vanish
         welcome_username_entry.internal.bind("<Button-1>", entry_clear)
@@ -216,11 +216,11 @@ class SpeckApp:
         )
 
         def clear_location_entry(e):
-            if not self.loc_e_cleared:
+            if not self._loc_cleared:
                 location_input_entry.internal.delete(0, tk.END)
-                self.loc_e_cleared = True
+                self._loc_cleared = True
 
-        self.loc_e_cleared = False
+        self._loc_cleared = False
 
         location_input_entry.internal.insert(0, "Search Location")
         location_input_entry.internal.bind(
@@ -261,19 +261,19 @@ class SpeckApp:
             try:
                 info = self.__get_loc_meta(loc)
             except speck.errors.InvalidLocation:
-                SpeckApp.__err('Unknown location.')
+                self.err('Unknown location.')
                 self.location_entry()
                 return
             except speck.errors.InternalError as e:
-                SpeckApp.__err(f'Internal Error: {e}')
+                self.err(f'Internal Error: {e}')
                 self.location_entry()
                 return
             except speck.errors.InvalidApiKey:
-                SpeckApp.__err('Invalid API key. Get the API key from https://weatherapi.com/my')
+                self.err('Invalid API key. Get the API key from https://weatherapi.com/my')
                 self.location_entry()
                 return
             except speck.WeatherApiError as e:
-                SpeckApp.__err(f'Query failed: {e.message}')
+                self.err(f'Query failed: {e.message}')
                 self.location_entry()
                 return
 

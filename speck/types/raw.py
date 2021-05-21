@@ -18,7 +18,7 @@ __all__ = [
     'Cel'
 ]
 
-@dataclass(frozen=True)
+@dataclass()
 class Km:
     """Kilometer."""
     val: float = 0
@@ -30,7 +30,7 @@ class Km:
     def __repr__(self):
         return f"{self.val}"
 
-@dataclass(frozen=True)
+@dataclass()
 class Mm:
     """Milimeters."""
     val: float = 0
@@ -42,7 +42,7 @@ class Mm:
     def __repr__(self):
         return f"{self.val}"
 
-@dataclass(frozen=True)
+@dataclass()
 class Mb:
     """Milibar."""
     val: float = 0
@@ -54,7 +54,7 @@ class Mb:
     def __repr__(self):
         return f"{self.val}"
 
-@dataclass(frozen=True)
+@dataclass()
 class Cel:
     """Celsius."""
     val: float = -273.15

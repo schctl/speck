@@ -14,20 +14,21 @@ def readf(fname):
         return f.read()
 
 def get_version(fname):
-    # From discord.py
-    # https://github.com/Rapptz/discord.py/blob/master/setup.py#L10
     return re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', readf(fname), re.MULTILINE).group(1)
-    # +------------------------------------------------------------+
-    # | Regex                                                      |
-    # +------------------------------------------------------------+
-    # | - re.MULTILINE tells `search` to compare each line         |
-    # |     instead of the whole text.                             |
-    # | - \s - whitespace character                                |
-    # | - [\'"] - either ' or "                                    |
-    # | - ([^\'"]*) - characters that are NOT ' or "               |
-    # |     .group(1) will return the first subgroup of the match  |
-    # |     subgroups are enclosed in `()`                         |
-    # +------------------------------------------------------------+
+    # +-----------------------------------------------------------------+
+    # | Regex                                                           |
+    # +-----------------------------------------------------------------+
+    # | Referenced from discord.py                                      |
+    # | https://github.com/Rapptz/discord.py/blob/master/setup.py#L10   |
+    # |                                                                 |
+    # | - re.MULTILINE tells `search` to compare each line              |
+    # |     instead of the whole text.                                  |
+    # | - \s - whitespace character                                     |
+    # | - [\'"] - either ' or "                                         |
+    # | - ([^\'"]*) - characters that are NOT ' or "                    |
+    # |     .group(1) will return the first subgroup of the match       |
+    # |     subgroups are enclosed in `()`                              |
+    # +-----------------------------------------------------------------+
 
 # Requirements ---------
 

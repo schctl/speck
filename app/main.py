@@ -23,11 +23,10 @@ def vanilla_profile(func):
 
         profile.disable()
 
-        buffer = io.StringIO()
-        # StringIO acts as a File like object
+        buffer = io.StringIO()  # StringIO acts as a File like object
         profile_stats = pstats.Stats(profile, stream=buffer).sort_stats('cumulative')
 
-        if 'SPECK_DEBUG' in os.environ:
+        if 'SPECK_DEV' in os.environ:
             profile_stats.print_stats()
             print(buffer.getvalue())
 
