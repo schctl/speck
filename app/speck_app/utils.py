@@ -8,7 +8,7 @@ from hashlib import sha256
 __all__ = [
     'rootd',
     'readf',
-    'utf8_to_md5_hex'
+    'utf8_to_sha256'
 ]
 
 def rootd(path):
