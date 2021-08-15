@@ -91,7 +91,7 @@ class Client:
         """Private method to make a request to ``weatherapi.com``."""
 
         try:
-            # Does the acutal request
+            # Does the actual request
             return self.session.get(f"{self.BASE}/{endpoint}{parameters}",
                                     timeout=(4, 4)).json()
         except Exception as e:
