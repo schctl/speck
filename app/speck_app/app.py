@@ -14,6 +14,8 @@ from .tracker import Tracker, plot
 from .calculator import Calculator
 from .widget import Widget, WidgetManager
 
+from tkinter import messagebox
+
 __all__ = ['SpeckApp']
 
 class SpeckApp:
