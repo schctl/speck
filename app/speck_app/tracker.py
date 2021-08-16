@@ -42,8 +42,13 @@ class Tracker:
     """Utility to dump speck objects into cache files, stored per day, in a "tracker directory"."""
 
     def __init__(self, path='.tracker'):
-        self.path = path
-        self.cache = FileCacheManager(self.path)
+        self._path = path
+        self.cache = FileCacheManager(self._path)
+
+    @property
+    def path(self):
+        """Get the path to the data files stored by this Tracker."""
+        return self._path
 
     def dump(self, name, data):
         """Dump an object into the tracker directory."""

@@ -39,12 +39,12 @@ class Widget:
 
 class WidgetManager:
     """
-    Basic implementation for a widget manager, to keep track of Tkinter Widgets. 
+    Basic implementation for a widget manager, to keep track of Tkinter Widgets.
 
     Widgets must have ``internal`` attribute which points to actual Tkinter widget object, and
     a ``position`` attribute which can either be ``int`` or ``str``. If it is a ``str``,
     it should begin with ``+``/``-``/``int``, and will be positioned relative to the last widget
-    pushed onto the stack. The prefix will be ignored for the first widget in the stack.
+    pushed onto the queue. The prefix will be ignored for the first widget in the queue.
     """
 
     def __init__(self):
@@ -56,16 +56,16 @@ class WidgetManager:
         return [len(self._widgets) - (i + 1) for i in range(0, len(widgets), -1)]
 
     def push(self, widget):
-        """Add a new widget to the stack. Returns the index of the widget."""
+        """Add a new widget to the queue. Returns the index of the widget."""
         self._widgets.append(widget)
         return len(self._widgets) - 1
 
     def pop(self, _id):
-        """Remove a widget from the stack by index."""
+        """Remove a widget from the queue by index."""
         return self._widgets.pop(_id)
 
-    # `empty` reassigns an empty list with 0 space to the stack.
-    # `clear` only removes each widget, but the stack takes up
+    # `empty` reassigns an empty list with 0 space to the queue.
+    # `clear` only removes each widget, but the queue takes up
     # the same space in memory. This may be faster since
     # it won't have to be reallocated (until it takes up > `size` again).
 
@@ -81,23 +81,27 @@ class WidgetManager:
             i.destroy()
         self._widgets = []
 
-    def __get_position_from_prev(self, index, position_index): # position_index -> x/y -> 0/1
-        """Get position of previous widget in the stack."""
+    def __get_position(self, index, position_index): # position_index -> x/y -> 0/1
+        """Get position of previous widget in the queue."""
 
         pos = self._widgets[index].position[position_index]
-
-        # TODO: more descriptive errors.
 
         if isinstance(pos, str):
             try:
                 if index == 0:
+                    # If we are at the end of the queue,
+                    # we have to interpret position as absolute since there
+                    # is nothing to position it relative to.
+                    # This is a safeguard in case its provided position is a str.
                     return int(pos.lstrip('+').lstrip('-'))
                 else:
+                    # This will recursively get the position of the last
+                    # widget, walking down the queue until we reach index 0
                     if pos[0] == '-':
-                        return self.__get_position_from_prev(index - 1, position_index) - \
+                        return self.__get_position(index - 1, position_index) - \
                                int(pos.lstrip('-'))
                     elif pos[0] == '+':
-                        return self.__get_position_from_prev(index - 1, position_index) + \
+                        return self.__get_position(index - 1, position_index) + \
                                int(pos.lstrip('+'))
                     else:
                         raise ValueError("Invalid format for widget position (Must be `+x`, `-x` or int).")
@@ -112,10 +116,10 @@ class WidgetManager:
             raise TypeError("Invalid type for widget position.")
 
     def render_all(self, canvas):
-        """Render all widgets currently in the stack onto a canvas."""
+        """Render all widgets currently in the queue onto a canvas."""
 
         for n, i in enumerate(self._widgets):
-            x_pos = self.__get_position_from_prev(n, 0)
-            y_pos = self.__get_position_from_prev(n, 1)
+            x_pos = self.__get_position(n, 0)
+            y_pos = self.__get_position(n, 1)
 
             canvas.create_window(x_pos, y_pos, anchor='nw', window=i.internal)

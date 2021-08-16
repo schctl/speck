@@ -94,17 +94,16 @@ class SpeckApp:
 
         self.bg = tk.PhotoImage(file=utils.rootd(bg_path))
 
-        self.main_canvas = Widget(tk.Canvas(
+        self.main_canvas = tk.Canvas(
             self.root,
             width              = self.style.window.width,
             height             = self.style.window.height,
             bd                 = 0,
             highlightthickness = 0
-            ), (0, 0)
         )
 
-        self.main_canvas.internal.pack(fill="both", expand=True)
-        self.main_canvas.internal.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
+        self.main_canvas.pack(fill="both", expand=True)
+        self.main_canvas.create_image(0, 0, image=self.bg, anchor="nw") # put img on canvas
 
     @staticmethod
     def warn(msg):
@@ -197,7 +196,7 @@ class SpeckApp:
             welcome_login_button
         ])
 
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
     def location_entry(self):
         """Implementation for Location Entry Screen."""
@@ -244,7 +243,7 @@ class SpeckApp:
         self.widget_manager.push(location_input_entry)
         self.widget_manager.push(location_input_button)
 
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
     def info_screen(self, loc, info=None):
         """Display information for a location."""
@@ -414,7 +413,7 @@ class SpeckApp:
             plot_btn,
             docs_btn,
         ])
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
 
     def forecast_screen(self, info):
@@ -510,7 +509,7 @@ class SpeckApp:
             calc_btn,
             docs_btn,
         ])
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
     def astro_screen(self, info):
         """Show all astronomy details."""
@@ -591,7 +590,7 @@ class SpeckApp:
             calc_btn,
             docs_btn
         ])
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
     def docs(self, parent, *args, **kwargs):
         """Link to the documentation."""
@@ -622,7 +621,7 @@ class SpeckApp:
         )
 
         self.widget_manager.extend([docs_label, back_btn])
-        self.widget_manager.render_all(self.main_canvas.internal)
+        self.widget_manager.render_all(self.main_canvas)
 
     # -------------------------------------------
 
