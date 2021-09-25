@@ -10,6 +10,15 @@ Minimal wrapper and frontend for [weatherAPI.com](https://www.weatherapi.com/)
 
 [Wiki](https://github.com/schctl/speck/wiki)
 
+## Contributors
+
+- [Sachin Cherian](https://github.com/schctl/)
+  - WeatherAPI wrapper library
+  - Plot implementation
+- [Nevin Jose](https://github.com/FaZe-Vulcan)
+  - Tkinter GUI implementation
+  - Calculator sub-app implementation 
+
 ## Usage
 
 **__Installation__**
