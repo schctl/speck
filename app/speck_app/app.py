@@ -11,7 +11,7 @@ import speck
 from . import utils
 from .style import SpeckStyle
 from .tracker import Tracker, plot
-from .calculator import Calculator
+from .calculator import run_calc
 from .widget import Widget, WidgetManager
 
 from tkinter import messagebox
@@ -369,7 +369,7 @@ class SpeckApp:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: Calculator().run()
+            command = lambda: run_calc()
             ),
             ("+70", 523) # pos
         )
@@ -483,7 +483,7 @@ class SpeckApp:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: Calculator().run()
+            command = lambda: run_calc()
             ),
             ("+70", 523) # pos
         )
@@ -562,7 +562,7 @@ class SpeckApp:
             fg      = self.style.colors["primary"].fg,
             bg      = self.style.colors["primary"].bg,
             bd      = 0,
-            command = lambda: Calculator().run()
+            command = lambda: run_calc()
             ),
             ("+70", 523) # pos
         )

@@ -14,10 +14,8 @@ Minimal wrapper and frontend for [weatherAPI.com](https://www.weatherapi.com/)
 
 - [Sachin Cherian](https://github.com/schctl/)
   - WeatherAPI wrapper library
-  - Plot implementation
 - [Nevin Jose](https://github.com/FaZe-Vulcan)
-  - Tkinter GUI implementation
-  - Calculator sub-app implementation 
+  - All UI related code
 
 ## Usage
 
