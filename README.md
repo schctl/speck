@@ -15,6 +15,8 @@ Some of the main ideas demonstrated are:
 
 See the [Wiki] for more documentation on some concepts.
 
+Since the project has been completed, this repository will no longer be maintained.
+
 ---
 
 [<img alt="PyPI" src="https://img.shields.io/pypi/v/speck-wrapper?style=for-the-badge" height="24">](https://pypi.org/project/speck-wrapper/)

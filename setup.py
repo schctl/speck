@@ -62,7 +62,7 @@ setup(
     license = "MIT",
     author = "Nevin Jose, Sachin Cherian",
     description = "A simple wrapper and frontend for weatherAPI.com",
-    long_description = readf('README'),
+    long_description = readf('README.md'),
     long_description_content_type = 'text/markdown',
     url = "https://github.com/schctl/speck",
     packages = packages,
