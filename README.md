@@ -1,61 +1,73 @@
-[//]: # (Speck is a minimal wrapper and frontend for weatherAPI.com)
+# speck
 
-# Speck
+`speck` is a minimal weather app and library to interact with [weatherapi.com]. It was created by
+[Sachin Cherian](https://github.com/schctl/) and [Nevin Jose](https://github.com/FaZe-Vulcan/)
+as their 12th grade Computer Science project and showcases some concepts in Python and
+some popular development ideas.
 
-<a href="https://pypi.org/project/speck-wrapper/"><img alt="PyPI" src="https://img.shields.io/pypi/v/speck-wrapper?style=for-the-badge" height="24"></a>
-<a href="https://lgtm.com/projects/g/schctl/speck/context:python"><img alt="LGTM Grade" src="https://img.shields.io/lgtm/grade/python/github/schctl/speck?label=Code&style=for-the-badge" height="24"></a>
-<a href="https://speck.readthedocs.io/en/latest/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/speck?style=for-the-badge" height="24"></a>
+Some of the main ideas demonstrated are:
+- Usage of functions and classes in Python
+- Using packages and modules in Python to separate functionality in code
+- Distributing code as packages
+- Retrieving and storing data from a remote source
+- Serving that data using a GUI toolkit such as [Tkinter], and visualization with [matplotlib]
+- Using [Version Control] software like [git] to keep track of development and help with collaboration.
 
-Minimal wrapper and frontend for [weatherAPI.com](https://www.weatherapi.com/)
+See the [Wiki] for more documentation on some concepts.
 
-[Wiki](https://github.com/schctl/speck/wiki)
+---
 
-## Contributors
-
-- [Sachin Cherian](https://github.com/schctl/)
-  - WeatherAPI wrapper library
-- [Nevin Jose](https://github.com/FaZe-Vulcan)
-  - All UI related code
+[<img alt="PyPI" src="https://img.shields.io/pypi/v/speck-wrapper?style=for-the-badge" height="24">](https://pypi.org/project/speck-wrapper/)
+[<img alt="LGTM" src="https://img.shields.io/lgtm/grade/python/github/schctl/speck?style=for-the-badge" height="24">](https://lgtm.com/projects/g/schctl/speck/)
+[<img alt="Read the Docs" src="https://img.shields.io/readthedocs/speck?style=for-the-badge" height="24">](https://speck.readthedocs.io/en/latest/)
 
 ## Usage
 
-**__Installation__**
+### The speck library
 
-Speck is packaged publicly on PyPi as [`speck-wrapper`](https://pypi.org/project/speck-wrapper/)
+Speck is packaged publicly on PyPi as [`speck-wrapper`]
 
-    pip install speck-wrapper
+```
+pip install speck-wrapper
+```
 
-To install from source, first clone the repository
+Alternatively, to install from source, first clone the repository and then use `pip` to install it.
 
-    git clone https://github.com/schctl/speck.git
+```
+git clone https://github.com/schctl/speck.git
+cd speck
+pip install .
+```
 
-Then, from the root directory, run
+`speck` can then be imported as a regular python module.
 
-    pip install .
+```py
+>>> import speck
+>>> help(speck)
+```
 
-**__Usage__**
-
-`speck` can be imported as a regular python module after installation.
-
-    >>> import speck
-    >>> help(speck)
-
-## GUI Frontend
-
-**__Installation__**
-
-Install scripts in `scripts` will automate the install for you.
-
-**__Manual installation__**
+### GUI Frontend
 
 The `speck` library must be installed for this to work, in addition to requirements listed in `app/requirements.txt`.
 
-    pip install -r app/requirements.txt
-
-**__Usage__**
+```
+# From the repository's root directory
+pip install -r app/requirements.txt
+```
 
 To run the speck app, run `main.py` under `app`.
 
-    cd app && python main.py
+```
+cd app && python main.py
+```
 
-The username and password entry screen is a dummy. To make the app ignore this, set the `SPECK_DEV` environment variable. The username and password are `11C` and `11c2021`.
+The username and password entry screen is a dummy. The username and password are `11C` and `11c2021`.
+Set the `SPECK_DEV` environment variable to make the app ignore the login screen.
+
+[wiki]: https://github.com/schctl/speck/wiki/
+[weatherapi.com]: https://www.weatherapi.com/
+[`speck-wrapper`]: https://pypi.org/project/speck-wrapper/
+[tkinter]: https://docs.python.org/3/library/tkinter.html
+[matplotlib]: https://matplotlib.org/
+[git]: https://git-scm.com/
+[version control]: https://en.wikipedia.org/wiki/Version_control
